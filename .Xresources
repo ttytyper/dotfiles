@@ -75,7 +75,20 @@ Xft.dpi:       96
 !Xft.dpi:       192
 ! }}}
 
-rofi.bc: #000000
 rofi.terminal: urxvt
-rofi.monitor: -1
+rofi.monitor: -4
 rofi.ssh-client: mosh
+rofi.sidebar-mode: true
+rofi.theme: touch-friendly
+! Scrolling method. (0: Page, 1: Centered)
+rofi.scroll-method: 1
+! Large font for easier use on touchscreens
+rofi.font: Hack 26
+rofi.width: 75
+rofi.height: 75
+rofi.modi: drun,ssh,windowcd
+! xbindkeys is configured to open rofi with Super_L+d. The same combo cancels out of rofi here. xcape is configured to map the Super_L key by itself to Super_L+d. Super_L is better known as the Windows key
+rofi.kb-cancel: Escape,Control+g,Super_L+d
+! By default rofi uses single click to select and double click to accept. I want single click to accept
+rofi.me-select-entry: MouseSecondary
+rofi.me-accept-entry: MousePrimary
