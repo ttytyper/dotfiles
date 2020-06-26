@@ -1,11 +1,29 @@
 ! Various terminal settings {{{
 ! https://unix.stackexchange.com/questions/81746/how-can-i-get-better-looking-fonts-in-my-terminal-URxvt
-!URxvt.font:     xft:bitstream vera sans mono:size=8:antialias=true
-!URxvt.boldFont: xft:bitstream vera sans mono:bold:size=8:antialias=true
-URxvt.font:     xft:DejaVu Sans Mono:size=10:antialias=true
-URxvt.boldFont: xft:DejaVu Sans Mono:bold:size=10:antialias=true
-!URxvt.font:     xft:Hack:regular:size=10:antialias=true
-!URxvt.boldFont: xft:Hack:bold:size=10:antialias=true
+!URxvt.font:     xft:bitstream vera sans mono:size=8
+!URxvt.boldFont: xft:bitstream vera sans mono:bold:size=8
+!URxvt.font:     xft:DejaVu Sans Mono:size=10
+!URxvt.boldFont: xft:DejaVu Sans Mono:bold:size=10
+URxvt.font:     xft:Hack:regular:size=10
+URxvt.boldFont: xft:Hack:bold:size=10
+
+! HiDPI and font related settings {{{
+! http://vincent.jousse.org/tech/archlinux-retina-hidpi-macbookpro-xmonad/
+! https://wiki.archlinux.org/index.php/HiDPI#X_Server
+Xft.antialias: true
+Xft.rgba:      rgb
+Xft.hinting:   true
+!Xft.autohint:  0
+!Xft.lcdfilter: lcddefault
+Xft.hintstyle: hintfull
+Xft.dpi:       96
+!Xft.dpi:       120
+!Xft.dpi:       144
+!Xft.dpi:       175
+!Xft.dpi:       168
+!Xft.dpi:       192
+! }}}
+!
 URxvt.loginShell: true
 URxvt.scrollBar: false
 URxvt.colorMode: on
@@ -58,35 +76,19 @@ URxvt.color14: cyan
 URxvt.color15: white
 ! }}}
 
-! HiDPI and font related settings {{{
-! http://vincent.jousse.org/tech/archlinux-retina-hidpi-macbookpro-xmonad/
-! https://wiki.archlinux.org/index.php/HiDPI#X_Server
-Xft.antialias: true
-Xft.rgba:      rgb
-Xft.hinting:   true
-!Xft.autohint:  0
-!Xft.lcdfilter: lcddefault
-Xft.hintstyle: hintfull
-Xft.dpi:       96
-!Xft.dpi:       120
-!Xft.dpi:       144
-!Xft.dpi:       175
-!Xft.dpi:       168
-!Xft.dpi:       192
-! }}}
-
 rofi.terminal: urxvt
 rofi.monitor: -4
 rofi.ssh-client: mosh
+rofi.parse-known-hosts: false
 rofi.sidebar-mode: true
 rofi.theme: touch-friendly
 ! Scrolling method. (0: Page, 1: Centered)
 rofi.scroll-method: 1
 ! Large font for easier use on touchscreens
-rofi.font: Hack 26
+rofi.font: Hack 32
 rofi.width: 75
 rofi.height: 75
-rofi.modi: drun,ssh,windowcd
+rofi.modi: drun,ssh,Workspaces:~/.config/rofi/scripts/i3_switch_workspaces.sh,Rotate:~/.config/rofi/scripts/rotate-ThinkPad-Yoga
 ! xbindkeys is configured to open rofi with Super_L+d. The same combo cancels out of rofi here. xcape is configured to map the Super_L key by itself to Super_L+d. Super_L is better known as the Windows key
 rofi.kb-cancel: Escape,Control+g,Super_L+d
 ! By default rofi uses single click to select and double click to accept. I want single click to accept
