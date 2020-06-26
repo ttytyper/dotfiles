@@ -10,17 +10,17 @@ xsetwacom --set "Wacom Intuos PT S 2 Pad pad" Gesture on
 xsetwacom --set "Wacom Intuos PT S 2 Pen stylus" Gesture on
 xsetwacom --set "Wacom Intuos PT S 2 Finger touch" Gesture on
 
-# Buttons as mouse wheel
-xsetwacom --set "Wacom Intuos PT S 2 Pad pad" Button 1 "button 5"
-xsetwacom --set "Wacom Intuos PT S 2 Pad pad" Button 9 "button 5"
-xsetwacom --set "Wacom Intuos PT S 2 Pad pad" Button 8 "button 4"
 
-# Handled by xbindkeys
-xsetwacom --set "Wacom Intuos PT S 2 Pad pad" Button 3 "key F12"
+# Handled by xbindkeys to move focus left and right
+xsetwacom --set "Wacom Intuos PT S 2 Pad pad" Button 3 "key F7"
+xsetwacom --set "Wacom Intuos PT S 2 Pad pad" Button 1 "key F8"
+xsetwacom --set "Wacom Intuos PT S 2 Pad pad" Button 8 "key F7"
+xsetwacom --set "Wacom Intuos PT S 2 Pad pad" Button 9 "key F8"
 
 xsetwacom set "Wacom Intuos PT S 2 Finger touch" ZoomDistance 18
-xsetwacom set "Wacom Intuos PT S 2 Finger touch" ScrollDistance 18
+xsetwacom set "Wacom Intuos PT S 2 Finger touch" ScrollDistance 30
 xsetwacom set "Wacom Intuos PT S 2 Finger touch" TapTime 120
+xsetwacom set "Wacom Intuos PT S 2 Finger touch" Area 0 0 5000 3125 # Tablet seems to have a 1.6 aspect ratio
 
 xsetwacom --set "Wacom Intuos PT S 2 Pen stylus" Threshold 200
 xsetwacom --set "Wacom Intuos PT S 2 Pen stylus" RawSample 10

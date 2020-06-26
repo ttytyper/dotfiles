@@ -2,6 +2,10 @@
 # xbindkeys configuration #
 ###########################
 
+# Use Super_L+d to show rofi. xcape is configured to map the Super_L key by itself to Super_L+d. Super_L and Mod4 are better known as the Windows key.
+# rofi is configured (in ~/.Xresources) to use the same combo to cancel
+"rofi -show drun"
+	Mod4 + d
 
 ##### Emulate some Windows behaviour
 ## Use Alt + Tab to toggle windows
@@ -42,11 +46,13 @@
 "systemctl suspend"
 	Mod4 + Shift + S
 
-# xsetwacom is set to fire F12 on one of the tablet buttons. This is mapped
-# here to MapToOutput next, to rotate the mapping among screens and finally the
+# xsetwacom is set to fire F13 and F14 on one of the tablet buttons. This is mapped
+# here to switch , to rotate the mapping among screens and finally the
 # whole desktop
-"xsetwacom --set 'Wacom Intuos PT S 2 Pen stylus' MapToOutput next"
-	F12
+"i3-msg focus output left"
+	F7
+"i3-msg focus output right"
+	F8
 
 # Switch between windows with the Windows key alone, but only in non-rotated mode. If this seems to override Windows+Any combinations, try pressing Any first, then Window
 #"if [ `$HOME/bin/yoga-rotate.sh status` != 'normal' ]; then ratpoison -c next; fi"
@@ -119,10 +125,10 @@
 #	m:0x0 + b:8
 # Directly
 # m:0x0 + b:8 = mouse back button
-"echo 'RX;' >> /dev/radio/kx3"
-	m:0x0 + b:8 + Release
-"stty -F /dev/radio/kx3 38400; echo 'TX;' >> /dev/radio/kx3"
-	m:0x0 + b:8
+#"echo 'RX;' >> /dev/radio/kx3"
+#	m:0x0 + b:8 + Release
+#"stty -F /dev/radio/kx3 38400; echo 'TX;' >> /dev/radio/kx3"
+#	m:0x0 + b:8
 
 ##################################
 # End of xbindkeys configuration #
