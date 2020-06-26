@@ -75,9 +75,13 @@ fi
 if [ -x "$HOME/bin/yoga-disable-ts-on-pen-proximity.sh" ] && cmdexists xinput && xinput|grep 'Wacom ISDv4 EC Pen stylus'; then
 	"$HOME/bin/yoga-disable-ts-on-pen-proximity.sh" &
 	BGPIDS="$BGPIDS $!"
-	# Set calibration props for the built-in tablet. Parameters from xinput_calibrator
-	xinput --set-prop 'Wacom ISDv4 EC Pen stylus' 'Wacom Tablet Area' 0 40 27706 15519
+	# Set calibration props for the built-in tablet. Parameters from xinput_calibrator, followed by trial-and-error
+	xinput --set-prop 'Wacom ISDv4 EC Pen stylus' 'Wacom Tablet Area' 100 41 27680 15600
 fi
+
+# https://support.zoom.us/hc/en-us/articles/202082128-Black-Screen-During-Screen-Sharing
+cmdexists && xcompmgr -c -l0 -t0 -r0 -o.00 &
+BGPIDS="$BGPIDS $!"
 
 # Finally, the window manager
 if cmdexists i3; then
@@ -117,10 +121,10 @@ if cmdexists parcellite; then
 	BGPIDS="$BGPIDS $!"
 fi
 
-if cmdexists redshift; then
-	redshift > /dev/null &
-	BGPIDS="$BGPIDS $!"
-fi
+#if cmdexists redshift; then
+#	redshift > /dev/null &
+#	BGPIDS="$BGPIDS $!"
+#fi
 
 # Start a terminal with screen
 if cmdexists screen; then
@@ -131,11 +135,6 @@ fi
 
 if cmdexists wpa_gui; then
 	wpa_gui -t -i wlp4s0 &
-	BGPIDS="$BGPIDS $!"
-fi
-
-if [ -x "$HOME/bin/i3-map-device-to-monitor" ]; then
-	"$HOME/bin/i3-map-device-to-monitor" "Wacom Intuos PT S 2 Pen stylus" &
 	BGPIDS="$BGPIDS $!"
 fi
 
