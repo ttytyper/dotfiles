@@ -8,12 +8,6 @@ set $mod Mod4
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
 font pango:Hack Regular 10
-# Before i3 v4.8, we used to recommend this one as the default:
-# font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
-# The font above is very space-efficient, that is, it looks good, sharp and
-# clear in small sizes. However, its unicode glyph coverage is limited, the old
-# X core fonts rendering does not support right-to-left and this being a bitmap
-# font, it doesn’t scale on retina/hidpi displays.
 
 # Use Mouse+Alt to drag floating windows to their wanted position
 floating_modifier Mod1
@@ -30,14 +24,8 @@ bindsym $mod+Return exec urxvt -e screen
 
 # kill focused window
 bindsym $mod+Shift+q kill
-
-# start rofi (a program launcher)
-bindsym $mod+d exec rofi -show run
-# Alternative with urxvt
-#exec --no-startup-id urxvt -name i3scratchpad
-#for_window [instance="i3scratchpad"] floating enable;
-#for_window [instance="i3scratchpad"] move scratchpad; [instance="i3scratchpad"] scratchpad show; move position center; resize set 1024 400; move scratchpad
-#bindsym $mod+d [instance="i3scratchpad"] scratchpad show
+# Same as above, but Alt+F4, similar to Windows' behaviour
+bindsym Mod1+F4 kill
 
 # Move focus across windows
 bindsym $mod+h focus left
@@ -51,16 +39,9 @@ bindsym $mod+Shift+j move down
 bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
 
-
 # Move whole workspaces across screens
 bindsym $mod+Ctrl+h move workspace to output left
 bindsym $mod+Ctrl+l move workspace to output right
-
-# split in horizontal orientation
-#bindsym $mod+h split h
-
-# split in vertical orientation
-#bindsym $mod+v split v
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen
@@ -79,12 +60,25 @@ bindsym $mod+space focus mode_toggle
 # focus container with activity
 bindsym $mod+a [urgent=oldest] focus
 
-# Chat, email
+## Workspaces
+# Chat, email. Speech bubble icon
 set $workspace1 "1: "
-# Web, firefox
+assign [class="TelegramDesktop"] $workspace1
+assign [class="Mail"] $workspace2
+# Prefer putting it on small external monitor, alternatively on internal
+workspace $workspace1 output DP1-2 eDP1
+
+# Web browsing. Firefox icon
 set $workspace2 "2: "
-# Terminals
+assign [class="Navigator"] $workspace2
+# Prefer putting it on large external monitor, alternatively on internal
+workspace $workspace1 output HDM1 eDP1
+
+# Terminals. Shell icon
 set $workspace3 "3: "
+assign [class="urxvt"] $workspace3
+# Prefer putting it on large external monitor, alternatively on internal
+workspace $workspace1 output HDM1 eDP1
 
 # switch to workspace
 bindsym $mod+1 workspace $workspace1
@@ -151,8 +145,8 @@ bindsym $mod+End exec "xset s activate"
 # finds out, if available)
 bar {
 	#status_command i3status|~/.i3/mpdstatus
-	status_command i3status
-	#status_command i3blocks
+	#status_command i3status
+	status_command i3blocks
 }
 
 # Use tabbed layout per default
@@ -160,7 +154,7 @@ workspace_layout tabbed
 
 # Mouse settings
 focus_follows_mouse yes
-mouse_warping none
+mouse_warping output
 
 for_window [title="Android Emulator - .*"] floating enable
 
@@ -170,11 +164,7 @@ for_window [class="Pinentry"] floating enable
 # SpeedCrunch is better floating
 for_window [title="Speedcrunch"] floating enable
 
-# Where to place things
-assign [class="TelegramDesktop"] $workspace1
-# DP1-2 is usually to the left. eDP1 is the built-in monitor of my laptop
-# I want the chat workspace to be on the left when docked, alternatively on the built-in monitor
-workspace $workspace1 output DP1-2 eDP1
-
 # No borders
 hide_edge_borders both
+
+exec_always --no-startup-id i3-map-device-to-monitor 'Wacom Intuos PT S 2 Pen stylus'
