@@ -1,0 +1,73 @@
+#!/bin/bash
+
+json_escape() {
+	# Characters to escape based on specs:
+	# \b  Backspace (ascii code 08)
+	# \f  Form feed (ascii code 0C)
+	# \n  New line
+	# \r  Carriage return
+	# \t  Tab
+	# \"  Double quote
+	# \\  Backslash character
+	#
+	# However, we only escape double quotes and backslashes, and delete all non-printable characters
+	sed \
+		-e 's/["\\]/\\\0/g' \
+		-e 's/[^[:print:]]//'
+}
+
+# Takes the names of one or more associative arrays, and prints the key/values in json format
+#
+# Example:
+# declare -A json
+# json["full_text"]="Hello world"
+# json["urgent"]="false"
+# declare -A foo
+# foo["full_text"]="Hi there"
+# print_json_array json foo
+# Becomes (line break removed for brevety):
+# { "full_text": "Hello world", "urgent": false },
+# { "full_text": "Hi there" }
+# Note that bash doesn't have a boolean data type. The strings "true" and "false" are considered booleans and will not be quoted in the output
+print_json_array() {
+	array_names=( "${@}" )
+	str=""
+	let a=1
+	for array_name in "${array_names[@]}"; do
+		local -n array="${array_name}"
+		str+='{'
+		let i=1
+		for key in "${!array[@]}"; do
+			value="${array["$key"]}"
+			json_key="$(echo "$key"|json_escape)"
+			json_value="$(echo "$value"|json_escape)"
+
+			# Add quotes if appropriate
+			case "$value" in
+				true|false) :;; # No qoutes
+				*) json_value="\"${json_value}\"";;  # Add quotes
+			esac
+
+			str+="\"$json_key\":$json_value"
+
+			# Add a comma if there are more entries in the array
+			if [ $i -lt ${#array[@]} ]; then
+				str+=','
+			fi
+			let i++
+		done
+		str+='}'
+
+		# Add a comma if there are more arrays
+		if [ $a -lt ${#array_names[@]} ]; then
+			str+=','
+		fi
+		let a++
+	done
+	echo "$str"
+}
+
+# Useful for coloring i3blocks/i3bar according to e.g. wifi quality and battery level.
+color_level() {
+	python "$(dirname "$0")/color_level.py" "${@}"
+}

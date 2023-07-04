@@ -1,0 +1,119 @@
+#!/bin/bash
+. "$(dirname "$0")/common_functions"
+
+set -eEu
+
+shopt -s nullglob
+power_paths=( /sys/class/power_supply/*/ )
+batteries=( )
+mains_connected="" # 1 or 0
+charging=""  # "y" or empty
+icon=""
+total_seconds_left=0
+declare -A json=( ["full_text"]="" )
+battery_percentages_str=""
+
+seconds_left() {
+	battery="$1"
+
+	read energy_now <"$battery/energy_now"
+	read power_now  <"$battery/power_now"
+	read alarm      <"$battery/alarm"
+
+	awk \
+		-v energy_now="$energy_now" \
+		-v power_now="$power_now" \
+		-v alarm="$alarm" \
+		'BEGIN {printf "%d", 3600*(energy_now-alarm)/power_now }'
+}
+
+duration_from_seconds() {
+	seconds="$1"
+	awk -v seconds="$seconds" 'BEGIN { printf "%02d:%02d", seconds/3600, seconds%60 }'
+}
+
+time_from_seconds() {
+	seconds="$1"
+	now="$(date +'%s')"
+	date -d "@$(( now + seconds ))" '+%H:%M'
+}
+
+for power_path in "${power_paths[@]}"; do
+	type="$(cat "$power_path/type")"
+	case "$type" in
+		Battery)
+			batteries+=( "$power_path" )
+		;;
+		Mains)
+			read mains_connected<"$power_paths/online"
+		;;
+	esac
+done
+
+if [ ${#batteries[@]} -eq 0 ]; then
+	# No batteries, no need to show any power status
+	json["full_text"]=""
+	print_json_array json
+	exit
+fi
+
+# Add power plug icon when connected to mains
+if [ "$mains_connected" = "1" ]; then
+	json["full_text"]+="🔌" # Power plug
+fi
+
+i=0
+for battery in "${batteries[@]}"; do
+	# Add a space between each battery, if there are multiple batteries
+	if [ $i -gt 1 ]; then
+		json["full_text"]+=" "
+	fi
+
+	# Add icon based on charging status
+	read status <"$battery/status"
+	if [ "$status" = "Charging" ]; then
+		json["full_text"]+="⚡" # Lightning bolt
+	#else
+	#	json["full_text"]+="🔋" # Battery
+	fi
+	
+	# Show capacity in percent
+	read capacity<"$battery/capacity"
+	json["full_text"]+="$capacity%"
+
+	# Show power usage in watts
+	read power_now <"$battery/power_now"
+	if [ $power_now -gt 0 ]; then
+		watts="$(awk -v power_now="$power_now" 'BEGIN { printf "%0.1fW", power_now/1000000}')"
+		json["full_text"]+=" $watts"
+
+		let total_seconds_left+=$(seconds_left "$battery")
+	fi
+
+	let i+=1
+done
+
+json["full_text"]+=" ⇒" # Arrow, pointing right
+
+# Show remaining duration before depletion, as well as what time that is
+#json["full_text"]+="⌛" # Hourglass
+json["full_text"]+=" $(duration_from_seconds "$total_seconds_left")"
+# Clock
+#json["full_text"]+="🕐" # Clock
+json["full_text"]+=" $(time_from_seconds "$total_seconds_left")"
+
+if [ "$mains_connected" = "y" ]; then
+	json["color"]="$(color_level 1800 "$total_seconds_left" 600)"
+else
+
+	json["color"]="$(color_level 3600 "$total_seconds_left" 1200)"
+
+	# Urgent when there's less that 10 minutes left. Keep in mind that we're basing
+	# this on the batteries's alarm level, so there's likely a bit of spare juice
+	# available beyond the 10 minutes
+	if [ $total_seconds_left -lt 600 ]; then
+		json["urgent"]=true
+	fi
+fi
+
+print_json_array json

@@ -1,0 +1,49 @@
+#!/bin/bash
+set -eu
+. "$(dirname "$0")/common_functions"
+declare -A json=( ["full_text"]="" )
+
+cool=40
+critical=80
+max_meassured=0
+num_zones=0
+label=""
+
+shopt -s nullglob
+for zone in /sys/class/thermal/thermal_zone*; do
+	test -e "$zone/type" || continue
+	test -e "$zone/temp" || continue
+
+	type="$(cat "$zone/type")"
+	case "$type" in
+		x86_pkg_temp|pch_*|iwlwifi_*) :;;
+		*) continue
+	esac
+
+	temp="$(cat "$zone/temp")"
+	let temp=temp/1000
+	if [ $temp -gt $max_meassured ]; then
+		let max_meassured=temp
+		case "$type" in
+			x86_pkg_temp) label="CPU";;
+			pch_*) label="PCH";;
+			iwlwifi_*) label="WiFi";;
+			*) ;;
+		esac
+	fi
+	let num_zones=num_zones+1
+done
+
+# If there were no temperatures to meassure, exit now
+if [ $num_zones -eq 0 ]; then
+	print_json_array json
+	exit 0
+fi
+
+json["full_text"]="$label $max_meassured°C"
+json["color"]="$(color_level "$cool" "$max_meassured" "$critical")"
+if [ $max_meassured -ge $critical ]; then
+	json["urgent"]=true
+fi
+
+print_json_array json

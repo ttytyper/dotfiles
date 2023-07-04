@@ -1,0 +1,33 @@
+#!/bin/bash
+set -eEu
+
+. "$(dirname "$0")/common_functions"
+
+format='[%artist%: ]%title%'
+
+(
+	# Kickstart the while loop immediately on script startup
+	echo "player"
+	mpc idleloop
+)|while read event; do
+	if [ "$event" = "player" ]; then
+		current="$(mpc -f '[%name%: ][%artist%: ]%title%' current|json_escape)"
+		# sed picks out playing/paused from the status line
+		status="$(mpc status|sed -n '2s/\[\([^]]\+\).*/\1/p')"
+		#  Seems like stopped is represented by an empty line
+		status="${status:-stopped}"
+
+		if [ -z "$current" ] || [ "$status" = "stopped" ]; then
+			echo '{ "full_text": "" }'
+		else
+			case "$status" in
+				playing)
+					echo '{ "full_text": "♪ '"$current"'" }'
+				;;
+				paused)
+					echo '{ "full_text": "‖ '"$current"'" }'
+				;;
+			esac
+		fi
+	fi
+done

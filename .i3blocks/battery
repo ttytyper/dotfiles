@@ -1,0 +1,79 @@
+#!/bin/bash
+. "$(dirname "$0")/common_functions"
+
+set -eEu
+
+shopt -s nullglob
+power_paths=( /sys/class/power_supply/*/ )
+declare -A battery_paths
+declare -A battery_capacities
+declare -A battery_usage
+ac_online=""
+charging=""
+icon=""
+declare -A json=( ["full_text"]="" )
+
+for power_path in "${power_paths[@]}"; do
+	type="$(cat "$power_path/type")"
+	case "$type" in
+		Battery)
+			battery_name="$(basename "$power_path")"
+			battery_paths["$battery_name"]="$power_path"
+			battery_capacities["$battery_name"]="$(cat "$power_path/capacity")"
+			battery_usage["$battery_name"]="$(cat "$power_path/power_now")"
+		;;
+		Mains)
+			ac_online="$(cat "$power_paths/online")"
+		;;
+	esac
+done
+
+if [ ${#battery_paths[@]} -eq 0 ]; then
+	# No batteries, no need to show any power status. Print a default (empty) line and exit
+	print_json_array json
+	exit
+fi
+
+if [ "$ac_online" = "1" ]; then
+	icon="🔌" # Power plug
+else
+	icon="🔋" # Battery
+fi
+
+for battery_path in "${battery_paths[@]}"; do
+	status="$(cat "$battery_path/status")"
+	if [ "$status" = "Charging" ]; then
+		icon="⚡" # Lightning bolt
+	fi
+done
+
+
+highest_capacity=0
+for battery_capacity in "${battery_capacities[@]}"; do
+	if [ $battery_capacity -gt $highest_capacity ]; then
+		highest_capacity=$battery_capacity
+	fi
+done
+
+highest_usage=0
+for battery_usage in "${battery_usage[@]}"; do
+	if [ $battery_usage -gt $highest_usage ]; then
+		highest_usage=$battery_usage
+	fi
+done
+
+if [ "$ac_online" = "1" ]; then
+	json["color"]="$(color_level 50 "$highest_capacity" 20)"
+else
+	json["color"]="$(color_level 85 "$highest_capacity" 20)"
+fi
+
+if [ $highest_capacity -lt 15 ]; then
+	json["urgent"]=true
+fi
+
+usage="$(awk '{if($1>0) {printf " (%0.2f W)", $1/1000000 }}' <<< "$highest_usage")"
+
+json["full_text"]="$icon$highest_capacity%$usage"
+
+print_json_array json

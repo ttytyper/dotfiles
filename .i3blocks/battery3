@@ -1,0 +1,121 @@
+#!/bin/bash
+. "$(dirname "$0")/common_functions"
+
+set -eEu
+
+shopt -s nullglob
+power_paths=( /sys/class/power_supply/*/ )
+
+mains_online=""
+charging=""
+battery_exists=""
+total_capacity=0
+total_power_now=0
+total_energy_now=0
+total_energy_full=0
+total_alarm=0
+
+declare -A json=( ["full_text"]="" )
+
+for power_path in "${power_paths[@]}"; do
+	type="$(cat "$power_path/type")"
+	case "$type" in
+		Battery)
+			test -e "$power_path/capacity" || break
+			test -e "$power_path/power_now" || break
+			test -e "$power_path/energy_now" || break
+			test -e "$power_path/energy_full" || break
+			test -e "$power_path/alarm" || break
+			battery_exists="y"
+			capacity="$(cat "$power_path/capacity")"
+			power_now="$(cat "$power_path/power_now")"
+			energy_now="$(cat "$power_path/energy_now")"
+			energy_full="$(cat "$power_path/energy_full")"
+			alarm="$(cat "$power_path/alarm")"
+
+			if [ $capacity -gt 0 ]; then
+				let total_capacity+=$capacity
+			fi
+
+			if [ $power_now -gt 0 ]; then
+				let total_power_now+=$power_now
+			fi
+
+			if [ $energy_now -gt 0 ]; then
+				let total_energy_now+=$energy_now
+			fi
+
+			if [ $alarm -gt 0 ]; then
+				let total_alarm+=$alarm
+			fi
+
+			if [ "$(cat "$power_path/status")" = "Charging" ]; then
+				charging="y"
+			fi
+		;;
+		Mains)
+			if [ "$(cat "$power_path/online")" = "1" ]; then
+				mains_online="y"
+			fi
+		;;
+	esac
+done
+
+# Only display battery status if a battery actually exists
+if [ -n "$battery_exists" ]; then
+
+	# Icons
+	if [ -n "$mains_online" ]; then
+		# On mains power but not charging
+		json["full_text"]+="⚡" # Lightning bolt
+	elif [ -n "$charging" ]; then
+		# When charging
+		json["full_text"]="${json["full_text"]}🔌" # Power plug
+	else
+		# When on battery power
+		json["full_text"]="${json["full_text"]}🔋" # Battery
+	fi
+
+	# Send urgent signal if remaining capacity is way too low
+	if [ $total_capacity -lt 15 ] || [ $total_energy_now -lt $total_alarm ]; then
+		json["urgent"]="true"
+	fi
+
+	# Show remaining capacity
+	json["full_text"]="${json["full_text"]}${total_capacity}%"
+
+	# Only proceed with charging calculations if power is flowing to/from the
+	# battery. Otherwise we would get division by zero.
+	if [ $total_power_now -gt 0 ]; then
+		seconds="$(awk \
+			-v "total_energy_now=$total_energy_now" \
+			-v "total_energy_full=$total_energy_full" \
+			-v "total_power_now=$total_power_now" \
+			'BEGIN {printf "%d", 3600*(total_energy_now-total_energy_full)/total_power_now }'
+		)"
+
+		time_left="$(
+			awk -v seconds="$seconds" 'BEGIN { printf "%02d:%02d", seconds/3600, (seconds/60)%60 }'
+		)"
+
+		# Color based on time left on battery
+		# <=30 mins left = red
+		# >= 90 mins left = green
+		json["color"]="$(color_level 5400 $seconds 1800)"
+
+		clock_time_when_done="$(
+			now="$(date +'%s')"
+			date -d "@$(( $now + $seconds ))" '+%H:%M'
+
+		)"
+
+		watts="$(awk '{if($1>0) {printf "%0.2fW", $1/1000000 }}' <<< "$total_power_now")"
+
+		json["full_text"]+=" ${watts} ${time_left}⧗  ${clock_time_when_done}⏱"
+	elif [ -n "$mains_online" ]; then
+		# On mains, but not charging
+		json["color"]="$(color_level 50 "$total_capacity" 20)"
+	fi
+fi
+
+print_json_array json

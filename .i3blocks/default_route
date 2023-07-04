@@ -1,0 +1,38 @@
+#!/bin/sh
+green_interface="vpn"
+
+case "$1" in
+	-6)
+		inet="-6"
+		prefix="ipv6: "
+	;;
+	*) 
+		inet="-4" 
+		prefix="ipv4: "
+	;;
+esac
+
+get_default_dev() {
+	ip route|sed -n '/^default /{s/.*\bdev \([^ ]\+\).*/\1/p;q}'
+}
+
+(
+	# Start the loop and run it every so often
+	while echo && sleep 60; do :; done &
+	# React immediately to changes
+	ip monitor
+)|while read _; do
+	default_dev="$(ip "$inet" route|get_default_dev)"
+
+	if [ "$default_dev" = "$green_interface" ]; then
+		color="#00FF00"
+	elif [ -n "$default_dev" ]; then
+		color="#FFFF00"
+	else
+		color="#FF0000"
+		default_dev="down"
+	fi
+	
+	echo '{ "full_text": "'$prefix$default_dev'", "color"="'$color'" }'
+	
+done

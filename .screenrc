@@ -1,0 +1,96 @@
+# ~/.screenrc
+# My configuration for GNU/screen
+
+# UTF-8 is neat
+defutf8 on
+utf8 on on
+
+# Yeah, yeah, I've read it a thousand times already
+startup_message off
+
+# My computer has more backscroll memory than my brain, might as well use it
+defscrollback 3000
+
+# The shell should be started as a "login" shell
+#shell -$SHELL
+shell -/bin/bash
+
+# Attention grabbers
+activity "Activity in window %n"
+bell_msg "Ding-a-ling in window %n!^G"
+
+# Use audible bell
+vbell off
+
+# Attempt to function better on unstable ssh connections
+nonblock on
+
+# Lock screen after 12 minutes of inactivity
+#idle 720 lockscreen
+
+# Let C-g abort C-a, instead of toggling vbell
+bind ^g echo "Aborted"
+
+# Use shift-up and shift-down for scrolling. Requires changes to .Xresources if
+# you use xterm or something similar. Info:
+# http://aperiodic.net/screen/interface#xterm-style_scrolling
+bindkey "^[[5;2~" eval "copy" "stuff ^u"
+bindkey -m "^[[5;2~" stuff ^u
+bindkey -m "^[[6;2~" stuff ^d
+
+# Status bar at the bottom. Example:
+# [19:26:04] 0$ bash  1$ bash  2-$ bash  3$* bash    laptop
+caption always "%?%F%{= bw}%:%{= bk}%?[%c:%s] %-Lw%{+b}%10L>%n%f* %t%{-b}%+Lw%=%H%{dd}"
+
+# Highlight window titles that want attention with bright red
+rendition bell br
+rendition monitor br
+rendition silence br
+
+# Standout rendition, including vertical bar, is bold green on black background
+rendition so "=b kg"
+
+# Enable 256 colors
+term screen-256color
+altscreen on
+
+# Shortcuts to window navigation
+# The key bindings below might not be the same on all kinds of terminals. Use
+# showkey -a to determine what code your terminal maps the keys to.
+# Use alt and the upper left keys to quicly switch back and forth
+bindkey "^[|" other # alt + |
+bindkey "^[h" prev # alt + h
+bindkey "^[l" next # alt + l
+bindkey "^[^M" screen # alt + enter creates a new window
+
+# Bind F1-12 to jump between windows. Intentionally starting from one to
+# decrease mental mathness. Window 0 will just have to be accessed the old way
+# Use bindkey -d to show default bindings
+
+# Works in urxvt:
+#bindkey -k k1 select  1   # F1
+#bindkey -k k2 select  2   # F2
+#bindkey -k k3 select  3   # F3
+#bindkey -k k4 select  4   # F4
+#bindkey -k k5 select  5   # F5
+#bindkey -k k6 select  6   # F6
+#bindkey -k k7 select  7   # F7
+#bindkey -k k8 select  8   # F8
+#bindkey -k k9 select  9   # F9
+#bindkey -k k; select 10   # F10
+#bindkey -k F1 select 11   # F11
+#bindkey -k F2 select 12   # F12 - Doesn't work?
+#
+# Works in Git for Windows:
+#bindkey "^[OP" select    1  # F1
+#bindkey "^[OQ" select    2  # F2
+#bindkey "^[OR" select    3  # F3
+#bindkey "^[OS" select    4  # F4
+#bindkey "^[[15~" select  5  # F5
+#bindkey "^[[17~" select  6  # F6
+#bindkey "^[[18~" select  7  # F7
+#bindkey "^[[19~" select  8  # F8
+#bindkey "^[[20~" select  9  # F9
+#bindkey "^[[21~" select 10  # F10
+#bindkey "^[[23~" select 11  # F11
+#bindkey "^[[24~" select 12  # F12
