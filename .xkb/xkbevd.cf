@@ -1,0 +1,10 @@
+soundDirectory	= ""
+soundCmd	= "aplay --quiet --nonblock"
+
+// More info:
+// http://wiesmann.codiferes.net/wordpress/?p=4536&lang=en
+
+Bell() 			"~/.xkb/clearly-602.wav &"
+Bell(ImAlive) none
+// Debugging
+//Bell() shell "echo foo $(name)"
