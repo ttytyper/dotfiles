@@ -10,11 +10,11 @@ alias dotfiles='git --git-dir="$HOME/.dotfiles.git/" --work-tree="$HOME"'
 # Clone via bundle:
 # alice$ dotfiles bundle create dotfiles.bundle main
 # alice$ scp dotfiles.bundle bob:
-# bob$ git clone --bare dotfiles.bundle "$HOME/.dotfiles.git"
+# bob$ git clone --branch main --bare dotfiles.bundle "$HOME/.dotfiles.git"
 # This creates a 'remote' entry in ~/.dotfiles.git/config pointing to the dotfiles.bundle file. Future updates:
 # alice$ dotfiles bundle create dotfiles.bundle main
 # alice$ scp dotfiles.bundle bob:
-# bob$ dotfiles pull
+# bob$ dotfiles pull origin main
 #
 # Clone from github:
 # git clone --bare https://github.com/ttytyper/dotfiles.git "$HOME/.dotfiles.git"
