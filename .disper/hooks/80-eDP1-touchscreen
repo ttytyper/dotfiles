@@ -1,0 +1,7 @@
+#!/bin/sh
+if [ -r /sys/devices/virtual/dmi/id/product_name ] && grep -q '^20CD0038MN$' /sys/devices/virtual/dmi/id/product_name; then
+	# This makes touch and pen input work properly even when external monitors are connected
+	xinput map-to-output 'ELAN Touchscreen' eDP1
+	xinput map-to-output 'Wacom ISDv4 EC Pen stylus' eDP1
+	xinput map-to-output 'Wacom ISDv4 EC Pen eraser' eDP1
+fi

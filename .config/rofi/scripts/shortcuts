@@ -1,0 +1,60 @@
+#!/bin/bash
+separator() {
+	echo "# ----------- #"
+}
+
+i3_shortcuts() {
+	mapfile -t workspaces < <(i3-msg -t get_workspaces|jq '.[]["name"]')
+
+	for ws in "${workspaces[@]}"; do
+		echo "i3-msg workspace $ws"
+	done
+	separator
+	for ws in "${workspaces[@]}"; do
+		echo "i3-msg move workspace $ws"
+	done
+}
+
+yoga_rotate_shortcuts() {
+	for rotation in normal left right inverted; do
+		echo "yoga-rotate $rotation"
+	done
+}
+
+xbacklight_shortcuts() {
+	for i in 25 50 75 100; do
+		echo "xbacklight -set $i"
+	done
+}
+
+systemctl_suspend() {
+	echo "systemctl suspend"
+}
+
+barrier_shortcuts() {
+	echo "barrierc -1 -d ERROR desktop.vpn.catnet.dk"
+}
+
+show_shortcuts() {
+	#i3_shortcuts
+	#separator
+	yoga_rotate_shortcuts
+	separator
+	xbacklight_shortcuts
+	separator
+	barrier_shortcuts
+	separator
+	systemctl_suspend
+}
+
+if [ $# -eq 0 ]; then
+	show_shortcuts
+else
+	$*
+
+	# When moving i3 windows to a different workspace, change focus to the workspace
+	if [[ "$1" =~ ^'i3-msg move workspace ' ]]; then
+		# Remove "i3-msg move " to get just the workspace command
+		i3-msg "${1:12}" >/dev/null
+	fi
+fi

@@ -6,7 +6,7 @@ exec 1>"/tmp/$USER-xerrors.log"
 exec 2>&1
 #set -x
 
-# Source .bashrc, if existing, to get PATH and other vars
+# Source .bash_profile, if existing, to get PATH and other vars
 [ -f "${HOME}/.bash_profile" ] && . "${HOME}/.bash_profile"
 
 # A quick function to check if a command exists

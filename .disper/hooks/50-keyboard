@@ -1,0 +1,33 @@
+#!/bin/bash
+# Set keyboard options
+# (more options: http://gentoo-wiki.com/HOWTO_X11_Keyboard )
+# I primarily want Norwegian layout with no dead keys. In addition, caps lock
+# functions like an extra ctrl key
+setxkbmap \
+	-layout no \
+	-variant nodeadkeys\
+	-option \
+	-option ctrl:nocaps \
+	-option keypad:pointerkeys
+
+# Set repeat rate
+xset r rate 200 35
+
+# Use xkbevd to generate audible bell
+# http://www.gentoo-wiki.info/HOWTO_Virtual_PC_Speaker
+pkill -U "$UID" xkbevd
+xkbevd -bg
+
+# xbindkeys is configure to launch rofi on Windows + d. With xcape, it's possible to assign the Windows key by itself to a key combo, such as Windows + d. This is useful for launching rofi on e.g. a ThinkPad Yoga S1 in tablet mode, where the only available button is the Windows button at the bottom of the monitor
+if type xcape >/dev/null; then
+	pkill -U "$UID" xcape
+	xcape -e 'Super_L=Super_L|d'
+fi
+
+if type xbindkeys >/dev/null 2>&1 && [ -f ~/.xbindkeysrc ]; then
+	pkill -U "$UID" xbindkeys
+	xbindkeys
+fi
+
+# Adjust the beep to be less annoying
+xset b 10 400 50

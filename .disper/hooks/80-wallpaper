@@ -1,0 +1,4 @@
+#!/bin/sh
+[ -d "${HOME}/.backgrounds" ] || exit 0
+type feh >/dev/null 2>&1 || exit 0
+exec feh --no-fehbg --image-bg black --bg-max --randomize --recursive "${HOME}/.backgrounds/"

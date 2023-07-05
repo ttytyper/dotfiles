@@ -1,0 +1,19 @@
+#!/bin/sh
+# Set calibration props for the built-in tablet. Parameters from
+# xinput_calibrator, followed by trial-and-error. Proper calibration relised on
+# not just where the tip of the styles touches the screen, but also how the
+# stylus is held. In different orientations, the stylus will appear to be
+# angled differently. Calibration therefore should be done in all orientations
+
+if xrandr |grep -qE '^eDP1 connected primary [^ ]+ \(normal'; then
+	xinput --set-prop 'Wacom ISDv4 EC Pen stylus' 'Wacom Tablet Area' 50 0 27700 15600
+elif xrandr |grep -qE '^eDP1 connected primary [^ ]+ left '; then
+	# Rotated left
+	xinput --set-prop 'Wacom ISDv4 EC Pen stylus' 'Wacom Tablet Area' 0 0 27600 15430
+elif xrandr |grep -qE '^eDP1 connected primary [^ ]+ right '; then
+	# Rotated right
+	:
+elif xrandr |grep -qE '^eDP1 connected primary [^ ]+ inverted '; then
+	# Inverted
+	:
+fi

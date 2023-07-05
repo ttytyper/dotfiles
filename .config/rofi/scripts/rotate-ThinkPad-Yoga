@@ -1,0 +1,37 @@
+#!/bin/bash
+if [ $# -eq 0 ]; then
+	echo "Normal"
+	echo "Left"
+	echo "Right"
+	echo "Inverted"
+else
+	orientation="$(echo "$1"|tr A-Z a-z)"
+	output="eDP-1"
+	devices=(
+		"Wacom ISDv4 EC Pen stylus"
+		"Wacom ISDv4 EC Pen eraser"
+		"ELAN Touchscreen"
+	)
+	disable_in_tablet_tent_mode=(
+		"SynPS/2 Synaptics TouchPad"
+		"TPPS/2 IBM TrackPoint"
+	)
+
+	case "$orientation" in
+		normal|left|right|inverted) :;;
+		*) exit 1;;
+	esac
+
+	xrandr --output eDP1 --rotate "$orientation"
+	for device in "${devices[@]}"; do
+		xinput map-to-output "$device" "$output"
+	done
+
+	for device in "${disable_in_tablet_tent_mode[@]}"; do
+		if [ "$orientation" = "normal" ]; then
+			xinput enable "$device"
+		else
+			xinput disable "$device"
+		fi
+	done
+fi

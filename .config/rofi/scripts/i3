@@ -1,0 +1,20 @@
+#!/bin/bash
+
+if [ $# -eq 0 ]; then
+	mapfile -t workspaces < <(i3-msg -t get_workspaces|jq '.[]["name"]')
+
+	for ws in "${workspaces[@]}"; do
+		echo "workspace $ws"
+	done
+
+	for ws in "${workspaces[@]}"; do
+		echo "move workspace $ws"
+	done
+else
+	i3-msg "$1" >/dev/null
+	# When moveing windows to a different workspace, move focus to the workspace
+	if [[ "$1" =~ ^'move workspace ' ]]; then
+		# Remove "move " to get just the workspace commadn
+		i3-msg "${1:5}" >/dev/null
+	fi
+fi

@@ -1,0 +1,121 @@
+###########################
+# xbindkeys configuration #
+###########################
+
+# Use Super_L+d to show rofi. xcape is configured to map the Super_L key by itself to Super_L+d. Super_L and Mod4 are better known as the Windows key.
+# rofi is configured (in ~/.Xresources) to use the same combo to cancel
+"rofi -show drun"
+	Mod4 + d
+
+# Windows+P = Activate any connected external monitors with multihead (Activates projector switch dialog in Windows 7)
+"mydisper"
+	Mod4 + p
+
+# An experiment to rotate the screen with the Windows key, but only while in tablet mode (detected by the disabled touchpad)
+#"xinput list-props 'SynPS/2 Synaptics TouchPad'|sed -n 's/\s*Device Enabled (134):\s*\([0-1]\)$/\1/p'|grep -q 0 && $HOME/bin/yoga-rotate.sh ccw"
+#"$HOME/bin/yoga-rotate.sh ccw"
+#	Super_L
+######
+
+# Windows + Shift + S = suspend system
+#"systemctl suspend"
+#	Mod4 + Shift + S
+
+# Switch between windows with the Windows key alone, but only in non-rotated mode. If this seems to override Windows+Any combinations, try pressing Any first, then Window
+#"if [ `$HOME/bin/yoga-rotate.sh status` != 'normal' ]; then ratpoison -c next; fi"
+#	Super_L
+
+# Easy rotation of the screen
+#"$HOME/bin/yoga-rotate.sh normal"
+#	Mod4 + Control + Up
+#"$HOME/bin/yoga-rotate.sh inverted"
+#	Mod4 + Control + Down
+#"$HOME/bin/yoga-rotate.sh left"
+#	Mod4 + Control + Left
+#"$HOME/bin/yoga-rotate.sh right"
+#	Mod4 + Control + Right
+
+# Pause = Activate screensaver/locker. Also clear various keys
+"set -x; ssh-add -D; killall -q -SIGHUP gpg-agent; rm -vrf "$HOME/.ssh/controlmasters/"*; xset s activate"
+	Pause
+## Same with Win+l, to emulate Windows behavior
+#"set -x; ssh-add -D; killall -q -SIGHUP gpg-agent; rm -vrf "$HOME/.ssh/controlmasters/"*; xset s activate"
+#	Mod4 + l
+# Lenovo Thinkpad Yoga has a lock button that generates a Mod4 + o event
+"set -x; ssh-add -D; killall -q -SIGHUP gpg-agent; rm -vrf "$HOME/.ssh/controlmasters/"*; xset s activate"
+	Mod4 + o
+# This is for the lock button on the side of the Lenovo Thinkpad Yoga
+#"ssh-add -D; killall -q -SIGHUP gpg-agent; sleep 1; xset s activate"
+#	0xffeb + Super_L
+
+# Controls for keyboards with hotkeys, including certain Apple keyboards
+# PCM for docking station, Master for internal
+#"pgrep -x amixer || amixer -q sset Master 5%-; aplay -q ~/.xkb/me-too-603.wav"
+#	XF86AudioLowerVolume
+#"pgrep -x amixer || amixer -q sset Master 5%+; aplay -q ~/.xkb/me-too-603.wav"
+#	XF86AudioRaiseVolume
+#"pgrep -x amixer || amixer -q sset PCM Togge; amixer -q sset Master toggle; aplay -q ~/.xkb/me-too-603.wav"
+#	XF86AudioMute
+## Capture Switch is available on Lenovo Thinkpad Yoga. Not sure how generic this setup is
+#"amixer cset "$(amixer controls|sed -n "s/^\(numid=[0-9]\+\)\,iface=[a-zA-Z0-9]\+\,name='Capture Switch'$/\1/p")" toggle"
+#	XF86AudioMicMute
+
+# Increase volume
+"pactl set-sink-volume @DEFAULT_SINK@ +2%; aplay -q ~/.xkb/me-too-603.wav"
+   XF86AudioRaiseVolume
+# Decrease volume
+"pactl set-sink-volume @DEFAULT_SINK@ -2%; aplay -q ~/.xkb/me-too-603.wav"
+   XF86AudioLowerVolume
+# Mute volume
+"pactl set-sink-mute @DEFAULT_SINK@ toggle; aplay -q ~/.xkb/me-too-603.wav"
+   XF86AudioMute
+# Mute microphone
+"pactl set-source-mute @DEFAULT_SOURCE@ toggle"
+   XF86AudioMicMute
+
+"mpc -q prev"
+	XF86AudioPrev
+"mpc -q next"
+	XF86AudioNext
+# Toggle play/pause (or play/stop if playing an http stream)
+"mpc -f '%file%' current|grep -q '^https\?://' && mpc -q stop ||  mpc -q toggle"
+	XF86AudioPlay
+"mpc -q pause"
+	XF86AudioPause
+"mpc -q stop"
+	XF86AudioStop
+# Alternatives for machines without media hotkeys
+"mpc -q prev"
+	XF86Tools
+"mpc -q next"
+	XF86Search
+"mpc -f '%file%' current|grep -q '^https\?://' && mpc -q stop ||  mpc -q toggle"
+	XF86LaunchA
+
+# Backlight control
+"xbacklight -time 50 -steps 5 -inc 2"
+	XF86MonBrightnessUp
+"xbacklight -time 50 -steps 5 -dec 2"
+	XF86MonBrightnessDown
+
+# Screenshot
+"shot"
+	Print
+
+### HAM rig control. For K3 and KX3, first run:
+# rigctld -r /dev/serial/by-id/usb-FTDI_FT232R_USB_UART_A9015XNW-if00-port0 -m229
+# Back button on mouse: m:0x0 + b:8
+#"echo T0|rigctl -m2 &"
+#	m:0x0 + b:8 + Release
+#"echo T1|rigctl -m2 &"
+#	m:0x0 + b:8
+# Directly
+# m:0x0 + b:8 = mouse back button
+#"echo 'RX;' >> /dev/radio/kx3"
+#	m:0x0 + b:8 + Release
+#"stty -F /dev/radio/kx3 38400; echo 'TX;' >> /dev/radio/kx3"
+#	m:0x0 + b:8
+
+##################################
+# End of xbindkeys configuration #
+##################################

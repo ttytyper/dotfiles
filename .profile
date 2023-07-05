@@ -16,6 +16,19 @@ cmdexists dircolors && eval "$(dircolors -b)"
 # I want my ~/bin and various ~/sbin dirs to be part of my PATH
 export PATH="$HOME/bin:$HOME/.local/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:$PATH:/usr/X11R6/bin:/usr/X11R6/sbin"
 
+[ -z "$XDG_CONFIG_HOME" ] && export XDG_CONFIG_HOME="$HOME/.config"
+[ -z "$XDG_CACHE_HOME" ] && export XDG_CACHE_HOME="$HOME/.cache"
+[ -z "$XDG_DATA_HOME" ] && export XDG_DATA_HOME="$HOME/.local/share"
+[ -z "$XDG_STATE_HOME" ] && export XDG_STATE_HOME="$HOME/.local/state"
+if [ -z "$XDG_RUNTIME_DIR" ]; then
+	if [ -d "/var/run/user/$UID" ]; then
+		export XDG_RUNTIME_DIR="/var/run/user/$UID"
+	elif mkdir -p "/tmp/user/$UID" && chown "$UID:$GID" "/tmp/user/$UID" && chmod 700 "/tmp/user/$UID"; then
+		export XDG_RUNTIME_DIR="/tmp/user/$UID"
+	fi
+fi
+		
+
 # If we are working in a virtual console...
 if [ "${TERM}" = "linux" ]; then
 	# Change the beep frequency and length
