@@ -30,9 +30,9 @@ xsetroot -cursor_name watch
 xsetroot -solid black
 
 # Move cache and such to RAM medium
-if cmdexists unburden-home-dir; then
-	unburden-home-dir > /dev/null
-fi
+#if cmdexists unburden-home-dir; then
+#	unburden-home-dir > /dev/null
+#fi
 
 # Select an X terminal
 # Preferably urxvt, alternatively plain xterm

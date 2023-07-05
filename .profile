@@ -27,7 +27,15 @@ if [ -z "$XDG_RUNTIME_DIR" ]; then
 		export XDG_RUNTIME_DIR="/tmp/user/$UID"
 	fi
 fi
-		
+if [ -f "$XDG_CONFIG_HOME/user-dirs.dirs" ]; then
+	. "$XDG_CONFIG_HOME/user-dirs.dirs"
+	export XDG_DESKTOP_DIR
+	export XDG_DOWNLOAD_DIR
+	export XDG_DOCUMENTS_DIR
+	export XDG_MUSIC_DIR
+	export XDG_PICTURES_DIR
+	export XDG_VIDEOS_DIR
+fi
 
 # If we are working in a virtual console...
 if [ "${TERM}" = "linux" ]; then
@@ -100,8 +108,9 @@ fi
 export PLATFORMIO_BUILD_CACHE_DIR="$HOME/.cache/platformio/build_cache_dir"
 export PLATFORMIO_BUILD_DIR="$HOME/.cache/platformio/build_dir"
 
-if [ "$XDG_RUNTIME_DIR" ]; then
+if cmdexists mpd && [ -d "$XDG_MUSIC_DIR" ]; then
 	export MPD_HOST="$XDG_RUNTIME_DIR/mpd/socket"
+	[ ! -e "$XDG_RUNTIME_DIR/mpd/socket" ] && mpd
 fi
 
 # I want pass (password manager) to use the primary clipboard
