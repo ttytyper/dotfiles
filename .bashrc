@@ -4,12 +4,24 @@
 # Use git for managing dotfiles
 # Source of idea: https://www.atlassian.com/git/tutorials/dotfiles
 alias dotfiles='git --git-dir="$HOME/.dotfiles.git/" --work-tree="$HOME"'
-# Initial setup:
+# Initial setup (how it all started):
 # git init --bare "$HOME/.dotfiles.git"
-# To apply to a new system, add the alias above and run:
+# 
+# Clone via bundle:
+# alice$ dotfiles bundle create dotfiles.bundle main
+# alice$ scp dotfiles.bundle bob:
+# bob$ git clone --bare dotfiles.bundle "$HOME/.dotfiles.git"
+# This creates a 'remote' entry in ~/.dotfiles.git/config pointing to the dotfiles.bundle file. Future updates:
+# alice$ dotfiles bundle create dotfiles.bundle main
+# alice$ scp dotfiles.bundle bob:
+# bob$ dotfiles pull
+#
+# Clone from github:
 # git clone --bare https://github.com/ttytyper/dotfiles.git "$HOME/.dotfiles.git"
+#
+# Final steps:
 # dotfiles config --local status.showUntrackedFiles no
-# dotfiles checkout # Will tell you if you need to move any pre-existing files out of the way. Use --force to delete all of them
+# dotfiles checkout main # Will tell you if you need to move any pre-existing files out of the way. Use --force to delete all of them
 # dotfiles submodule update --init --recursive
 
 # Shorthand to check if a command exists

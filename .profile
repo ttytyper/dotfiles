@@ -16,10 +16,6 @@ cmdexists dircolors && eval "$(dircolors -b)"
 # I want my ~/bin and various ~/sbin dirs to be part of my PATH
 export PATH="$HOME/bin:$HOME/.local/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:$PATH:/usr/X11R6/bin:/usr/X11R6/sbin"
 
-[ -z "$XDG_CONFIG_HOME" ] && export XDG_CONFIG_HOME="$HOME/.config"
-[ -z "$XDG_CACHE_HOME" ] && export XDG_CACHE_HOME="$HOME/.cache"
-[ -z "$XDG_DATA_HOME" ] && export XDG_DATA_HOME="$HOME/.local/share"
-[ -z "$XDG_STATE_HOME" ] && export XDG_STATE_HOME="$HOME/.local/state"
 if [ -z "$XDG_RUNTIME_DIR" ]; then
 	if [ -d "/var/run/user/$UID" ]; then
 		export XDG_RUNTIME_DIR="/var/run/user/$UID"
@@ -27,15 +23,18 @@ if [ -z "$XDG_RUNTIME_DIR" ]; then
 		export XDG_RUNTIME_DIR="/tmp/user/$UID"
 	fi
 fi
-if [ -f "$XDG_CONFIG_HOME/user-dirs.dirs" ]; then
-	. "$XDG_CONFIG_HOME/user-dirs.dirs"
-	export XDG_DESKTOP_DIR
-	export XDG_DOWNLOAD_DIR
-	export XDG_DOCUMENTS_DIR
-	export XDG_MUSIC_DIR
-	export XDG_PICTURES_DIR
-	export XDG_VIDEOS_DIR
-fi
+[ -z "$XDG_CONFIG_HOME" ] && export XDG_CONFIG_HOME="$HOME/.config"
+[ -z "$XDG_CACHE_HOME" ] && export XDG_CACHE_HOME="$HOME/.cache"
+[ -z "$XDG_DATA_HOME" ] && export XDG_DATA_HOME="$HOME/.local/share"
+[ -z "$XDG_STATE_HOME" ] && export XDG_STATE_HOME="$HOME/.local/state"
+
+[ -f "$XDG_CONFIG_HOME/user-dirs.dirs" ] && . "$XDG_CONFIG_HOME/user-dirs.dirs"
+[ -z "$XDG_DESKTOP_DIR" ] && export XDG_DESKTOP_DIR
+[ -z "$XDG_DOWNLOAD_DIR" ] && export XDG_DOWNLOAD_DIR
+[ -z "$XDG_DOCUMENTS_DIR" ] && export XDG_DOCUMENTS_DIR
+[ -z "$XDG_MUSIC_DIR" ] && export XDG_MUSIC_DIR
+[ -z "$XDG_PICTURES_DIR" ] && export XDG_PICTURES_DIR
+[ -z "$XDG_VIDEOS_DIR" ] && export XDG_VIDEOS_DIR
 
 # If we are working in a virtual console...
 if [ "${TERM}" = "linux" ]; then
