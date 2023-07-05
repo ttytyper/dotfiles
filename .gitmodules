@@ -17,3 +17,4 @@
 	path = .local/share/liquidprompt
 	url = https://github.com/nojhan/liquidprompt.git
 	branch = stable
+	shallow = true

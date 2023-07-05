@@ -17,7 +17,7 @@ alias dotfiles='git --git-dir="$HOME/.dotfiles.git/" --work-tree="$HOME"'
 # bob$ dotfiles pull origin main
 #
 # Clone from github:
-# git clone --bare https://github.com/ttytyper/dotfiles.git "$HOME/.dotfiles.git"
+# git clone --branch main --bare https://github.com/ttytyper/dotfiles.git "$HOME/.dotfiles.git"
 #
 # Final steps:
 # dotfiles config --local status.showUntrackedFiles no
