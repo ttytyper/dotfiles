@@ -1,13 +1,14 @@
 #!/bin/bash
-WORKINGPIDS=""
-
-# Redirect stdout and stderr to a file
-exec 1>"/tmp/$USER-xerrors.log"
-exec 2>&1
-#set -x
 
 # Source .bash_profile, if existing, to get PATH and other vars
 [ -f "${HOME}/.bash_profile" ] && . "${HOME}/.bash_profile"
+
+WORKINGPIDS=""
+
+# Redirect stdout and stderr to a file
+exec 1>"$XDG_RUNTIME_DIR/xinit-output-$$.log"
+exec 2>&1
+#set -x
 
 # A quick function to check if a command exists
 cmdexists()

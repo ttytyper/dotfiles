@@ -34,6 +34,10 @@ fi
 [ -z "$XDG_PICTURES_DIR" ] && export XDG_PICTURES_DIR
 [ -z "$XDG_VIDEOS_DIR" ] && export XDG_VIDEOS_DIR
 
+[ -d "$XDG_CACHE_HOME" ] || mkdir -p "$XDG_CACHE_HOME"
+[ -d "$XDG_DATA_HOME" ] || mkdir -p "$XDG_DATA_HOME"
+[ -d "$XDG_STATE_HOME" ] || mkdir -p "$XDG_STATE_HOME"
+
 # If we are working in a virtual console...
 if [ "${TERM}" = "linux" ]; then
 	# Change the beep frequency and length
@@ -45,13 +49,19 @@ fi
 # Don't log commands that begin with space, and also don't log repeated commands
 export HISTCONTROL="ignoreboth"
 
-if cmdexists locale && locale -a 2>/dev/null|grep -q '^en_DK\.utf8$'; then
-	export LANGUAGE="en_DK.UTF-8"
-	export LANG="en_DK.UTF-8"
-	export LC_ALL="en_DK.UTF-8"
-else
-	# Fall back to POSIX locale if all preferred locales fail
-	export LC_ALL="C"
+if cmdexists locale; then
+	if locale -a 2>/dev/null|grep -q '^en_DK\.utf8$'; then
+		export LANGUAGE="en_DK.UTF-8"
+		export LANG="en_DK.UTF-8"
+		export LC_ALL="en_DK.UTF-8"
+	elif locale -a 2>/dev/null|grep -q '^en_US\.utf8$'; then
+		export LANGUAGE="en_US.UTF-8"
+		export LANG="en_US.UTF-8"
+		export LC_ALL="en_US.UTF-8"
+	else
+		# Fall back to POSIX locale if all preferred locales fail
+		export LC_ALL="C"
+	fi
 fi
 #export TZ="CET"
 
@@ -106,8 +116,9 @@ export PLATFORMIO_BUILD_CACHE_DIR="$HOME/.cache/platformio/build_cache_dir"
 export PLATFORMIO_BUILD_DIR="$HOME/.cache/platformio/build_dir"
 
 if cmdexists mpd && [ -d "$XDG_MUSIC_DIR" ]; then
-	export MPD_HOST="$XDG_RUNTIME_DIR/mpd/socket"
-	[ ! -e "$XDG_RUNTIME_DIR/mpd/socket" ] && mpd
+	#export MPD_HOST="$XDG_RUNTIME_DIR/mpd/socket"
+	export MPD_HOST="$HOME/.local/state/mpd.socket"
+	[ ! -e "$MPD_HOST" ] && mpd
 fi
 
 # I want pass (password manager) to use the primary clipboard

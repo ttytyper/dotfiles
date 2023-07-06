@@ -76,21 +76,21 @@ URxvt.color14: cyan
 URxvt.color15: white
 ! }}}
 
-rofi.terminal: urxvt
-rofi.monitor: -4
-rofi.ssh-client: mosh
-rofi.parse-known-hosts: false
-rofi.sidebar-mode: true
-rofi.theme: touch-friendly
-! Scrolling method. (0: Page, 1: Centered)
-rofi.scroll-method: 1
-! Large font for easier use on touchscreens
-rofi.font: Hack 32
-rofi.width: 75
-rofi.height: 75
-rofi.modi: drun,ssh,Shortcuts:~/.config/rofi/scripts/shortcuts
-! xbindkeys is configured to open rofi with Super_L+d. The same combo cancels out of rofi here. xcape is configured to map the Super_L key by itself to Super_L+d. Super_L is better known as the Windows key
-rofi.kb-cancel: Escape,Control+g,Super_L+d
-! By default rofi uses single click to select and double click to accept. I want single click to accept
-rofi.me-select-entry: MouseSecondary
-rofi.me-accept-entry: MousePrimary
+!rofi.terminal: urxvt
+!rofi.monitor: -4
+!rofi.ssh-client: mosh
+!rofi.parse-known-hosts: false
+!rofi.sidebar-mode: true
+!rofi.theme: touch-friendly
+!! Scrolling method. (0: Page, 1: Centered)
+!rofi.scroll-method: 1
+!! Large font for easier use on touchscreens
+!rofi.font: Hack 32
+!rofi.width: 75
+!rofi.height: 75
+!rofi.modi: drun,ssh,Shortcuts:~/.config/rofi/scripts/shortcuts
+!! xbindkeys is configured to open rofi with Super_L+d. The same combo cancels out of rofi here. xcape is configured to map the Super_L key by itself to Super_L+d. Super_L is better known as the Windows key
+!rofi.kb-cancel: Escape,Control+g,Super_L+d
+!! By default rofi uses single click to select and double click to accept. I want single click to accept
+!rofi.me-select-entry: MouseSecondary
+!rofi.me-accept-entry: MousePrimary

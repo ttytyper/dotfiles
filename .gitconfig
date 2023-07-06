@@ -27,5 +27,3 @@
 	gpgSign = true
 [init]
 	defaultBranch = main
-[safe]
-	directory = /home/jesper/.espressif/esp-matter/connectedhomeip/connectedhomeip
