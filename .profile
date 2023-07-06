@@ -11,8 +11,6 @@ cmdexists()
 # for ssh logins, install and configure the libpam-umask package.
 umask 022
 
-cmdexists dircolors && eval "$(dircolors -b)"
-
 # I want my ~/bin and various ~/sbin dirs to be part of my PATH
 export PATH="$HOME/bin:$HOME/.local/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:$PATH:/usr/X11R6/bin:/usr/X11R6/sbin"
 
@@ -76,9 +74,9 @@ export LESSHISTFILE="-"
 export LESSHISTSIZE=0
 
 # If an ecryptfs dir is present but locked, notify the user who might want a hint to unlock it
-if [ -d "$HOME/.Private" ] && [ -e "$HOME/.ecryptfs/Private.mnt" ] && cmdexists ecryptfs-mount-private && ! mountpoint -q "$(cat "$HOME/.ecryptfs/Private.mnt")"; then
-	echo "Note: ecryptfs is locked. Use ecryptfs-mount-private to unlock"
-fi
+#if [ -d "$HOME/.Private" ] && [ -e "$HOME/.ecryptfs/Private.mnt" ] && cmdexists ecryptfs-mount-private && ! mountpoint -q "$(cat "$HOME/.ecryptfs/Private.mnt")"; then
+#	echo "Note: ecryptfs is locked. Use ecryptfs-mount-private to unlock"
+#fi
 
 # gpg-agent, for managing my gpg key
 if [ -d "${HOME}/.gnupg" ] && cmdexists gpg-agent; then

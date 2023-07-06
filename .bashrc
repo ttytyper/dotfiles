@@ -30,20 +30,25 @@ cmdexists()
 	type "${@}" 1>/dev/null 2>&1
 }
 
+cmdexists dircolors && eval "$(dircolors -b)"
+
 # colors for ls, etc.
 # Warning: This might break in non-GNU versions of ls
 if [ "${LS_COLORS}" ]; then
 	alias ls="ls -hF --color=auto"
+	alias ip='ip -human -color -oneline -brief'
 else
 	alias ls="ls -hF"
+	alias ip='ip -human -oneline -brief'
 fi
 
-alias l="ls -l"
+alias l="ls -l" # One entry per line
 alias ll="l -L" # Dereference links. Show information about the file referenced, rather than the link itself
-alias lla="l -A"
+alias la="l -A" # Include dot-files
+alias lla="ll -A" # Include dot-files
 
 alias netstat='netstat --wide'
-alias ip='ip -human -color -oneline -brief'
+
 
 if cmdexists lynx; then
 	alias lynx="lynx -nopause"
