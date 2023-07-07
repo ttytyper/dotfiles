@@ -115,7 +115,7 @@ fi
 export PLATFORMIO_BUILD_CACHE_DIR="$HOME/.cache/platformio/build_cache_dir"
 export PLATFORMIO_BUILD_DIR="$HOME/.cache/platformio/build_dir"
 
-if cmdexists mpd && [ -d "$XDG_MUSIC_DIR" ]; then
+if cmdexists mpd; then
 	#export MPD_HOST="$XDG_RUNTIME_DIR/mpd/socket"
 	export MPD_HOST="$HOME/.local/state/mpd.socket"
 	[ ! -e "$MPD_HOST" ] && mpd

@@ -20,6 +20,7 @@ alias dotfiles='git --git-dir="$HOME/.dotfiles.git/" --work-tree="$HOME"'
 # git clone --branch main --bare https://github.com/ttytyper/dotfiles.git "$HOME/.dotfiles.git"
 #
 # Final steps:
+# cd ~
 # dotfiles config --local status.showUntrackedFiles no
 # dotfiles checkout main # Will tell you if you need to move any pre-existing files out of the way. Use --force to delete all of them
 # dotfiles submodule update --init --recursive
