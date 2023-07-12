@@ -29,7 +29,8 @@ force_display_urgency_hint 2000 ms
 
 # start a terminal
 #bindsym $mod+Return exec i3-sensible-terminal
-bindsym $mod+Return exec urxvt -e screen
+#bindsym $mod+Return exec urxvt -e screen
+#bindsym $mod+Return exec urxvt
 
 # kill focused window
 bindsym $mod+q kill
@@ -63,10 +64,10 @@ bindsym $mod+space focus mode_toggle
 
 ## Workspaces
 # Chat, email. Speech bubble icon
+# Find window class with `xprop|grep WM_CLASS`, click on the window
 set $workspace1 "1: Coms "
 assign [class="TelegramDesktop"] $workspace1
-assign [class="Discord"] $workspace1
-assign [class="Mail"] $workspace2
+assign [class="discord"] $workspace1
 # Prefer putting it on small external monitor, alternatively on internal
 workspace $workspace1 output DP1-2 eDP1
 
@@ -74,13 +75,13 @@ workspace $workspace1 output DP1-2 eDP1
 set $workspace2 "2: Web "
 assign [class="Navigator"] $workspace2
 # Prefer putting it on large external monitor, alternatively on internal
-workspace $workspace1 output HDM1 eDP1
+workspace $workspace2 output HDM1 eDP1
 
 # Terminals. Shell icon
 set $workspace3 "3: Work "
 assign [class="urxvt"] $workspace3
 # Prefer putting it on large external monitor, alternatively on internal
-workspace $workspace1 output HDM1 eDP1
+workspace $workspace3 output HDM1 eDP1
 
 set $workspace4 "4: Misc"
 
@@ -169,7 +170,7 @@ for_window [title="Android Emulator - .*"] floating enable
 for_window [class="Pinentry"] floating enable
 
 # SpeedCrunch is better floating
-#for_window [title="Speedcrunch"] floating enable
+for_window [class="speedcrunch"] floating enable
 
 # No borders
 hide_edge_borders both

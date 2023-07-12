@@ -69,6 +69,8 @@ if [[ $- = *i* ]]; then
 	LP_HOSTNAME_ALWAYS=1
 	LP_USER_ALWAYS=0
 	LP_ENABLE_TITLE=1
+	LP_ENABLE_SCREEN_TITLE=0
+	LP_ENABLE_SSH_COLORS=1
 	if [ -e "$HOME/.local/share/liquidprompt/liquidprompt" ]; then
 		source "$HOME/.local/share/liquidprompt/liquidprompt"
 	elif [ -e /usr/share/liquidprompt/liquidprompt ]; then

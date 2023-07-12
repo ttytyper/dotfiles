@@ -74,11 +74,11 @@ else
 	exit 1
 fi
 
-if cmdexists flatpak; then
-	flatpak update
-	if [ "$SUDO_USER" ]; then
-		sudo -u "$SUDO_USER" flatpak update
-		# Flatpak often leaves files with a timestamp near 1970, which unison does not like. This is a dirty but functioning workaround
-		sudo -u "$SUDO_USER" sh -c 'find "$HOME/.local/share/flatpak/" -type f -mtime +9000 -exec touch {} +'
-	fi
-fi
+#if cmdexists flatpak; then
+#	flatpak update
+#	if [ "$SUDO_USER" ]; then
+#		sudo -u "$SUDO_USER" flatpak update
+#		# Flatpak often leaves files with a timestamp near 1970, which unison does not like. This is a dirty but functioning workaround
+#		sudo -u "$SUDO_USER" sh -c 'find "$HOME/.local/share/flatpak/" -type f -mtime +9000 -exec touch {} +'
+#	fi
+#fi

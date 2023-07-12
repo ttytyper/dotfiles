@@ -13,7 +13,7 @@ defscrollback 3000
 
 # The shell should be started as a "login" shell
 #shell -$SHELL
-shell -/bin/bash
+#shell /bin/bash
 
 # Attention grabbers
 activity "Activity in window %n"

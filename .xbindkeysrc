@@ -11,6 +11,10 @@
 "mydisper"
 	Mod4 + p
 
+# Start a terminal
+"(type urxvt && urxvt) || xterm"
+	Mod4 + Return
+
 # An experiment to rotate the screen with the Windows key, but only while in tablet mode (detected by the disabled touchpad)
 #"xinput list-props 'SynPS/2 Synaptics TouchPad'|sed -n 's/\s*Device Enabled (134):\s*\([0-1]\)$/\1/p'|grep -q 0 && $HOME/bin/yoga-rotate.sh ccw"
 #"$HOME/bin/yoga-rotate.sh ccw"
