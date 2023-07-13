@@ -22,4 +22,4 @@ hue=to_red/full_range/3
 
 rgb=tuple([z*255 for z in colorsys.hls_to_rgb(hue, 0.5, 1.0)])
 # Print the RGB values as HEX
-print '#%02X%02X%02X' % rgb
+print('#%02X%02X%02X' % (int(rgb[0]), int(rgb[1]), int(rgb[2])))

@@ -69,5 +69,5 @@ print_json_array() {
 
 # Useful for coloring i3blocks/i3bar according to e.g. wifi quality and battery level.
 color_level() {
-	python "$(dirname "$0")/color_level.py" "${@}"
+	python3 "$(dirname "$0")/color_level.py" "${@}"
 }
