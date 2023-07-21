@@ -4,39 +4,49 @@ set -eu
 declare -A json=( ["full_text"]="" )
 
 cool=40
-critical=80
-max_meassured=0
-num_zones=0
-label=""
+critical=70
 
-shopt -s nullglob
-for zone in /sys/class/thermal/thermal_zone*; do
-	test -e "$zone/type" || continue
-	test -e "$zone/temp" || continue
+#max_meassured=0
+#num_zones=0
+#label=""
 
-	type="$(cat "$zone/type")"
-	case "$type" in
-		x86_pkg_temp|pch_*|iwlwifi_*) :;;
-		*) continue
-	esac
+#shopt -s nullglob
+#for zone in /sys/class/thermal/thermal_zone*; do
+#	test -e "$zone/type" || continue
+#	test -e "$zone/temp" || continue
+#
+#	type="$(cat "$zone/type")"
+#	case "$type" in
+#		x86_pkg_temp|pch_*|iwlwifi_*) :;;
+#		*) continue
+#	esac
+#
+#	temp="$(cat "$zone/temp")"
+#	let temp=temp/1000
+#	if [ $temp -gt $max_meassured ]; then
+#		let max_meassured=temp
+#		case "$type" in
+#			x86_pkg_temp) label="CPU";;
+#			pch_*) label="PCH";;
+#			iwlwifi_*) label="WiFi";;
+#			*) ;;
+#		esac
+#	fi
+#	let num_zones=num_zones+1
+#done
+#
+## If there were no temperatures to meassure, exit now
+#if [ $num_zones -eq 0 ]; then
+#	print_json_array json
+#	exit 0
+#fi
 
-	temp="$(cat "$zone/temp")"
-	let temp=temp/1000
-	if [ $temp -gt $max_meassured ]; then
-		let max_meassured=temp
-		case "$type" in
-			x86_pkg_temp) label="CPU";;
-			pch_*) label="PCH";;
-			iwlwifi_*) label="WiFi";;
-			*) ;;
-		esac
-	fi
-	let num_zones=num_zones+1
-done
+max_temp() {
+	sensors -j 2>/dev/null | jq -r 'to_entries | max_by(.value.temp1.temp1_input) | "\(.value.temp1.temp1_input|round) \(.key | sub("-|_.*$"; ""))"'
+}
+read max_meassured label <<< "$(max_temp)"
 
-# If there were no temperatures to meassure, exit now
-if [ $num_zones -eq 0 ]; then
-	print_json_array json
+if [ -z "$label" -o -z "$max_meassured" ]; then
 	exit 0
 fi
 

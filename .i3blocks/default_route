@@ -24,10 +24,8 @@ get_default_dev() {
 )|while read _; do
 	default_dev="$(ip "$inet" route|get_default_dev)"
 
-	if [ "$default_dev" = "$green_interface" ]; then
+	if [ -n "$default_dev" ]; then
 		color="#00FF00"
-	elif [ -n "$default_dev" ]; then
-		color="#FFFF00"
 	else
 		color="#FF0000"
 		default_dev="down"

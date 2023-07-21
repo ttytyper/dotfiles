@@ -36,7 +36,15 @@ while [ $# -gt 0 ]; do
 	shift
 done
 
-if cmdexists aptitude; then
+if cmdexists apt; then
+	if [ "$update" = "y" ]; then
+		apt update
+	fi
+	apt upgrade
+	apt autoremove
+	apt autoclean
+	apt list --upgradable
+elif cmdexists aptitude; then
 	aptitude_opts="-W"
 	if [ "$update" = "y" ]; then
 		aptitude update

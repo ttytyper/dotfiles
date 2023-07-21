@@ -69,8 +69,8 @@ if [ -r /sys/devices/virtual/dmi/id/product_name ] && grep -q '^20CD0038MN$' /sy
 	fi
 elif [ -r /sys/devices/virtual/dmi/id/product_name ] && grep -q '^MS-7C80$' /sys/devices/virtual/dmi/id/product_name; then
 	echo "Running on desktop"
-	xrandr --output DP1 --auto --primary
-	xrandr --output HDMI1 --auto --right-of DP1
+	xrandr --output 'DisplayPort-0' --auto --primary
+	xrandr --output 'DisplayPort-1' --auto --rotate right --right-of 'DisplayPort-0'
 else
 	echo "Not sure what kind of machine this is. Skipping monitor layouts"
 fi
