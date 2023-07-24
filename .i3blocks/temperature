@@ -42,9 +42,11 @@ critical=70
 #fi
 
 max_temp() {
-	sensors -j 2>/dev/null | jq -r 'to_entries | max_by(.value.temp1.temp1_input) | "\(.value.temp1.temp1_input|round) \(.key | sub("-|_.*$"; ""))"'
+	sensors -j 2>/dev/null | sensors -j 2>/dev/null | jq -r 'to_entries | max_by(.value.temp1.temp1_input) | "\(.value.temp1.temp1_input|round) \(.key)"'
 }
 read max_meassured label <<< "$(max_temp)"
+label="${label%%-*}"
+label="${label%%_*}"
 
 if [ -z "$label" -o -z "$max_meassured" ]; then
 	exit 0

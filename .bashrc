@@ -55,6 +55,11 @@ if cmdexists lynx; then
 	alias lynx="lynx -nopause"
 fi
 
+if cmdexists mosh; then
+	# Enables more efficient use of ssh -oControlMaster
+	alias mosh="mosh --experimental-remote-ip=remote"
+fi
+
 # Automatically cd into directories when entered as commands
 shopt -s autocd
 

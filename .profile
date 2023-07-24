@@ -123,3 +123,5 @@ fi
 
 # I want pass (password manager) to use the primary clipboard
 export PASSWORD_STORE_X_SELECTION=primary
+
+export MOSH_TITLE_NOPREFIX=1

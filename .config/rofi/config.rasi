@@ -1,6 +1,6 @@
 configuration {
 	modi: "drun,ssh,shortcuts:~/.config/rofi/scripts/shortcuts";
-	ssh-client: "mosh";
+	ssh-client: "mosh --experimental-remote-ip=remote";
 	parse-known-hosts: false;
 	terminal: "urxvt";
 	monitor: "-4";
