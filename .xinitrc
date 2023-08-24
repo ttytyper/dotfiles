@@ -88,7 +88,11 @@ BGPIDS="$BGPIDS $!"
 
 # Finally, the window manager
 if cmdexists i3; then
-	i3 &
+	if cmdexists dbus-run-session; then
+		dbus-run-session i3 &
+	else
+		i3 &
+	fi
 	WM="i3"
 else
 # .. or just a terminal if we dont have i3
