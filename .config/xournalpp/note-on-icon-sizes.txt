@@ -1,0 +1,17 @@
+https://github.com/xournalpp/xournalpp/issues/3453
+
+Edit /usr/share/xournalpp/ui/xournalpp.css
+
+Add/edit:
+
+#tbLeft1 button, #tbLeft2 button
+{
+	padding: 15
+}
+
+Or:
+
+toolbar button
+{
+	padding: 15
+}
