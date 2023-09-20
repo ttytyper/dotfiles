@@ -1,4 +1,15 @@
-#!/bin/sh
+#!/bin/bash
+
+ordered() {
+	order=( "${@}" )
+
+	xrandr --output "${order[0]}" --auto
+	let end=${#order[@]}-1
+	for i in $(seq 1 $end); do
+		let ii=i-1
+		xrandr --output "${order[$i]}" --auto --right-of "${order[$ii]}"
+	done
+}
 
 if [ -r /sys/devices/virtual/dmi/id/product_name ] && grep -q '^20CD0038MN$' /sys/devices/virtual/dmi/id/product_name; then
 	echo "Running on a ThinkPad S1 Yoga laptop"
@@ -71,6 +82,10 @@ elif [ -r /sys/devices/virtual/dmi/id/product_name ] && grep -q '^MS-7C80$' /sys
 	echo "Running on desktop"
 	xrandr --output 'DisplayPort-0' --auto --primary
 	xrandr --output 'DisplayPort-1' --auto --rotate right --right-of 'DisplayPort-0'
+elif [ "$(hostname)" = "jesper-pc-linux" ]; then
+	echo "Running on $(hostname)"
+	ordered "eDP-1" "DP-1-8" "DP-1-1"
+	xrandr --output "DP-1-8" --primary
 else
 	echo "Not sure what kind of machine this is. Skipping monitor layouts"
 fi
