@@ -84,8 +84,8 @@ elif [ -r /sys/devices/virtual/dmi/id/product_name ] && grep -q '^MS-7C80$' /sys
 	xrandr --output 'DisplayPort-1' --auto --rotate right --right-of 'DisplayPort-0'
 elif [ "$(hostname)" = "jesper-pc-linux" ]; then
 	echo "Running on $(hostname)"
-	ordered "eDP-1" "DP-1-8" "DP-1-1"
-	xrandr --output "DP-1-8" --primary
+	ordered "DP-4" "DP-0.8" "DP-0.1"
+	xrandr --output "DP-0.8" --primary
 else
 	echo "Not sure what kind of machine this is. Skipping monitor layouts"
 fi
