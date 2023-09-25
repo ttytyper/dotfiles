@@ -1,7 +1,43 @@
+[Added Associations]
+inode/directory=exo-file-manager.desktop
+x-scheme-handler/trash=exo-file-manager.desktop
+x-scheme-handler/http=userapp-Firefox-LPMZIY.desktop;thunderbird.desktop;userapp-Thunderbird-H8UOC0.desktop;userapp-Firefox-9U2EK0.desktop;firefox-esr.desktop;
+x-scheme-handler/https=userapp-Firefox-LPMZIY.desktop;thunderbird.desktop;userapp-Thunderbird-H8UOC0.desktop;userapp-Firefox-9U2EK0.desktop;firefox-esr.desktop;
+x-scheme-handler/ftp=userapp-Firefox-LPMZIY.desktop;thunderbird.desktop;userapp-Thunderbird-H8UOC0.desktop;userapp-Firefox-9U2EK0.desktop;firefox-esr.desktop;
+x-scheme-handler/chrome=userapp-Firefox-LPMZIY.desktop;thunderbird.desktop;userapp-Thunderbird-H8UOC0.desktop;userapp-Firefox-9U2EK0.desktop;firefox-esr.desktop;
+text/html=org.gnome.Evince.desktop;userapp-Firefox-LPMZIY.desktop;thunderbird.desktop;userapp-Thunderbird-H8UOC0.desktop;userapp-Firefox-9U2EK0.desktop;firefox-esr.desktop;
+application/x-extension-htm=userapp-Firefox-LPMZIY.desktop;thunderbird.desktop;userapp-Thunderbird-H8UOC0.desktop;userapp-Firefox-9U2EK0.desktop;firefox-esr.desktop;
+application/x-extension-html=userapp-Firefox-LPMZIY.desktop;thunderbird.desktop;userapp-Thunderbird-H8UOC0.desktop;userapp-Firefox-9U2EK0.desktop;firefox-esr.desktop;
+application/x-extension-shtml=userapp-Firefox-LPMZIY.desktop;thunderbird.desktop;userapp-Thunderbird-H8UOC0.desktop;userapp-Firefox-9U2EK0.desktop;firefox-esr.desktop;
+application/xhtml+xml=userapp-Firefox-LPMZIY.desktop;thunderbird.desktop;userapp-Thunderbird-H8UOC0.desktop;userapp-Firefox-9U2EK0.desktop;firefox-esr.desktop;
+application/x-extension-xhtml=userapp-Firefox-LPMZIY.desktop;thunderbird.desktop;userapp-Thunderbird-H8UOC0.desktop;userapp-Firefox-9U2EK0.desktop;firefox-esr.desktop;
+application/x-extension-xht=userapp-Firefox-LPMZIY.desktop;thunderbird.desktop;userapp-Thunderbird-H8UOC0.desktop;userapp-Firefox-9U2EK0.desktop;firefox-esr.desktop;
+application/octet-stream=org.gnome.Evince.desktop;firefox-esr.desktop;
+x-scheme-handler/mailto=userapp-Thunderbird-H8UOC0.desktop;
+message/rfc822=userapp-Thunderbird-H8UOC0.desktop;
+application/msword=libreoffice-writer.desktop;
+image/png=firefox-esr.desktop;
+application/atom+xml=firefox-esr.desktop;
+video/mp4=mpv.desktop;
+image/svg+xml=inkscape.desktop;firefox-esr.desktop;
+application/json=org.gnome.gedit.desktop;vim.desktop;nvim.desktop;
+video/quicktime=mpv.desktop;
+image/jpeg=firefox-esr.desktop;gimp.desktop;feh.desktop;
+text/plain=code.desktop;org.gnome.gedit.desktop;vim.desktop;
+application/x-sh=code.desktop;
 
 [Default Applications]
-text/html=firefox-esr.desktop
 x-scheme-handler/http=firefox-esr.desktop
 x-scheme-handler/https=firefox-esr.desktop
-x-scheme-handler/about=firefox-esr.desktop
-x-scheme-handler/unknown=firefox-esr.desktop
+x-scheme-handler/ftp=firefox-esr.desktop
+x-scheme-handler/chrome=firefox-esr.desktop
+text/html=firefox-esr.desktop
+application/x-extension-htm=firefox-esr.desktop
+application/x-extension-html=firefox-esr.desktop
+application/x-extension-shtml=firefox-esr.desktop
+application/xhtml+xml=firefox-esr.desktop
+application/x-extension-xhtml=firefox-esr.desktop
+application/x-extension-xht=firefox-esr.desktop
+x-scheme-handler/mailto=userapp-Thunderbird-H8UOC0.desktop
+message/rfc822=userapp-Thunderbird-H8UOC0.desktop
+application/pdf=org.gnome.Evince.desktop;
