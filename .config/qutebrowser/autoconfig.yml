@@ -25,6 +25,7 @@ settings:
     - searchengines
     - quickmarks
     - bookmarks
+    - history
   content.geolocation:
     global: false
   content.pdfjs:
@@ -54,6 +55,8 @@ settings:
     global: false
   tabs.close_mouse_button:
     global: none
+  tabs.last_close:
+    global: close
   tabs.padding:
     global:
       bottom: 5
@@ -62,3 +65,7 @@ settings:
       top: 5
   tabs.wrap:
     global: false
+  url.default_page:
+    global: qute://bookmarks/
+  url.start_pages:
+    global: qute://bookmarks/
