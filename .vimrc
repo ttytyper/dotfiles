@@ -1,2 +1,2 @@
-# Do not use ~/.viminfo
+"" Do not use ~/.viminfo
 set viminfofile=NONE
