@@ -15,6 +15,16 @@
 "(type urxvt && urxvt) || xterm"
 	Mod4 + Return
 
+# i3 window control using the Windows key + mouse left/right/wheel up/down
+"i3-msg --quiet move left"
+	Mod4 + b:1
+"i3-msg --quiet move right"
+	Mod4 + b:3
+"i3-msg --quiet move up"
+	Mod4 + b:4
+"i3-msg --quiet move down"
+	Mod4 + b:5
+
 # An experiment to rotate the screen with the Windows key, but only while in tablet mode (detected by the disabled touchpad)
 #"xinput list-props 'SynPS/2 Synaptics TouchPad'|sed -n 's/\s*Device Enabled (134):\s*\([0-1]\)$/\1/p'|grep -q 0 && $HOME/bin/yoga-rotate.sh ccw"
 #"$HOME/bin/yoga-rotate.sh ccw"
