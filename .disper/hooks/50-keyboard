@@ -3,12 +3,16 @@
 # (more options: http://gentoo-wiki.com/HOWTO_X11_Keyboard )
 # I primarily want Norwegian layout with no dead keys. In addition, caps lock
 # functions like an extra ctrl key
-setxkbmap \
-	-layout no \
-	-variant nodeadkeys\
-	-option \
-	-option ctrl:nocaps \
-	-option keypad:pointerkeys
+# Also: xkeyboard-config(7)
+setxkbmap_opts=(
+	-layout "no"
+	-variant "nodeadkeys"
+	-option                       # Clears all previous options
+	-option "ctrl:nocaps"         # Replaces caps lock with ctrl
+	-option "shift:both_capslock" # Both shift keys together toggle caps lock
+)
+
+setxkbmap "${setxkbmap_opts[@]}"
 
 # Set repeat rate
 xset r rate 200 35

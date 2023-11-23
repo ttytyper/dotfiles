@@ -12,6 +12,9 @@ format='[%artist%: ]%title%'
 )|while read event; do
 	if [ "$event" = "player" ]; then
 		current="$(mpc -f '[%name%: ][%artist%: ]%title%' current|json_escape)"
+		if [ -z "$current" ]; then
+			current="(no name)"
+		fi
 		# sed picks out playing/paused from the status line
 		status="$(mpc status|sed -n '2s/\[\([^]]\+\).*/\1/p')"
 		#  Seems like stopped is represented by an empty line
