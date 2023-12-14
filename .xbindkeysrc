@@ -15,54 +15,15 @@
 "(type urxvt && urxvt) || xterm"
 	Mod4 + Return
 
-# i3 window control using the Windows key + mouse left/right/middle/wheel up/wheel down
-"i3-msg --quiet move left"
-	Mod4 + b:1
-"i3-msg --quiet move right"
-	Mod4 + b:3
-"i3-msg --quiet floating toggle"
-	Mod4 + b:2
-"i3-msg --quiet move up"
-	Mod4 + b:4
-"i3-msg --quiet move down"
-	Mod4 + b:5
-
-# An experiment to rotate the screen with the Windows key, but only while in tablet mode (detected by the disabled touchpad)
-#"xinput list-props 'SynPS/2 Synaptics TouchPad'|sed -n 's/\s*Device Enabled (134):\s*\([0-1]\)$/\1/p'|grep -q 0 && $HOME/bin/yoga-rotate.sh ccw"
-#"$HOME/bin/yoga-rotate.sh ccw"
-#	Super_L
-######
-
-# Windows + Shift + S = suspend system
-#"systemctl suspend"
-#	Mod4 + Shift + S
-
-# Switch between windows with the Windows key alone, but only in non-rotated mode. If this seems to override Windows+Any combinations, try pressing Any first, then Window
-#"if [ `$HOME/bin/yoga-rotate.sh status` != 'normal' ]; then ratpoison -c next; fi"
-#	Super_L
-
-# Easy rotation of the screen
-#"$HOME/bin/yoga-rotate.sh normal"
-#	Mod4 + Control + Up
-#"$HOME/bin/yoga-rotate.sh inverted"
-#	Mod4 + Control + Down
-#"$HOME/bin/yoga-rotate.sh left"
-#	Mod4 + Control + Left
-#"$HOME/bin/yoga-rotate.sh right"
-#	Mod4 + Control + Right
-
 # Pause = Activate screensaver/locker. Also clear various keys
-"set -x; ssh-add -D; killall -q -SIGHUP gpg-agent; rm -vrf "$HOME/.ssh/controlmasters/"*; xset s activate"
+"ssh-add -D; killall -q -SIGHUP gpg-agent; rm -vrf "$HOME/.ssh/controlmasters/"*; xset s activate"
 	Pause
 ## Same with Win+l, to emulate Windows behavior
 #"set -x; ssh-add -D; killall -q -SIGHUP gpg-agent; rm -vrf "$HOME/.ssh/controlmasters/"*; xset s activate"
 #	Mod4 + l
 # Lenovo Thinkpad Yoga has a lock button that generates a Mod4 + o event
-"set -x; ssh-add -D; killall -q -SIGHUP gpg-agent; rm -vrf "$HOME/.ssh/controlmasters/"*; xset s activate"
+"ssh-add -D; killall -q -SIGHUP gpg-agent; rm -vrf "$HOME/.ssh/controlmasters/"*; xset s activate"
 	Mod4 + o
-# This is for the lock button on the side of the Lenovo Thinkpad Yoga
-#"ssh-add -D; killall -q -SIGHUP gpg-agent; sleep 1; xset s activate"
-#	0xffeb + Super_L
 
 # Controls for keyboards with hotkeys, including certain Apple keyboards
 # PCM for docking station, Master for internal
@@ -100,13 +61,6 @@
 	XF86AudioPause
 "mpc -q stop"
 	XF86AudioStop
-# Alternatives for machines without media hotkeys
-"mpc -q prev"
-	XF86Tools
-"mpc -q next"
-	XF86Search
-"mpc -f '%file%' current|grep -q '^https\?://' && mpc -q stop ||  mpc -q toggle"
-	XF86LaunchA
 
 # Backlight control
 "xbacklight -time 50 -steps 5 -inc 2"
