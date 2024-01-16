@@ -18,12 +18,18 @@ set $mod Mod4
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
 font pango:Hack Regular 10
 
-# Use Mouse+Alt to drag floating windows to their wanted position
-floating_modifier Mod1
+# Enable draging windows around by the titlebar
+# https://i3wm.org/docs/userguide.html#tiling_drag
+tiling_drag titlebar
 
 # Do not switch focus to other monitors when cycling through workspaces.
 # Rather, wrap around to the oppositely placed workspace
 focus_wrapping force
+
+# When attempting to switch to the already selected workspace, switch to the
+# previously selected one instead. Allows easy toggling between the two most
+# recently used workspaces
+workspace_auto_back_and_forth yes
 
 force_display_urgency_hint 2000 ms
 
@@ -165,17 +171,30 @@ bindsym $mod+r mode "resize"
 # Lock the screen
 bindsym $mod+End exec "xset s activate"
 
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
+
+# Bar with i3blocks on the primary display
 bar {
-	#status_command i3status|~/.i3/mpdstatus
-	#status_command i3status
+	output primary
+	tray_output primary
+	workspace_min_width 40
+	status_command i3blocks
 	colors {
 		#                  Border  Backgr. Text
 		focused_workspace  #333333 #42414d #ffffff
 		inactive_workspace #333333 #1b1c22 #888888
 	}
-	status_command i3blocks
+}
+
+# Bar without i3blocks on nonprimary displays
+bar {
+	output nonprimary
+	tray_output none
+	workspace_min_width 40
+	colors {
+		#                  Border  Backgr. Text
+		focused_workspace  #333333 #42414d #ffffff
+		inactive_workspace #333333 #1b1c22 #888888
+	}
 }
 
 # Use tabbed layout per default
