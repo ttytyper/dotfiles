@@ -215,4 +215,3 @@ for_window [class="speedcrunch"] floating enable
 # No borders
 hide_edge_borders both
 
-exec_always --no-startup-id i3-map-device-to-monitor 'Wacom Intuos PT S 2 Pen stylus'
