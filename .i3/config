@@ -20,7 +20,8 @@ font pango:Hack Regular 10
 
 # Enable draging windows around by the titlebar
 # https://i3wm.org/docs/userguide.html#tiling_drag
-tiling_drag titlebar
+floating_modifier Mod1
+tiling_drag modifier titlebar
 
 # Do not switch focus to other monitors when cycling through workspaces.
 # Rather, wrap around to the oppositely placed workspace
