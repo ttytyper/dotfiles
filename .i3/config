@@ -38,6 +38,10 @@ force_display_urgency_hint 2000 ms
 #bindsym $mod+Return exec urxvt -e screen
 #bindsym $mod+Return exec urxvt
 
+# Scratchpad (https://i3wm.org/docs/userguide.html#_scratchpad)
+bindsym $mod+Shift+BackSpace move scratchpad
+bindsym $mod+BackSpace scratchpad show
+
 # kill focused window
 bindsym $mod+q kill
 
@@ -66,8 +70,8 @@ bindsym --whole-window $mod+button3 move right
 bindsym --whole-window $mod+button2 floating toggle
 bindsym --whole-window $mod+button4 move up
 bindsym --whole-window $mod+button5 move down
-bindsym --whole-window $mod+Ctrl+button1 move workspace to output left
-bindsym --whole-window $mod+Ctrl+button3 move workspace to output right
+bindsym --whole-window $mod+Ctrl+button1 move workspace to output left; focus output left
+bindsym --whole-window $mod+Ctrl+button3 move workspace to output right; focus output right
 
 # Move whole workspaces across screens
 bindsym $mod+Ctrl+h move workspace to output left
@@ -174,22 +178,9 @@ bindsym $mod+End exec "xset s activate"
 
 # Bar with i3blocks on the primary display
 bar {
-	output primary
 	tray_output primary
 	workspace_min_width 40
 	status_command i3blocks
-	colors {
-		#                  Border  Backgr. Text
-		focused_workspace  #333333 #42414d #ffffff
-		inactive_workspace #333333 #1b1c22 #888888
-	}
-}
-
-# Bar without i3blocks on nonprimary displays
-bar {
-	output nonprimary
-	tray_output none
-	workspace_min_width 40
 	colors {
 		#                  Border  Backgr. Text
 		focused_workspace  #333333 #42414d #ffffff
