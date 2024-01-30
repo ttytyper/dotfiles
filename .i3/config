@@ -23,6 +23,9 @@ font pango:Hack Regular 10
 floating_modifier Mod1
 tiling_drag modifier titlebar
 
+# Use Mouse+Alt to drag floating windows to their wanted position
+#floating_modifier Mod1
+
 # Do not switch focus to other monitors when cycling through workspaces.
 # Rather, wrap around to the oppositely placed workspace
 focus_wrapping force

@@ -84,8 +84,9 @@ if [ -r /sys/devices/virtual/dmi/id/product_name ] && grep -q '^20CD0038MN$' /sy
 	fi
 elif [ -r /sys/devices/virtual/dmi/id/product_name ] && grep -q '^MS-7C80$' /sys/devices/virtual/dmi/id/product_name; then
 	echo "Running on desktop"
-	xrandr --output 'DisplayPort-0' --auto --primary
-	xrandr --output 'DisplayPort-1' --auto --rotate right --right-of 'DisplayPort-0'
+	xrandr --output 'HDMI-1' --rotate right
+	ordered 'HDMI-1' 'DP-1'
+	set_primary 'DP-1'
 elif [ "$(hostname)" = "jesper-pc-linux" ]; then
 	echo "Running on $(hostname)"
 	ordered "DP-4" "DP-0.8" "DP-0.1"
@@ -93,3 +94,4 @@ elif [ "$(hostname)" = "jesper-pc-linux" ]; then
 else
 	echo "Not sure what kind of machine this is. Skipping monitor layouts"
 fi
+
