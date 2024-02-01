@@ -27,7 +27,7 @@ interval=15
 		
 		if [ "$operstate" = "up" ]; then
 			ssid="$(wpa_cli -i "$interface" status|grep '^ssid='|cut -d= -f2-)"
-			json["full_text"]="${wifi_logo} ${quality}%${ssid:+ "${ssid}"}"
+			json["full_text"]="${wifi_logo}${quality}%${ssid:+ "${ssid}"}"
 			json["color"]="$(color_level 80 "$quality" 30)"
 		fi
 	fi
