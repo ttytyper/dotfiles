@@ -27,5 +27,7 @@ get_default_dev() {
 	if [ -n "$default_dev" ]; then
 		color="#00FF00"
 		echo '{ "full_text": "'$prefix$default_dev'", "color"="'$color'" }'
+	else
+		echo '{ "full_text": "" }'
 	fi
 done
