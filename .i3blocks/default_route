@@ -13,7 +13,7 @@ case "$1" in
 esac
 
 get_default_dev() {
-	ip route|sed -n '/^default /{s/.*\bdev \([^ ]\+\).*/\1/p;q}'
+	sed -n '/^default /{s/.*\bdev \([^ ]\+\).*/\1/p;q}'
 }
 
 (
