@@ -26,11 +26,6 @@ get_default_dev() {
 
 	if [ -n "$default_dev" ]; then
 		color="#00FF00"
-	else
-		color="#FFFF00"
-		default_dev="down"
+		echo '{ "full_text": "'$prefix$default_dev'", "color"="'$color'" }'
 	fi
-	
-	echo '{ "full_text": "'$prefix$default_dev'", "color"="'$color'" }'
-	
 done
