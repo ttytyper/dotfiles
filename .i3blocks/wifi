@@ -25,16 +25,11 @@ interval=15
 		operstate="$(cat "/sys/class/net/$interface/operstate")"
 		ssid=""
 		
-		if [ "$operstate" != "up" ]; then
-			json["color"]="#FFFF00"
-		else
+		if [ "$operstate" = "up" ]; then
 			ssid="$(wpa_cli -i "$interface" status|grep '^ssid='|cut -d= -f2-)"
-			json["full_text"]="${quality}%${ssid:+ "${ssid}"}"
+			json["full_text"]="${wifi_logo} ${quality}%${ssid:+ "${ssid}"}"
 			json["color"]="$(color_level 80 "$quality" 30)"
 		fi
-
-		# Prepend wifi logo
-		json["full_text"]="${wifi_logo}${json["full_text"]}"
 	fi
 	
 	print_json_array json
