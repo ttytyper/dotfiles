@@ -27,7 +27,7 @@ get_default_dev() {
 	if [ -n "$default_dev" ]; then
 		color="#00FF00"
 	else
-		color="#FF0000"
+		color="#FFFF00"
 		default_dev="down"
 	fi
 	
