@@ -20,7 +20,7 @@ font pango:Hack Regular 10
 
 # Enable draging windows around by the titlebar
 # https://i3wm.org/docs/userguide.html#tiling_drag
-floating_modifier Mod1
+floating_modifier $mod
 tiling_drag modifier titlebar
 
 # Use Mouse+Alt to drag floating windows to their wanted position
@@ -60,22 +60,6 @@ bindsym $mod+Shift+h move left
 bindsym $mod+Shift+j move down
 bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
-
-# Move windows and workspaces using primarily the mouse
-# button1 = left
-# button2 = middle
-# button3 = right
-# button4 = scroll up
-# button5 = scroll down
-# button6 = scroll right
-# button7 = scroll left
-bindsym --whole-window $mod+button1 move left
-bindsym --whole-window $mod+button3 move right
-bindsym --whole-window $mod+button2 floating toggle
-bindsym --whole-window $mod+button4 move up
-bindsym --whole-window $mod+button5 move down
-bindsym --whole-window $mod+Ctrl+button1 move workspace to output left; focus output left
-bindsym --whole-window $mod+Ctrl+button3 move workspace to output right; focus output right
 
 # Move whole workspaces across screens
 bindsym $mod+Ctrl+h move workspace to output left
@@ -197,7 +181,7 @@ workspace_layout tabbed
 
 # Mouse settings
 focus_follows_mouse yes
-mouse_warping none
+mouse_warping output
 
 for_window [title="Android Emulator - .*"] floating enable
 
