@@ -1,7 +1,3 @@
-[user]
-	name = Jesper
-	email = ttytyper@users.noreply.github.com
-	signingkey = 0x2170135805AEC3CE
 [core]
 	excludesfile = ~/.gitignore
 [color]
@@ -28,3 +24,5 @@
 	gpgSign = true
 [init]
 	defaultBranch = main
+[includeIf "gitdir:*"]
+	path = ~/.gitconfig.local
