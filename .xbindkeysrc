@@ -11,9 +11,12 @@
 "mydisper"
 	Mod4 + p
 
-# Start a terminal
+# Start a terminal with Mod4/Windows
 "(type urxvt && urxvt) || xterm"
 	Mod4 + Return
+# Start a terminal with Mod5/AltGr
+"(type urxvt && urxvt) || xterm"
+	Mod5 + Return
 
 # Pause = Activate screensaver/locker. Also clear various keys
 "ssh-add -D; killall -q -SIGHUP gpg-agent; rm -vrf "$HOME/.ssh/controlmasters/"*; xset s activate"

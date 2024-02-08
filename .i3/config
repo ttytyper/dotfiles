@@ -37,7 +37,8 @@ force_display_urgency_hint 2000 ms
 
 # Scratchpad (https://i3wm.org/docs/userguide.html#_scratchpad)
 bindsym $mod+Shift+BackSpace move scratchpad
-bindsym $mod+BackSpace scratchpad show
+# Toggles scratchpad display with Mod5/AltGr
+bindsym Mod5+BackSpace scratchpad show
 
 # kill focused window
 bindsym $mod+q kill
