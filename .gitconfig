@@ -24,5 +24,9 @@
 	gpgSign = true
 [init]
 	defaultBranch = main
+[user]
+	name = Jesper
+	email = ttytyper@users.noreply.github.com
+	signingkey = 0x2170135805AEC3CE
 [includeIf "gitdir:*"]
 	path = ~/.gitconfig.local
