@@ -21,7 +21,11 @@ for zone in /sys/class/thermal/thermal_zone*; do
 		*) continue
 	esac
 
-	temp="$(cat "$zone/temp")"
+	temp="$(cat "$zone/temp" 2>/dev/null || true)"
+	if [ "$temp" = "" ]; then
+		continue
+	fi
+
 	let temp=temp/1000
 	if [ $temp -gt $max_meassured ]; then
 		let max_meassured=temp
