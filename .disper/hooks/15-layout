@@ -84,7 +84,7 @@ if [ -r /sys/devices/virtual/dmi/id/product_name ] && grep -q '^20CD0038MN$' /sy
 	fi
 elif [ -r /sys/devices/virtual/dmi/id/product_name ] && grep -q '^MS-7C80$' /sys/devices/virtual/dmi/id/product_name; then
 	echo "Running on desktop"
-	xrandr --output 'HDMI-1' --rotate right
+	xrandr --output 'HDMI-1' --rotate normal
 	ordered 'HDMI-1' 'DP-1'
 	set_primary 'DP-1'
 elif [ "$(hostname)" = "jesper-pc-linux" ]; then
