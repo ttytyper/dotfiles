@@ -89,8 +89,8 @@ elif [ -r /sys/devices/virtual/dmi/id/product_name ] && grep -q '^MS-7C80$' /sys
 	set_primary 'DP-1'
 elif [ "$(hostname)" = "jesper-pc-linux" ]; then
 	echo "Running on $(hostname)"
-	ordered "DP-0" "HDMI-0" "DP-4"
-	ordered "DP-4" "DP-0.8" "DP-0.1"
+	ordered "HDMI-0" "DP-0" "DP-4"
+	ordered "DP-0.1" "DP-0.8" "DP-4"
 	if xrandr --listmonitors|awk '$4 != "" { print $4}'|grep -q "HDMI-0" && xrandr --listmonitors|awk '$4 != "" { print $4}'|grep -q "DP-0"; then
 		echo "Running in home office"
 		xrandr --output DP-0 --rotate inverted
