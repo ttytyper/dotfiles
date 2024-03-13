@@ -47,10 +47,10 @@ bindsym $mod+k focus up
 bindsym $mod+l focus right
 
 # Move windows between workspaces, or by pixels in case of floating window
-bindsym $mod+Shift+h move left 20px
-bindsym $mod+Shift+j move down 20px
-bindsym $mod+Shift+k move up 20px
-bindsym $mod+Shift+l move right 20px
+bindsym $mod+Shift+h move left 20 px
+bindsym $mod+Shift+j move down 20 px
+bindsym $mod+Shift+k move up 20 px
+bindsym $mod+Shift+l move right 20 px
 
 # Move whole workspaces across screens
 bindsym $mod+Ctrl+h move workspace to output left
@@ -60,7 +60,7 @@ bindsym $mod+Ctrl+l move workspace to output right
 # Credit for idea: https://gist.github.com/ha7ilm/4712e38bdfdb81d53264c011a7f867e5
 # Modified to work with spaces
 #bindsym $mod+u exec i3-input -F "rename workspace to \\\"$(i3-msg -t get_workspaces|jq -r 'map(select(.focused))[0].num'): %s\\\"" -P 'New name for this workspace: '
-bindsym $mod+u exec i3-input -F 'rename workspace to "%s"' -P 'New name for this workspace: '
+bindsym $mod+Ctrl+u exec i3-input -F 'rename workspace to "%s"' -P 'New name for this workspace: '
 
 # change container layout (stacked, tabbed, toggle split)
 #bindsym $mod+s layout stacking
@@ -100,6 +100,7 @@ bindsym $mod+0 workspace number 10
 bindsym $mod+Tab workspace back_and_forth
 bindsym $mod+Prior workspace prev
 bindsym $mod+Next workspace next
+bindsym $mod+u exec rofi -show 'Focus to workspace' -modi 'Focus to workspace:~/.config/rofi/scripts/i3_focus_workspace'
 
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace number $workspace1; workspace number 1
@@ -112,7 +113,7 @@ bindsym $mod+Shift+7 move container to workspace number 7; workspace number 7
 bindsym $mod+Shift+8 move container to workspace number 8; workspace number 8
 bindsym $mod+Shift+9 move container to workspace number 9; workspace number 9
 bindsym $mod+Shift+0 move container to workspace number 10; workspace number 10
-bindsym $mod+Shift+u exec i3-input -F 'move to workspace "%s"' -P 'Name of destination workspace: '
+bindsym $mod+Shift+u exec rofi -show 'Move window to workspace' -modi 'Move window to workspace:~/.config/rofi/scripts/i3_move_window_to_workspace'
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
