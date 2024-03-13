@@ -59,18 +59,17 @@ bindsym $mod+Ctrl+l move workspace to output right
 # Prompt to rename current workspace
 # Credit for idea: https://gist.github.com/ha7ilm/4712e38bdfdb81d53264c011a7f867e5
 # Modified to work with spaces
-bindsym $mod+u exec i3-input -F "rename workspace to \\\"$(i3-msg -t get_workspaces|jq -r 'map(select(.focused))[0].num'): %s\\\"" -P 'New name for this workspace: '
+#bindsym $mod+u exec i3-input -F "rename workspace to \\\"$(i3-msg -t get_workspaces|jq -r 'map(select(.focused))[0].num'): %s\\\"" -P 'New name for this workspace: '
+bindsym $mod+u exec i3-input -F 'rename workspace to "%s"' -P 'New name for this workspace: '
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
+#bindsym $mod+s layout stacking
+#bindsym $mod+w layout tabbed
+#bindsym $mod+e layout toggle split
 
 # toggle tiling / floating
+bindsym $mod+space focus mode_toggle
 bindsym $mod+Shift+space floating toggle
-
-# Toggle fullscreen mode for active window
-bindsym $mod+space fullscreen toggle
 
 ## Workspaces
 # Chat, email. Speech bubble icon
@@ -78,46 +77,42 @@ bindsym $mod+space fullscreen toggle
 set $workspace1 "1: Coms "
 assign [class="TelegramDesktop"] $workspace1
 assign [class="discord"] $workspace1
-# Prefer putting it on small external monitor, alternatively on internal
-workspace $workspace1 output DP1-2 eDP1
 
 # Web browsing. Firefox icon
 set $workspace2 "2: Web "
 assign [class="Navigator"] $workspace2
-# Prefer putting it on large external monitor, alternatively on internal
-workspace $workspace2 output HDM1 eDP1
 
 # Terminals. Shell icon
 set $workspace3 "3: Work "
 assign [class="urxvt"] $workspace3
-# Prefer putting it on large external monitor, alternatively on internal
-workspace $workspace3 output HDM1 eDP1
-
-set $workspace4 "4: Misc"
 
 # switch to workspace
 bindsym $mod+1 workspace number $workspace1
 bindsym $mod+2 workspace number $workspace2
 bindsym $mod+3 workspace number $workspace3
-bindsym $mod+4 workspace number $workspace4
+bindsym $mod+4 workspace number 4
 bindsym $mod+5 workspace number 5
 bindsym $mod+6 workspace number 6
 bindsym $mod+7 workspace number 7
 bindsym $mod+8 workspace number 8
 bindsym $mod+9 workspace number 9
 bindsym $mod+0 workspace number 10
+bindsym $mod+Tab workspace back_and_forth
+bindsym $mod+Prior workspace prev
+bindsym $mod+Next workspace next
 
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace number $workspace1; workspace number 1
 bindsym $mod+Shift+2 move container to workspace number $workspace2; workspace number 2
 bindsym $mod+Shift+3 move container to workspace number $workspace3; workspace number 3
-bindsym $mod+Shift+4 move container to workspace number $workspace4; workspace number 4
+bindsym $mod+Shift+4 move container to workspace number 4; workspace number 4
 bindsym $mod+Shift+5 move container to workspace number 5; workspace number 5
 bindsym $mod+Shift+6 move container to workspace number 6; workspace number 6
 bindsym $mod+Shift+7 move container to workspace number 7; workspace number 7
 bindsym $mod+Shift+8 move container to workspace number 8; workspace number 8
 bindsym $mod+Shift+9 move container to workspace number 9; workspace number 9
 bindsym $mod+Shift+0 move container to workspace number 10; workspace number 10
+bindsym $mod+Shift+u exec i3-input -F 'move to workspace "%s"' -P 'Name of destination workspace: '
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -126,23 +121,10 @@ bindsym $mod+Shift+r restart
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
-        # These bindings trigger as soon as you enter the resize mode
-
-        # Pressing left will shrink the window’s width.
-        # Pressing right will grow the window’s width.
-        # Pressing up will shrink the window’s height.
-        # Pressing down will grow the window’s height.
-        #bindsym j resize shrink width 10 px or 10 ppt
-        #bindsym k resize grow height 10 px or 10 ppt
-        #bindsym l resize shrink height 10 px or 10 ppt
-        #bindsym oslash resize grow width 10 px or 10 ppt
-
-        # same bindings, but for the arrow keys
         bindsym h resize shrink width 10 px or 10 ppt
         bindsym j resize grow height 10 px or 10 ppt
         bindsym k resize shrink height 10 px or 10 ppt
         bindsym l resize grow width 10 px or 10 ppt
-
 
         # back to normal: Enter or Escape
         bindsym Return mode "default"
@@ -150,10 +132,6 @@ mode "resize" {
 }
 
 bindsym $mod+r mode "resize"
-
-# Lock the screen
-bindsym $mod+End exec "xset s activate"
-
 
 # Bar with i3blocks on the primary display
 bar {
@@ -177,10 +155,10 @@ mouse_warping output
 for_window [title="Android Emulator - .*"] floating enable
 
 # pinentry window should float
-for_window [class="Pinentry"] floating enable
+for_window [class="Pinentry"] floating enable, move position center
 
 # SpeedCrunch is better floating
-for_window [class="speedcrunch"] floating enable
+for_window [title="SpeedCrunch"] floating enable, sticky enable, move position mouse
 
 # No borders
 hide_edge_borders both
