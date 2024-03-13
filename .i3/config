@@ -46,11 +46,11 @@ bindsym $mod+j focus down
 bindsym $mod+k focus up
 bindsym $mod+l focus right
 
-# Move windows between workspaces
-bindsym $mod+Shift+h move left
-bindsym $mod+Shift+j move down
-bindsym $mod+Shift+k move up
-bindsym $mod+Shift+l move right
+# Move windows between workspaces, or by pixels in case of floating window
+bindsym $mod+Shift+h move left 20px
+bindsym $mod+Shift+j move down 20px
+bindsym $mod+Shift+k move up 20px
+bindsym $mod+Shift+l move right 20px
 
 # Move whole workspaces across screens
 bindsym $mod+Ctrl+h move workspace to output left
@@ -69,8 +69,8 @@ bindsym $mod+e layout toggle split
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
 
-# change focus between tiling / floating windows
-bindsym $mod+space focus mode_toggle
+# Toggle fullscreen mode for active window
+bindsym $mod+space fullscreen toggle
 
 ## Workspaces
 # Chat, email. Speech bubble icon
