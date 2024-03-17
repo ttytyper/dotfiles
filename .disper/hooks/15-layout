@@ -17,71 +17,8 @@ set_primary() {
 
 if [ -r /sys/devices/virtual/dmi/id/product_name ] && grep -q '^20CD0038MN$' /sys/devices/virtual/dmi/id/product_name; then
 	echo "Running on a ThinkPad S1 Yoga laptop"
-	dock_left="DP1-1"
-	dock_center="DP1-2"
-	builtin_display="eDP1"
-	hdmi="HDMI2"
-	as_tablet=""
-
-	xrandr --output "$builtin_display" --auto
-	xrandr --output "$dock_center" --auto
-	xrandr --output "$dock_left" --auto
-	xrandr --output "$hdmi" --auto
-
-	dock_center_connected=	
-	dock_left_connected=	
-	builtin_display_connected=
-	hdmi_connected=
-
-	if xrandr --query|grep -q "^$dock_center connected"; then
-		dock_center_connected=y
-	fi
-	if xrandr --query|grep -q "^$dock_left connected"; then
-		dock_left_connected=y
-	fi
-	if xrandr --query|grep -q "^$hdmi connected"; then
-		hdmi_connected=y
-	fi
-
-	if [ -n "$hdmi_connected" ]; then
-		xrandr --output "$hdmi" --right-of "$builtin_display"
-	fi
-
-	if [ -n "$dock_center_connected" ] && [ -n "$dock_left_connected" ]; then
-		echo "Docked with both external displays connected"
-		if [ "$as_tablet" = "y" ]; then
-			# Laptop as a portrait mode tablet on the left side of the desk
-			xrandr --output "$builtin_display" --left-of "$dock_left"
-			xrandr --output "$dock_center" --primary
-			xrandr --output "$dock_left" --left-of "$dock_center" --rotate normal
-		else
-			# Laptop as ordinary display, on the right side of the desk:
-			xrandr --output "$builtin_display" --rotate normal
-			xrandr --output "$dock_center" --left-of "$builtin_display" --primary
-			xrandr --output "$dock_left" --left-of "$dock_center" --rotate normal
-			xbacklight -set 100
-		fi
-	elif [ -z "$dock_center_connected" ] && [ -z "$dock_left_connected" ]; then
-		echo "Not docked"
-		xrandr --output "$builtin_display" --primary --rotate normal
-		xrandr --output "$dock_center" --off
-		xrandr --output "$dock_left" --off
-		#xbacklight -set 100
-	elif [ -n "$dock_center_connected" ] && [ -z "$dock_left_connected" ]; then
-		echo "Docked with center display connected but left display disconnected"
-		xrandr --output "$builtin_display" --rotate normal
-		xrandr --output "$dock_center" --primary --left-of "$builtin_display"
-		xrandr --output "$dock_left" --off
-		xbacklight -set 100
-	elif [ -z "$dock_center_connected" ] && [ -n "$dock_left_connected" ]; then
-		echo "Docked with center display disconnected, but left display connected"
-		xrandr --output "$builtin_display" --primary --rotate normal
-		xrandr --output "$dock_center" --off
-		xrandr --output "$dock_left" --left-of "$builtin_display" --rotate left
-		xbacklight -set 100
-	else
-		echo "No idea how to organize this display setup" >&2
-	fi
+	ordered "eDP1" "HDMI2"
+	set_primary "eDP1"
 elif [ -r /sys/devices/virtual/dmi/id/product_name ] && grep -q '^MS-7C80$' /sys/devices/virtual/dmi/id/product_name; then
 	echo "Running on desktop"
 	xrandr --output 'HDMI-1' --rotate normal
