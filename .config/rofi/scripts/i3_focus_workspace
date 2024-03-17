@@ -2,9 +2,6 @@
 if [ $# -eq 0 ]; then
 	i3-msg -t get_workspaces|jq -r '.[].name'|sort -n
 	cat <<-EOF
-	back_and_forth
-	next
-	prev
 	EOF
 else
 	i3-msg workspace "$*" >/dev/null
