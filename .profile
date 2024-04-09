@@ -125,3 +125,7 @@ fi
 export PASSWORD_STORE_X_SELECTION=primary
 
 export MOSH_TITLE_NOPREFIX=1
+
+# By default the .NET tools collect usage data to be shared with the community by Microsoft. I don't want that.
+export DOTNET_CLI_TELEMETRY_OPTOUT=1
+
