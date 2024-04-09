@@ -1,0 +1,6 @@
+[global]
+format = "<b>%a</b>\n%s\n%b"
+font = "Hack Regular 10"
+foreground = "#ffffff"
+background = "#42414d"
+
