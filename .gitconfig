@@ -1,5 +1,6 @@
 [core]
 	excludesfile = ~/.gitignore
+	commentChar = auto
 [color]
 	diff = true
 [merge]
