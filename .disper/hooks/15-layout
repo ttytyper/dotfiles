@@ -33,7 +33,9 @@ elif [ "$(hostname)" = "jesper-pc-linux" ]; then
 		xrandr --output DP-0 --rotate inverted
 		set_primary "HDMI-0"
 	else
-		xrandr --output DP-0 --rotate normal
+		xrandr --output DP-0.1 --rotate left  # Left monitor is rotated
+		xrandr --output DP-0.8 --pos 1440x500 # Adds vertical offset to center monitor
+		xrandr --output DP-4   --pos 4000x340 # Aligns bottom of laptop with bottom of center monitor
 		set_primary "DP-0.8"
 	fi
 else
