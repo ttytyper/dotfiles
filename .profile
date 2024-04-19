@@ -115,11 +115,10 @@ fi
 export PLATFORMIO_BUILD_CACHE_DIR="$HOME/.cache/platformio/build_cache_dir"
 export PLATFORMIO_BUILD_DIR="$HOME/.cache/platformio/build_dir"
 
-if cmdexists mpd; then
-	#export MPD_HOST="$XDG_RUNTIME_DIR/mpd/socket"
-	export MPD_HOST="$HOME/.local/state/mpd.socket"
-	[ ! -e "$MPD_HOST" ] && mpd
-fi
+# Using mpd via systemd. Enable like this:
+#systemctl --user enable mpd.socket
+#systemctl --user start mpd.socket
+export MPD_HOST="$XDG_RUNTIME_DIR/mpd/socket"
 
 # I want pass (password manager) to use the primary clipboard
 export PASSWORD_STORE_X_SELECTION=primary
