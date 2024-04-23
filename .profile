@@ -102,13 +102,6 @@ if [ -d "${HOME}/.gnupg" ] && cmdexists gpg-agent; then
 	fi
 fi
 
-# Use afuse and sshfs for auto mounting remote directories under ~/net
-if cmdexists afuse; then
-	if cmdexists sshfs && [ -d ~/net ] && ! mountpoint -q ~/net; then
-	afuse -o mount_template='sshfs -oreconnect -oServerAliveInterval=15 -oServerAliveCountMax=3 -oControlMaster=no -oPasswordAuthentication=no -oConnectTimeout=3 -oIdentityFile=~/.ssh/sshfs.key %r: %m' -o unmount_template='fusermount -u -z %m' ~/net
-	fi
-fi
-
 # Let Platform.io use the same build cache directory for all projects. This saves compilation time, particularly for Mbed projects.
 # https://docs.platformio.org/en/latest/envvars.html#envvar-PLATFORMIO_BUILD_CACHE_DIR
 # https://docs.platformio.org/en/latest/projectconf/section_platformio.html#projectconf-pio-build-cache-dir
