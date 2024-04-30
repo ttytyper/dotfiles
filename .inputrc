@@ -31,6 +31,12 @@ $if mode=emacs
 "\e[3~": delete-char
 "\e[2~": quoted-insert
 
+# Uses up and down to search history for lines starting with what has
+# been entered so far.
+# https://unix.stackexchange.com/a/73523
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+
 "\e[1;5A": history-search-backward
 "\e[1;5B": history-search-forward
 "\e[5A": history-search-backward
@@ -64,3 +70,4 @@ $endif
 # fix Home and End for German users
 "\e[7~": beginning-of-line
 "\e[8~": end-of-line
+
