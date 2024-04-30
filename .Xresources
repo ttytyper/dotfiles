@@ -76,6 +76,11 @@ URxvt.color14: cyan
 URxvt.color15: white
 ! }}}
 
+! Disables ctrl+shift (keycap picture insert mode and ISO 14755). Gets in the way a lot
+! https://unix.stackexchange.com/questions/444773/how-to-disable-the-ctrlshift-binding-iso-14755-in-urxvt
+URxvt.iso14755: false
+URxvt.iso14755_52: false
+
 !rofi.terminal: urxvt
 !rofi.monitor: -4
 !rofi.ssh-client: mosh
