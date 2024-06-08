@@ -1,0 +1,12 @@
+#!/bin/sh
+set -eEu
+dir="${XDG_RUNTIME_DIR:-/tmp}"
+name="${1:-screenshot}"
+timestamp="$(date "+%F-%H%M%S")"
+#filename="$dir/$timestamp-$name.png"
+filename="$dir/$name.png"
+import -silent "$filename"
+mogrify -trim "$filename"
+echo "Stored screenshot: $filename"
+xclip -selection clipboard -target image/png -in < "$filename"
+#feh "$filename"
