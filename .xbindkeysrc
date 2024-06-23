@@ -66,9 +66,9 @@
 	XF86AudioStop
 
 # Backlight control
-"xbacklight -time 50 -steps 5 -inc 2"
+"brightnessctl set -- +5%"
 	XF86MonBrightnessUp
-"xbacklight -time 50 -steps 5 -dec 2"
+"brightnessctl set -- -5%"
 	XF86MonBrightnessDown
 
 # Screenshot
