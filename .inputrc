@@ -15,6 +15,9 @@ set input-meta on
 set convert-meta off
 set output-meta on
 
+# One entry per line with tab-completion
+set completion-display-width 0
+
 # Completed names which are symbolic links to
 # directories have a slash appended.
 set mark-symlinked-directories on
