@@ -72,6 +72,12 @@ export _JAVA_AWT_WM_NONREPARENTING=y
 export MOZ_USE_XINPUT2=1
 export BROWSER=firefox
 
+# For Japanese input
+export GTK_IM_MODULE='ibus'
+export QT_IM_MODULE='ibus'
+export XMODIFIERS='@im=ibus'
+ibus-daemon --xim --daemonize --replace
+
 # Disper handles multihead situations, with a hook to run feh for setting the background/wallpaper
 if cmdexists mydisper; then
 	mydisper
@@ -137,6 +143,16 @@ fi
 #	wpa_gui -t -i wlp4s0 &
 #	BGPIDS="$BGPIDS $!"
 #fi
+
+if cmdexists nm-tray; then
+	nm-tray &
+	BGPIDS="$BGPIDS $!"
+fi
+
+if cmdexists pasystray; then
+	pasystray --notify=all &
+	BGPIDS="$BGPIDS $!"
+fi
 
 # Wait until working pids are done, then set the cursor to be the usual arrow, instead of a cross
 if [ "$WORKINGPIDS" != "" ]; then
