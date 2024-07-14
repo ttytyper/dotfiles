@@ -26,13 +26,12 @@ elif [ -r /sys/devices/virtual/dmi/id/product_name ] && grep -q '^MS-7C80$' /sys
 	set_primary 'DP-1'
 elif [ "$(hostname)" = "yoga3" ]; then
 	echo "Running on $(hostname)"
-	xrandr --output 'HDMI-1' --rotate normal
-	ordered 'DP-1' 'eDP-1' 'HDMI-1'
+	ordered 'eDP-1' 'HDMI-1' 'DP-2'
 	if xrandr|grep -qw 'HDMI-1 connected' && [ -r '/sys/class/drm/card0-HDMI-A-1/edid' ] && edid-decode < /sys/class/drm/card0-HDMI-A-1/edid |grep -qw "Display Product Name: 'PA249'"; then
 		# This external display on this laptop flickers on full auto. Have to specify mode
-		xrandr --output 'HDMI'-1 --mode 1920x1080i
+		xrandr --output 'HDMI-1' --mode 1920x1080i
 	fi
-	set_primary 'DP-1'
+	set_primary 'eDP-1'
 elif [ "$(hostname)" = "jesper-pc-linux" ]; then
 	echo "Running on $(hostname)"
 	ordered "HDMI-0" "DP-0" "DP-4"
