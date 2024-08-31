@@ -1,0 +1,13 @@
+#!/bin/bash
+monitor="eDP-1"
+devices=(
+	'Wacom HID 52EB Pen stylus'
+	'Wacom HID 52EB Finger touch'
+	'Wacom HID 52EB Pen eraser'
+)
+
+for device in "${devices[@]}"; do
+	if xinput|grep -qF "$device"; then
+		xinput map-to-output "$device" "$monitor"
+	fi
+done
