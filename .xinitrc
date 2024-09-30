@@ -111,10 +111,10 @@ WMPID="$!"
 xset s off dpms 0 0 0
 # screensaver
 if cmdexists xss-lock && cmdexists i3lock; then
-	if [ -e "$HOME/bin/i3lock-dpms" ]; then
-		xss-lock -- "$HOME/bin/i3lock-dpms" &
+	if [ -x "$HOME/bin/myi3lock" ]; then
+		xss-lock --transfer-sleep-lock -- "$HOME/bin/myi3lock" --ignore-empty-password --color=000000 --show-failed-attempts --nofork &
 	else
-		xss-lock -- i3lock --ignore-empty-password --color=000000 --show-failed-attempts --nofork &
+		xss-lock --transfer-sleep-lock -- i3lock --ignore-empty-password --color=000000 --show-failed-attempts --nofork &
 	fi
 	BGPIDS="$BGPIDS $!"
 elif cmdexists xscreensaver; then
@@ -150,7 +150,7 @@ if cmdexists nm-tray; then
 fi
 
 if cmdexists pasystray; then
-	pasystray --notify=all &
+	pasystray --notify=all --symbolic-icons &
 	BGPIDS="$BGPIDS $!"
 fi
 

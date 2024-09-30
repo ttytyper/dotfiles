@@ -11,6 +11,7 @@ client.background       #ffffff
 
 # Use Windows key as modifier
 set $mod Mod4
+set $altgr Mod5
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -34,8 +35,8 @@ force_display_urgency_hint 2000 ms
 
 # Scratchpad (https://i3wm.org/docs/userguide.html#_scratchpad)
 bindsym $mod+Shift+BackSpace move scratchpad
-# Toggles scratchpad display with Mod5/AltGr
-bindsym Mod5+BackSpace scratchpad show
+# Toggles scratchpad display
+bindsym $altgr+BackSpace scratchpad show
 
 # kill focused window
 bindsym $mod+q kill
@@ -45,6 +46,8 @@ bindsym $mod+h focus left
 bindsym $mod+j focus down
 bindsym $mod+k focus up
 bindsym $mod+l focus right
+bindsym $mod+Prior focus left
+bindsym $mod+Next focus right
 
 # Move windows between workspaces, or by pixels in case of floating window
 bindsym $mod+Shift+h move left 30 px
@@ -98,9 +101,9 @@ bindsym $mod+8 workspace number 8
 bindsym $mod+9 workspace number 9
 bindsym $mod+0 workspace number 10
 bindsym $mod+Tab workspace back_and_forth
-bindsym $mod+Prior workspace prev
-bindsym $mod+Next workspace next
 bindsym $mod+u exec rofi -show 'Focus to workspace' -modi 'Focus to workspace:~/.config/rofi/scripts/i3_focus_workspace'
+bindsym $altgr+Prior workspace prev
+bindsym $altgr+Next workspace next
 
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace number $workspace1; workspace number 1

@@ -11,6 +11,7 @@
 	graph = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
 	pushall = !git remote | xargs -L1 git push --all
 	sync = "!f() { git fetch --tags && git pull && git push; };f"
+	checkpoint = "!git stash store -m \"$1\" $(git stash create \"$1\") #"
 [push]
 	default = simple
 [commit]

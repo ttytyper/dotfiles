@@ -1,18 +1,65 @@
 #!/bin/bash
 
-ordered() {
-	order=( "${@}" )
-
-	xrandr --output "${order[0]}" --auto
-	let end=${#order[@]}-1
-	for i in $(seq 1 $end); do
-		let ii=i-1
-		xrandr --output "${order[$i]}" --auto --right-of "${order[$ii]}"
-	done
-}
-
 set_primary() {
 	xrandr --output "$1" --primary
+}
+
+get_geometry() {
+	xrandr|awk -v monitor="$1" '$1==monitor && $2=="connected" {print $0}'|sed -n 's/.*\<\([0-9]\+\)x\([0-9]\+\)+\([0-9]\+\)+\([0-9]\+\).*/\1 \2 \3 \4/p'
+}
+
+width() {
+	get_geometry "$1"|awk '{print $1}'
+}
+
+height() {
+	get_geometry "$1"|awk '{print $2}'
+}
+
+horiz_offset() {
+	get_geometry "$1"|awk '{print $3}'
+}
+
+vert_offset() {
+	get_geometry "$1"|awk '{print $4}'
+}
+
+is_connected() {
+	display="$1"
+	xrandr|awk -v monitor="$1" '$1==monitor && $2=="connected" {print "ok"}'|grep -qF "ok"
+}
+
+ordered() {
+	displays=( "${@}" )
+	echo "Display order: ${displays[*]}"
+
+	connected_displays=()
+	disconnected_displays=()
+
+	for display in "${displays[@]}"; do
+		if is_connected "$display"; then
+			connected_displays+=( "$display" )
+		else
+			disconnected_displays+=( "$display" )
+		fi
+	done
+
+	for display in "${disconnected_displays[@]}"; do
+		xrandr --output "$display" --auto
+	done
+
+	if [ ${#connected_displays[@]} -eq 0 ]; then
+		echo "This machine has no connected displays"
+		return 1
+	fi
+
+	xrandr --output "${connected_displays[0]}" --auto
+	prev_display="${connected_displays[0]}"
+
+	for display in "${connected_displays[@]:1}"; do
+		xrandr --output "$display" --rotate normal --auto --right-of "${prev_display}"
+		prev_display="$display"
+	done
 }
 
 if [ -r /sys/devices/virtual/dmi/id/product_name ] && grep -q '^20CD0038MN$' /sys/devices/virtual/dmi/id/product_name; then
@@ -36,21 +83,15 @@ elif [ "$(hostname)" = "yoga3" ]; then
 	else
 		set_primary 'eDP-1'
 	fi
-elif [ "$(hostname)" = "jesper-pc-linux" ]; then
-	echo "Running on $(hostname)"
-	ordered "HDMI-0" "DP-0" "DP-4"
-	ordered "DP-0.1" "DP-0.8" "DP-4"
-	if xrandr --listmonitors|awk '$4 != "" { print $4}'|grep -q "HDMI-0" && xrandr --listmonitors|awk '$4 != "" { print $4}'|grep -q "DP-0"; then
-		echo "Running in home office"
-		xrandr --output DP-0 --rotate inverted
-		set_primary "HDMI-0"
-	else
-		xrandr --output DP-0.1 --rotate left  # Left monitor is rotated
-		xrandr --output DP-0.8 --pos 1440x500 # Adds vertical offset to center monitor
-		xrandr --output DP-4   --pos 4000x340 # Aligns bottom of laptop with bottom of center monitor
-		set_primary "DP-0.8"
-	fi
+	set_primary 'eDP-1'
+elif is_connected "DP-0.1" && is_connected "DP-0.8" && is_connected "DP-4"; then
+	echo "Recognized as $(hostname) in three-screen configuration"
+	xrandr --output DP-0.1 --auto --pos 0x0 --rotate right  # Left monitor is rotated
+	xrandr --output DP-0.8 --auto --pos 1440x500 --primary  # Adds vertical offset to center monitor
+	xrandr --output DP-4   --auto --pos 4000x340            # Aligns bottom of laptop with bottom of center
 else
-	echo "Not sure what kind of machine this is. Skipping monitor layouts"
+	echo "Unrecognized setup. Falling back to default layout"
+	mapfile -t alldisplays < <(xrandr|awk '$2=="disconnected" || $2=="connected" {print $1}')
+	ordered "${alldisplays[@]}"
 fi
 
