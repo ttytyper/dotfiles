@@ -109,22 +109,20 @@ WMPID="$!"
 
 # Do not blank/turn off the monitor automatically. I want manual control
 xset s off dpms 0 0 0
-# screensaver
-if cmdexists xss-lock && cmdexists i3lock; then
-	if [ -x "$HOME/bin/myi3lock" ]; then
-		xss-lock --transfer-sleep-lock -- "$HOME/bin/myi3lock" --ignore-empty-password --color=000000 --show-failed-attempts --nofork &
-	else
-		xss-lock --transfer-sleep-lock -- i3lock --ignore-empty-password --color=000000 --show-failed-attempts --nofork &
-	fi
+# screenlocker
+if ! cmdexists xss-lock; then
+	xmessage "xss-lock not available. You will not be able to lock the screen" &
+	BGPIDS="$BGPIDS $!"
+elif [ -x "$HOME/.local/bin/screenlocker" ]; then
+	xss-lock --transfer-sleep-lock -- "$HOME/.local/bin/screenlocker" &
 	BGPIDS="$BGPIDS $!"
 elif cmdexists xscreensaver; then
 	xscreensaver -no-splash &
-	if cmdexists xss-lock; then
-		xss-lock -- xscreensaver -lock &
-		BGPIDS="$BGPIDS $!"
-	fi
+	BGPIDS="$BGPIDS $!"
+	xss-lock -- xscreensaver -lock &
+	BGPIDS="$BGPIDS $!"
 else
-	xmessage "i3lock and xss-lock or xscreensaver not available. You will likely not be able to lock this machine" &
+	xmessage "Neither custom screenlocker nor xscreensaver available. You will not be able to lock the screen" &
 	BGPIDS="$BGPIDS $!"
 fi
 
