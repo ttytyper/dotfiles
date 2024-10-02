@@ -9,7 +9,7 @@ configuration {
 	font: "Hack 24";
 	sidebar-mode: true;
 	/* xbindkeys is configured to open rofi with Super_L+d. The same combo cancels out of rofi here. xcape is configured to map the Super_L key by itself to Super_L+d. Super_L is aka Windows key */
-	kb-cancel: "Escape,Control+g,Super_L+d";
+	kb-cancel: "Escape,Super_L+d";
 	me-select-entry: "MouseSecondary";
 	me-accept-entry: "MousePrimary";
 }

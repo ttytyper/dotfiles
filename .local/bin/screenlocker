@@ -1,6 +1,11 @@
 #!/bin/sh
 
-# Wrapper script for i3lock, because DPMS support was removed. Check i3lock(1) for info
+sudo -k
+ssh-add -D
+gpg-conf --kill agent
+rm -f "$HOME"/.ssh/controlmasters/*
+
 trap 'xset dpms 0 0 0' EXIT
 xset dpms 5 5 5
+
 i3lock --ignore-empty-password --color=000000 --show-failed-attempts --nofork

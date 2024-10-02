@@ -1,14 +1,13 @@
 #!/bin/bash
 
+# Redirect stdout and stderr to system log
+exec 1> >(xargs -rL 1 logger -p debug -s -- "xinitrc:" 2>&1)
+exec 2> >(xargs -rL 1 logger -p error -s -- "xinitrc:" )
+
 # Source .bash_profile, if existing, to get PATH and other vars
 [ -f "${HOME}/.bash_profile" ] && . "${HOME}/.bash_profile"
 
 WORKINGPIDS=""
-
-# Redirect stdout and stderr to a file
-exec 1>"$XDG_RUNTIME_DIR/xinit-output-$$.log"
-exec 2>&1
-#set -x
 
 # A quick function to check if a command exists
 cmdexists()
@@ -87,10 +86,6 @@ if [ -x "$HOME/bin/yoga-disable-ts-on-pen-proximity.sh" ] && cmdexists xinput &&
 	"$HOME/bin/yoga-disable-ts-on-pen-proximity.sh" &
 	BGPIDS="$BGPIDS $!"
 fi
-
-# https://support.zoom.us/hc/en-us/articles/202082128-Black-Screen-During-Screen-Sharing
-cmdexists && xcompmgr -c -l0 -t0 -r0 -o.00 &
-BGPIDS="$BGPIDS $!"
 
 # Finally, the window manager
 if cmdexists i3; then

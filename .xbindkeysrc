@@ -1,63 +1,48 @@
-###########################
-# xbindkeys configuration #
-###########################
-
-# Use Super_L+d to show rofi. xcape is configured to map the Super_L key by itself to Super_L+d. Super_L and Mod4 are better known as the Windows key.
-# rofi is configured (in ~/.Xresources) to use the same combo to cancel
+### Rofi as application launcher
+# The setup is a bit complicated, but here goes:
+#
+# 1. The Windows key by itself is intercepted by xcape (launched by mydisper),
+#    which translates it to Windows + d.
+# 2. xbindkeys is configured to launch rofi on Windows + d.
+# 3. rofi is configured (~/.config/rofi/config.rasi) to cancel out on Windows + d.
+#
+# All this effectively makes the Windows key by itself act as a rofi toggle. As a fallback,
+# in case xcape is not installed, manually pressing Windows + d works as well.
+#
+# Why involve xcape, can't we just bind to the Windows key itself? Maybe, somehow, but I've
+# never gotten it to work, at least not without interfering with other key bindings.
 "rofi -show drun"
 	Mod4 + d
 
-# Windows+P = Activate any connected external monitors with multihead (Activates projector switch dialog in Windows 7)
-"mydisper"
-	Mod4 + p
-
-# Start a terminal with Mod4/Windows
+### Terminal launcher
+# Windows + Return for i3 familiarity
 "(type urxvt && urxvt) || xterm"
 	Mod4 + Return
-# Start a terminal with Mod5/AltGr
+# AltGr + Return for one-handed operation
 "(type urxvt && urxvt) || xterm"
 	Mod5 + Return
 
-# Pause = Activate screensaver/locker. Also clear various keys
-"ssh-add -D; killall -q -SIGHUP gpg-agent; rm -vrf "$HOME/.ssh/controlmasters/"*; xset s activate"
-	Pause
-## Same with Win+l, to emulate Windows behavior
-#"set -x; ssh-add -D; killall -q -SIGHUP gpg-agent; rm -vrf "$HOME/.ssh/controlmasters/"*; xset s activate"
-#	Mod4 + l
-# Lenovo Thinkpad Yoga has a lock button that generates a Mod4 + o event
-"ssh-add -D; killall -q -SIGHUP gpg-agent; rm -vrf "$HOME/.ssh/controlmasters/"*; xset s activate"
+### Screensaver/locker
+# Windows + o = Activate screensaver/locker
+"xset s activate"
 	Mod4 + o
 
-# Controls for keyboards with hotkeys, including certain Apple keyboards
-# PCM for docking station, Master for internal
-#"pgrep -x amixer || amixer -q sset Master 5%-; aplay -q ~/.xkb/me-too-603.wav"
-#	XF86AudioLowerVolume
-#"pgrep -x amixer || amixer -q sset Master 5%+; aplay -q ~/.xkb/me-too-603.wav"
-#	XF86AudioRaiseVolume
-#"pgrep -x amixer || amixer -q sset PCM Togge; amixer -q sset Master toggle; aplay -q ~/.xkb/me-too-603.wav"
-#	XF86AudioMute
-## Capture Switch is available on Lenovo Thinkpad Yoga. Not sure how generic this setup is
-#"amixer cset "$(amixer controls|sed -n "s/^\(numid=[0-9]\+\)\,iface=[a-zA-Z0-9]\+\,name='Capture Switch'$/\1/p")" toggle"
-#	XF86AudioMicMute
-
-# Increase volume
-"pactl set-sink-volume @DEFAULT_SINK@ +2%; aplay -q ~/.xkb/me-too-603.wav"
+### Audio volume control
+"pactl set-sink-volume @DEFAULT_SINK@ +2%"
    XF86AudioRaiseVolume
-# Decrease volume
-"pactl set-sink-volume @DEFAULT_SINK@ -2%; aplay -q ~/.xkb/me-too-603.wav"
+"pactl set-sink-volume @DEFAULT_SINK@ -2%"
    XF86AudioLowerVolume
-# Mute volume
-"pactl set-sink-mute @DEFAULT_SINK@ toggle; aplay -q ~/.xkb/me-too-603.wav"
+"pactl set-sink-mute @DEFAULT_SINK@ toggle"
    XF86AudioMute
-# Mute microphone
 "pactl set-source-mute @DEFAULT_SOURCE@ toggle"
    XF86AudioMicMute
 
+### Media player control
 "mpc -q prev"
 	XF86AudioPrev
 "mpc -q next"
 	XF86AudioNext
-# Toggle play/pause (or play/stop if playing an http stream)
+# Play/stop if playing a stream, otherwise play/pause toggle
 "mpc -f '%file%' current|grep -q '^https\?://' && mpc -q stop ||  mpc -q toggle"
 	XF86AudioPlay
 "mpc -q pause"
@@ -65,30 +50,17 @@
 "mpc -q stop"
 	XF86AudioStop
 
-# Backlight control
+### Backlight control
 "brightnessctl set -- +5%"
 	XF86MonBrightnessUp
 "brightnessctl set -- -5%"
 	XF86MonBrightnessDown
 
+### Misc
 # Screenshot
 "shot"
 	Print
 
-### HAM rig control. For K3 and KX3, first run:
-# rigctld -r /dev/serial/by-id/usb-FTDI_FT232R_USB_UART_A9015XNW-if00-port0 -m229
-# Back button on mouse: m:0x0 + b:8
-#"echo T0|rigctl -m2 &"
-#	m:0x0 + b:8 + Release
-#"echo T1|rigctl -m2 &"
-#	m:0x0 + b:8
-# Directly
-# m:0x0 + b:8 = mouse back button
-#"echo 'RX;' >> /dev/radio/kx3"
-#	m:0x0 + b:8 + Release
-#"stty -F /dev/radio/kx3 38400; echo 'TX;' >> /dev/radio/kx3"
-#	m:0x0 + b:8
-
-##################################
-# End of xbindkeys configuration #
-##################################
+# Windows + p = Launch mydisper which sets up monitor layout, keyboard settings, etc.
+"mydisper"
+	Mod4 + p
