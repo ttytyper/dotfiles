@@ -1,36 +1,39 @@
 #!/bin/bash
-set -eEu
+
+interval=15
 
 . "$(dirname "$0")/common_functions"
 
-if [ -n "${BLOCK_INSTANCE:-}" ]; then
-	interface="$BLOCK_INSTANCE"
-else
-	# Pick the first available wifi interface
-	interface="$(ip -o -c=never link|grep -m1 -o 'wl[a-z0-9-]*')"
-fi
-wifi_logo=""
-interval=15
+wifi_icon=""
 
 (
-	# Start the loop and run it every so often
-	while echo && sleep $interval; do :; done &
-	# Also run the loop immediately when wifi status changes
-	type iwevent >/dev/null 2>&1 && iwevent
+	while echo && sleep "$interval"; do :; done &
+	iwevent 2>/dev/null
 )|while read _; do
-	declare -A json=( ["full_text"]="" )
-
-	if type iwevent >/dev/null 2>&1 && test -d "/sys/class/net/${interface}/wireless" && test -a "/sys/class/net/${interface}/operstate"; then
-		quality="$(grep "^$interface: " /proc/net/wireless | awk '{ print int($3 * 100 / 70) }')"
-		operstate="$(cat "/sys/class/net/$interface/operstate")"
-		ssid=""
-		
-		if [ "$operstate" = "up" ]; then
-			ssid="$(wpa_cli -i "$interface" status|grep '^ssid='|cut -d= -f2-)"
-			json["full_text"]="${wifi_logo}${quality}%${ssid:+ "${ssid}"}"
-			json["color"]="$(color_level 80 "$quality" 30)"
-		fi
+	interface=""
+	if [ -n "$BLOCK_INSTANCE" ]; then
+		interface="$BLOCK_INSTANCE"
+	else
+		# If no interface is specified, pick any
+		shopt -s nullglob
+		for wireless in /sys/class/net/*/wireless; do
+			sysfs_entry="${wireless%/*}"
+			interface="${sysfs_entry##*/}"
+			break
+		done
 	fi
-	
+	if [ -z "$interface" ]; then
+		continue
+	fi
+
+	declare -A json=( ["full_text"]="" ["instance"]="$interface" )
+
+	quality="$(awk -v interface="$interface" '$1 == interface":" {print int($3)}' /proc/net/wireless)"
+	ssid="$(iwgetid "$interface" --raw)"
+	if [ -n "$ssid" ]; then
+		json["full_text"]="${wifi_icon}${quality}%${ssid:+ "${ssid}"}"
+		json["color"]="$(color_level 80 "$quality" 30)"
+		json["instance"]="$interface"
+	fi
 	print_json_array json
 done
