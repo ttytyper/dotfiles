@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Redirect stdout and stderr to system log
-exec 1> >(xargs -rL 1 logger -p debug -s -- "xinitrc:" 2>&1)
+exec 1> >(xargs -rL 1 logger -p info  -s -- "xinitrc:" 2>&1)
 exec 2> >(xargs -rL 1 logger -p error -s -- "xinitrc:" )
 
 # Source .bash_profile, if existing, to get PATH and other vars
