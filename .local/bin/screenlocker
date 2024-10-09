@@ -2,7 +2,7 @@
 
 sudo -k
 ssh-add -D
-gpg-conf --kill agent
+gpgconf --kill agent
 rm -f "$HOME"/.ssh/controlmasters/*
 
 trap 'xset dpms 0 0 0' EXIT
