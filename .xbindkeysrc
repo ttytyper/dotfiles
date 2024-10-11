@@ -16,10 +16,10 @@
 
 ### Terminal launcher
 # Windows + Return for i3 familiarity
-"(type urxvt && urxvt) || xterm"
+"(type kitty && kitty --single-instance) || (type urxvt && urxvt) || xterm"
 	Mod4 + Return
 # AltGr + Return for one-handed operation
-"(type urxvt && urxvt) || xterm"
+"(type kitty && kitty --single-instance) || (type urxvt && urxvt) || xterm"
 	Mod5 + Return
 
 ### Screensaver/locker
