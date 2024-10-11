@@ -1,9 +1,8 @@
 #!/bin/sh
 # Uses git for managing dotfiles
-set -eu
 
-export GIT_DIR="$HOME/.dotfiles.git"
-export GIT_WORK_TREE="$HOME"
+git_dir="$HOME/.dotfiles.git"
+work_tree="$HOME"
 
 usage() {
 	script="$(basename "$0")"
@@ -11,7 +10,7 @@ usage() {
 Usage:
 
 $script init
-	Creates a fresh dotfiles setup in '$GIT_WORK_TREE', using '$GIT_DIR' as a bare git directory.
+	Creates a fresh dotfiles setup in '$work_tree', using '$git_dir' as a bare git directory.
 
 $script clone [git options] <remote>
 	Clones a remote repository to be used locally. This also pulls in any submodules that might exist in the repository.
@@ -33,7 +32,7 @@ Using a bundle file for cloning the repository to another machine, without using
 	alice\$ scp dotfiles.bundle bob:
 	bob\$ $script clone --branch main dotfiles.bundle
 
-The commands above create a 'remote' entry in '$GIT_DIR/config' pointing to the bundle. Future updates can be performed by copying a new bundle file and pulling from it:
+The commands above create a 'remote' entry in '$git_dir/config' pointing to the bundle. Future updates can be performed by copying a new bundle file and pulling from it:
 	alice\$ $script bundle create dotfiles.bundle main
 	alice\$ scp dotfiles.bundle bob:
 	bob\$ $script pull origin main
@@ -42,9 +41,13 @@ Source of idea: https://www.atlassian.com/git/tutorials/dotfiles
 EOF
 }
 
+dotgit() {
+	git --git-dir="$git_dir" --work-tree="$work_tree" "${@}"
+}
+
 init() {
-	git init --bare "$GIT_DIR"
-	git config --local status.showUntrackedFiles no
+	dotgit init --bare "$git_dir"
+	dotgit config --local status.showUntrackedFiles no
 }
 
 clone() {
@@ -54,9 +57,9 @@ clone() {
 		usage
 		exit 1
 	fi
-	git clone --bare "${@}" "$GIT_DIR"
-	git config --local status.showUntrackedFiles no
-	git submodule update --init --recursive
+	dotgit clone --bare "${@}" "$git_dir"
+	dotgit config --local status.showUntrackedFiles no
+	dotgit submodule update --init --recursive
 }
 
 if [ $# -eq 0 ]; then
@@ -67,5 +70,5 @@ fi
 case "$1" in
 	init) shift; init;;
 	clone) shift; clone "${@}";;
-	*) git "${@}";;
+	*) dotgit "${@}";; 
 esac
