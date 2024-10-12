@@ -26,7 +26,6 @@ alias lla="ll -A" # Include dot-files
 
 alias netstat='netstat --wide'
 
-
 if cmdexists lynx; then
 	alias lynx="lynx -nopause"
 fi
