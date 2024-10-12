@@ -1,13 +1,4 @@
-! Various terminal settings {{{
-! https://unix.stackexchange.com/questions/81746/how-can-i-get-better-looking-fonts-in-my-terminal-URxvt
-!URxvt.font:     xft:bitstream vera sans mono:size=8
-!URxvt.boldFont: xft:bitstream vera sans mono:bold:size=8
-!URxvt.font:     xft:DejaVu Sans Mono:size=10
-!URxvt.boldFont: xft:DejaVu Sans Mono:bold:size=10
-URxvt.font:     xft:Hack:regular:size=10
-URxvt.boldFont: xft:Hack:bold:size=10
-
-! HiDPI and font related settings {{{
+! HiDPI and font related settings
 ! http://vincent.jousse.org/tech/archlinux-retina-hidpi-macbookpro-xmonad/
 ! https://wiki.archlinux.org/index.php/HiDPI#X_Server
 Xft.antialias: true
@@ -22,62 +13,21 @@ Xft.dpi:       96
 !Xft.dpi:       175
 !Xft.dpi:       168
 !Xft.dpi:       192
-! }}}
-!
-URxvt.loginShell: true
-URxvt.scrollBar: false
-URxvt.colorMode: on
-URxvt.boldColors: on
-URxvt.dynamicColors: on
-URxvt.colorAttrMode: on
-URxvt.urgentOnBell: true
 
-URxvt.perl-ext-common: background,font-size
-! Matcher makes URLs clickable
-URxvt.matcher.button: 0
-URxvt.font-size.step: 1
-URxvt.background.expr: rootalign shade -0.95, root
-
-!! Colors
-URxvt.foreground: green
-URxvt.background: black
-! Black
-URxvt.color0: black
-! Red
-URxvt.color1: red3
-! Green
-URxvt.color2: green3
-! Yellow
-URxvt.color3: yellow3
-!!Blue
-URxvt.color4: rgb:4c/4c/ff
-! Magenta
-URxvt.color5: magenta
-! Cyan
-URxvt.color6: cyan3
-! White
-URxvt.color7: gray90
-! Bright black?
-URxvt.color8: gray50
-! Bright red
-URxvt.color9: red
-! Bright green
-URxvt.color10: green
-! Bright yellow
-URxvt.color11: yellow
-*VT100.color11: yellow
-! Bright blue
-URxvt.color12: rgb:5c/5c/ff
-! Bright magenta
-URxvt.color13: magenta
-! Bright cyan
-URxvt.color14: cyan
-! Bright white
-URxvt.color15: white
-! }}}
-
-! Disables ctrl+shift (keycap picture insert mode and ISO 14755). Gets in the way a lot
-! https://unix.stackexchange.com/questions/444773/how-to-disable-the-ctrlshift-binding-iso-14755-in-urxvt
-URxvt.iso14755: false
-URxvt.iso14755_52: false
+xterm*faceName: Hack
+xterm*faceSize: 11
+xterm.vt100.faceSize1: 13
+xterm.vt100.faceSize2: 15
+xterm.vt100.faceSize3: 17
+xterm.vt100.faceSize4: 19
+xterm.vt100.faceSize5: 21
+xterm.vt100.faceSize6: 23
+xterm.vt100.faceSize7: 25
+! Zooming with ctrl++ and ctrl+-
+! Copy/pasting with ctrl+shift+c and ctrl+shift+v. An alternative to "PRIMARY" is "CLIPBOARD"
+xterm.vt100.translations: #override \n\
+  Ctrl <Key> minus: smaller-vt-font() \n\
+  Ctrl <Key> plus: larger-vt-font() \n\
+  Ctrl Shift <Key> c: copy-selection(PRIMARY) \n\
+  Ctrl Shift <Key> v: insert-selection(PRIMARY)
 
