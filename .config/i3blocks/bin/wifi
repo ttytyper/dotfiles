@@ -1,6 +1,8 @@
 #!/bin/bash
 
 interval=15
+good_quality=50
+bad_quality=20
 
 . "$(dirname "$0")/common_functions"
 
@@ -32,7 +34,7 @@ wifi_icon=""
 	ssid="$(iwgetid "$interface" --raw)"
 	if [ -n "$ssid" ]; then
 		json["full_text"]="${wifi_icon}${quality}%${ssid:+ "${ssid}"}"
-		json["color"]="$(color_level 80 "$quality" 30)"
+		json["color"]="$(color_level "$good_quality" "$quality" "$bad_quality")"
 		json["instance"]="$interface"
 	fi
 	print_json_array json
