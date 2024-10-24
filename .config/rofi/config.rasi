@@ -2,7 +2,7 @@ configuration {
 	modi: "drun,ssh,shortcuts:~/.config/rofi/scripts/shortcuts";
 	ssh-client: "mosh --experimental-remote-ip=remote";
 	parse-known-hosts: false;
-	terminal: "urxvt";
+	terminal: "xterm";
 	monitor: "-4";
 	/* Scroll method. 0 = page, 1 = centered */
 	scroll-method: 1;
