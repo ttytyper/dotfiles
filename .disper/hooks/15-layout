@@ -62,28 +62,11 @@ ordered() {
 	done
 }
 
-if [ -r /sys/devices/virtual/dmi/id/product_name ] && grep -q '^20CD0038MN$' /sys/devices/virtual/dmi/id/product_name; then
-	echo "Running on a ThinkPad S1 Yoga laptop"
-	ordered "eDP1" "HDMI2"
-	set_primary "eDP1"
-elif [ -r /sys/devices/virtual/dmi/id/product_name ] && grep -q '^MS-7C80$' /sys/devices/virtual/dmi/id/product_name; then
+if [ -r /sys/devices/virtual/dmi/id/product_name ] && grep -q '^MS-7C80$' /sys/devices/virtual/dmi/id/product_name; then
 	echo "Running on desktop"
 	xrandr --output 'HDMI-1' --rotate normal
 	ordered 'HDMI-1' 'DP-1'
 	set_primary 'DP-1'
-elif [ "$(hostname)" = "yoga3" ]; then
-	echo "Running on $(hostname)"
-	ordered 'eDP-1' 'DP-3' 'DP-2'
-	#if xrandr|grep -qw 'HDMI-1 connected' && [ -r '/sys/class/drm/card0-HDMI-A-1/edid' ] && edid-decode < /sys/class/drm/card0-HDMI-A-1/edid |grep -qw "Display Product Name: 'PA249'"; then
-	#	# This external display on this laptop flickers on full auto. Have to specify mode
-	#	xrandr --output 'HDMI-1' --mode 1920x1080i
-	#fi
-	if xrandr|grep -qw 'DP-3 connected'; then
-		set_primary 'DP-3'
-	else
-		set_primary 'eDP-1'
-	fi
-	set_primary 'eDP-1'
 elif is_connected "DP-0.1" && is_connected "DP-0.8" && is_connected "DP-4"; then
 	echo "Recognized as $(hostname) in three-screen configuration"
 	xrandr --output DP-0.1 --auto --pos 0x0 --rotate right  # Left monitor is rotated
