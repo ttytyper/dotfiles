@@ -41,3 +41,5 @@ application/x-extension-xht=firefox-esr.desktop
 x-scheme-handler/mailto=userapp-Thunderbird-H8UOC0.desktop
 message/rfc822=userapp-Thunderbird-H8UOC0.desktop
 application/pdf=org.gnome.Evince.desktop;
+image/jpeg=feh.desktop
+image/png=feh.desktop
