@@ -1,0 +1,45 @@
+#!/bin/dash
+
+timestamp_file="${XDG_RUNTIME_DIR:-/tmp/$USER}/worksession-timer/timestamp"
+
+start()
+{
+	mkdir -p "$(dirname "$timestamp_file")"
+	date '+%s' >"$timestamp_file"
+}
+
+stop()
+{
+	rm -f "$timestamp_file"
+}
+
+print()
+{
+	if [ ! -e "$timestamp_file" ]; then
+		return
+	fi
+
+	then="$(cat "$timestamp_file")"
+	if [ -z "$then" ]; then
+		return
+	fi
+
+	now="$(date '+%s')"
+	duration=$(($now - $then))
+	seconds=$(($duration % 60))
+	minutes=$(($duration / 60 % 60))
+	hours=$(($duration / 3600 % 24))
+	days=$(($duration / 86400))
+
+	if [ $duration -ge 86400 ]; then
+		printf "%dd %02dh %02dm %02ds" $days $hours $minutes $seconds
+	else
+		printf "%02dh %02dm %02ds" $hours $minutes $seconds
+	fi
+}
+
+case "$1" in
+	start) start ;;
+	stop) stop ;;
+	*) print ;;
+esac

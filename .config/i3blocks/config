@@ -54,6 +54,11 @@ format=json
 interval=10
 format=json
 
+[worksession_timer]
+command=worksession-timer
+interval=1
+color=#00FF00
+
 [time]
 command=date '+%a %Y-%b-%d %H:%M:%S'
 interval=1

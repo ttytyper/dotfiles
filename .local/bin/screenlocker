@@ -8,4 +8,12 @@ rm -f "$HOME"/.ssh/controlmasters/*
 trap 'xset dpms 0 0 0' EXIT
 xset dpms 5 5 5
 
+if type worksession-timer >/dev/null 2>&1; then
+	worksession-timer stop
+fi
+
 i3lock --ignore-empty-password --color=000000 --show-failed-attempts --nofork
+
+if type worksession-timer >/dev/null 2>&1; then
+	worksession-timer start
+fi

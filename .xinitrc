@@ -76,6 +76,10 @@ else
 	xmessage "Neither custom screenlocker nor xscreensaver available. You will not be able to lock the screen" &
 fi
 
+if cmdexists worksession-timer; then
+	worksession-timer start
+fi
+
 # NetworkManager tray
 cmdexists nm-tray && nm-tray &
 
