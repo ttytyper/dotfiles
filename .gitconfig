@@ -12,6 +12,10 @@
 	pushall = !git remote | xargs -L1 git push --all
 	sync = "!f() { git fetch --tags && git pull && git push; };f"
 	checkpoint = "!git stash store -m \"$1\" $(git stash create \"$1\") #"
+	# Searches through the file contents of stashes.
+	# Credit: https://stackoverflow.com/a/57601163
+	stashgrep = "!f() { for i in `git stash list --format=\"%gd\"` ; \
+		do git stash show -p $i | grep -H --label=\"$i\" \"$@\" ; done ; }; f"
 [push]
 	default = simple
 [commit]
