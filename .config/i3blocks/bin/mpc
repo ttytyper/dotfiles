@@ -11,7 +11,7 @@ format='[%artist%: ]%title%'
 	mpc idleloop
 )|while read event; do
 	if [ "$event" = "player" ]; then
-		current="$(mpc -f '[%name%: ][%artist%: ]%title%' current|json_escape)"
+		current="$(mpc -f '[%name%: ][%artist%: ]%title%|%file%' current|json_escape)"
 		if [ -z "$current" ]; then
 			current="(no name)"
 		fi
