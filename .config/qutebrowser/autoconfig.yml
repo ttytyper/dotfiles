@@ -23,6 +23,8 @@ settings:
     global: '#42414d'
   colors.tabs.selected.odd.bg:
     global: '#42414d'
+  colors.webpage.darkmode.enabled:
+    global: false
   colors.webpage.preferred_color_scheme:
     global: dark
   completion.open_categories:
@@ -39,6 +41,8 @@ settings:
     global: -1
   input.match_counts:
     global: false
+  scrolling.bar:
+    global: overlay
   search.ignore_case:
     global: always
   search.wrap:
