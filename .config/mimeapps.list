@@ -44,3 +44,4 @@ application/pdf=org.gnome.Evince.desktop;
 image/jpeg=feh.desktop
 image/png=feh.desktop
 application/x-blender=blender.desktop
+application/gpx+xml=viking.desktop
