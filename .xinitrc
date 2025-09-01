@@ -3,8 +3,8 @@
 # Redirect stdout and stderr to system log
 exec 1> >(xargs -rL 1 logger -p info  -- "xinitrc:" )
 exec 2> >(xargs -rL 1 logger -p error -- "xinitrc:" )
-BASH_XTRACEFD=3
 exec 3> >(xargs -rL 1 logger -p debug -- "xinitrc:" )
+BASH_XTRACEFD=3
 set -x
 
 # Shorthand to check if a command exists
