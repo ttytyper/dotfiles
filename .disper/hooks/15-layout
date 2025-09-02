@@ -64,9 +64,12 @@ ordered() {
 
 if [ -r /sys/devices/virtual/dmi/id/product_name ] && grep -q '^MS-7C80$' /sys/devices/virtual/dmi/id/product_name; then
 	echo "Running on desktop"
-	xrandr --output 'HDMI-1' --rotate normal
 	ordered 'HDMI-1' 'DP-1'
 	set_primary 'DP-1'
+#elif [ -r /sys/devices/virtual/dmi/id/product_name ] && grep -q '^21B5005YMX$' /sys/devices/virtual/dmi/id/product_name; then
+#	echo "Running on laptop"
+#	ordered 'eDP-1' 'DP-3' 'DP-2'
+#	set_primary 'DP-3'
 elif is_connected "DP-0.1" && is_connected "DP-0.8" && is_connected "DP-4"; then
 	echo "Recognized as $(hostname) in three-screen configuration"
 	xrandr --output DP-0.1 --auto --pos 0x0 --rotate right  # Left monitor is rotated
