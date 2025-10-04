@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eu
+
 set_primary() {
 	xrandr --output "$1" --primary
 }
@@ -44,37 +46,39 @@ ordered() {
 		fi
 	done
 
+	xrandr_opts=( )
+
 	for display in "${disconnected_displays[@]}"; do
-		xrandr --output "$display" --auto
+		xrandr_opts+=( --output "$display" --auto )
 	done
 
-	if [ ${#connected_displays[@]} -eq 0 ]; then
-		echo "This machine has no connected displays"
-		return 1
+	if [ ${#connected_displays[@]} -gt 0 ]; then
+		prev_display="${connected_displays[0]}"	
+
+		for display in "${connected_displays[@]:1}"; do
+			xrandr_opts+=( --output "$display" --rotate normal --auto --right-of "${prev_display}" )
+			prev_display="$display"
+		done
 	fi
-
-	xrandr --output "${connected_displays[0]}" --auto
-	prev_display="${connected_displays[0]}"
-
-	for display in "${connected_displays[@]:1}"; do
-		xrandr --output "$display" --rotate normal --auto --right-of "${prev_display}"
-		prev_display="$display"
-	done
+	xrandr "${xrandr_opts[@]}"
 }
 
 if [ -r /sys/devices/virtual/dmi/id/product_name ] && grep -q '^MS-7C80$' /sys/devices/virtual/dmi/id/product_name; then
 	echo "Running on desktop"
 	ordered 'HDMI-1' 'DP-1'
 	set_primary 'DP-1'
-#elif [ -r /sys/devices/virtual/dmi/id/product_name ] && grep -q '^21B5005YMX$' /sys/devices/virtual/dmi/id/product_name; then
-#	echo "Running on laptop"
-#	ordered 'eDP-1' 'DP-3' 'DP-2'
-#	set_primary 'DP-3'
+elif [ -r /sys/devices/virtual/dmi/id/product_name ] && grep -q '^21B5005YMX$' /sys/devices/virtual/dmi/id/product_name; then
+	echo "Running on laptop"
+	ordered 'DP-2' 'eDP-1' 'DP-3'
+	set_primary 'DP-3'
 elif is_connected "DP-0.1" && is_connected "DP-0.8" && is_connected "DP-4"; then
 	echo "Recognized as $(hostname) in three-screen configuration"
-	xrandr --output DP-0.1 --auto --pos 0x0 --rotate right  # Left monitor is rotated
-	xrandr --output DP-0.8 --auto --pos 1440x500 --primary  # Adds vertical offset to center monitor
-	xrandr --output DP-4   --auto --pos 4000x340            # Aligns bottom of laptop with bottom of center
+	xrandr_opts=(
+		--output DP-0.1 --auto --pos 0x0 --rotate right  # Left monitor is rotated
+		--output DP-0.8 --auto --pos 1440x500 --primary  # Adds vertical offset to center monitor
+		--output DP-4   --auto --pos 4000x340            # Aligns bottom of laptop with bottom of center
+	)
+	xrandr "${xrandr_opts[@]}"
 else
 	echo "Unrecognized setup. Falling back to default layout"
 	mapfile -t alldisplays < <(xrandr|awk '$2=="disconnected" || $2=="connected" {print $1}')
