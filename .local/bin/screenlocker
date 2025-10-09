@@ -1,19 +1,68 @@
 #!/bin/sh
 
-sudo -k
-ssh-add -D
-gpgconf --kill agent
-rm -f "$HOME"/.ssh/controlmasters/*
+log_info()
+{
+	logger -t "$USER" -p info -- "screenlock: $*"
+}
 
-trap 'xset dpms 0 0 0' EXIT
-xset dpms 5 5 5
+now()
+{
+	date '+%s'
+}
 
-if type worksession-timer >/dev/null 2>&1; then
-	worksession-timer stop
-fi
+time_str()
+{
+	date -d"@$1" '+%H:%M'
+}
 
+duration_str()
+{
+	from=$1
+	to=$2
+	duration=$(( $to - $from ))
+	echo "$(time_str $from) - $(time_str $to) ($(( $duration / 3600)) hours, $(( $duration / 60 % 60)) minutes)"
+}
+
+locked_at=0
+unlocked_at=0
+
+pre_lock()
+{
+	locked_at=$(now)
+	sudo -k
+	ssh-add -D
+	gpgconf --kill agent
+	rm -f "$HOME"/.ssh/controlmasters/*
+	xset dpms 5 5 5
+
+	pactl set-sink-mute @DEFAULT_SINK@ on
+	pactl set-source-mute @DEFAULT_SOURCE@ on
+
+	if pgrep mpd >/dev/null; then
+		mpc -f '%file%' current|grep -q '^https\?://' && mpc -q stop ||  mpc -q pause
+	fi
+
+	if type worksession-timer >/dev/null 2>&1; then
+		worksession-timer stop
+	fi
+
+	return 0
+}
+
+post_unlock()
+{
+	unlocked_at=$(now)
+	xset dpms 0 0 0
+	log_info "Locked period: $(duration_str $locked_at $unlocked_at)"
+
+	if type worksession-timer >/dev/null 2>&1; then
+		worksession-timer start
+	fi
+
+	return 0
+}
+
+trap 'post_unlock' EXIT
+pre_lock
 i3lock --ignore-empty-password --color=000000 --show-failed-attempts --nofork
 
-if type worksession-timer >/dev/null 2>&1; then
-	worksession-timer start
-fi
