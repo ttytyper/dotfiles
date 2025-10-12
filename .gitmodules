@@ -1,15 +1,4 @@
-#[submodule ".vim/bundle/syntastic"]
-#	path = .vim/bundle/syntastic
-#	url = https://github.com/vim-syntastic/syntastic.git
-#[submodule ".vim/bundle/vim-arduino-syntax"]
-#	path = .vim/bundle/vim-arduino-syntax
-#	url = https://github.com/sudar/vim-arduino-syntax
-#[submodule ".vim/bundle/vim-jinja"]
-#	path = .vim/bundle/vim-jinja
-#	url = https://github.com/lepture/vim-jinja.git
-#[submodule ".vim/bundle/vim-openscad"]
-#	path = .vim/bundle/vim-openscad
-#	url = https://github.com/sirtaj/vim-openscad.git
-#[submodule ".vim/bundle/darcula"]
-#	path = .vim/bundle/darcula
-#	url = https://github.com/blueshirts/darcula.git
+[submodule "alacritty-themes"]
+	shallow = true
+	path = .config/alacritty/themes
+	url = https://github.com/alacritty/alacritty-theme.git

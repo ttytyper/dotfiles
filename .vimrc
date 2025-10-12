@@ -18,3 +18,6 @@ set smartcase  " .. but become case sensitive if specifically searching with upp
 
 " Mouse enabled
 set mouse=a
+
+" Styling
+set termguicolors

@@ -16,10 +16,10 @@
 
 ### Terminal launcher
 # Windows + Return for i3 familiarity
-"xterm"
+"alacritty"
 	Mod4 + Return
 # AltGr + Return for one-handed operation
-"xterm"
+"alacritty"
 	Mod5 + Return
 
 ### Screensaver/locker
