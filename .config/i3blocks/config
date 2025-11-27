@@ -60,7 +60,7 @@ interval=1
 color=#00FF00
 
 [time]
-command=date '+%a %Y-%b-%d %H:%M:%S'
+command=LC_ALL=ja_JP.UTF-8 date '+%a %Y-%m-%d %H:%M:%S'
 interval=1
 color=#00FF00
 
