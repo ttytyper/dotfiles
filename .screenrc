@@ -38,17 +38,20 @@ bindkey "^[[5;2~" eval "copy" "stuff ^u"
 bindkey -m "^[[5;2~" stuff ^u
 bindkey -m "^[[6;2~" stuff ^d
 
-# Status bar at the bottom. Example:
-# [19:26:04] 0$ bash  1$ bash  2-$ bash  3$* bash    laptop
-caption always "%?%F%{= bw}%:%{= bk}%?[%c:%s] %-Lw%{+b}%10L>%n%f* %t%{-b}%+Lw%=%H%{dd}"
+# Backtick showing the primary default route for ipv6 and ipv4
+backtick 1 0 0 sh -c '(echo; ip monitor)|while read _; do ip -6 route show default|head -n1|sed -n "s/.*dev \([^ ]\+\).*/ipv6: \1 | /p"; ip -4 route show default|head -n1|sed -n "s/.*dev \([^ ]\+\).*/ipv4: \1 | /p"; done'
+
+caption string "%n %t"
+hardstatus alwayslastline
+hardstatus string "%{= k.}%?%F%{= ..w}%:%{= s.K}%?%-Lw%{+s}%n%?%f%::%? %t%{-}%+Lw %{= .dg}%=%1`%H%-11< | %c:%s%{dd}"
 
 # Highlight window titles that want attention with bright red
 rendition bell br
 rendition monitor br
 rendition silence br
 
-# Standout rendition, including vertical bar, is bold green on black background
-rendition so "=b kg"
+# Standout rendition, affects vertical split bar
+rendition so "=b kw"
 
 # Enable 256 colors
 term screen-256color
