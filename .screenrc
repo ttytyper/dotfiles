@@ -38,12 +38,12 @@ bindkey "^[[5;2~" eval "copy" "stuff ^u"
 bindkey -m "^[[5;2~" stuff ^u
 bindkey -m "^[[6;2~" stuff ^d
 
-# Backtick showing the primary default route for ipv6 and ipv4
-backtick 1 0 0 sh -c '(echo; ip monitor)|while read _; do ip -6 route show default|head -n1|sed -n "s/.*dev \([^ ]\+\).*/ipv6: \1 | /p"; ip -4 route show default|head -n1|sed -n "s/.*dev \([^ ]\+\).*/ipv4: \1 | /p"; done'
+# Backtick showing the primary default route for ipv4 and ipv6
+backtick 1 0 0 sh -c '(echo; ip monitor)|while read _; do ip -4 route get 1.0.0.0|head -n1|sed -n "s/.*dev \([^ ]\+\).*/ipv4: \1 | /p"|tr -d "\n"; ip -6 route get 2000::|head -n1|sed -n "s/.*dev \([^ ]\+\).*/ipv6: \1 | /p"|tr -d "\n"; echo; done'
 
 caption string "%n %t"
 hardstatus alwayslastline
-hardstatus string "%{= k.}%?%F%{= ..w}%:%{= s.K}%?%-Lw%{+s}%n%?%f%::%? %t%{-}%+Lw %{= .dg}%=%1`%H%-11< | %c:%s%{dd}"
+hardstatus string "%{= kw}%-Lw%{+s}%n %f%t%{= kw}%+Lw%{= .g}%= %1`%c:%s | %H%{dd}"
 
 # Highlight window titles that want attention with bright red
 rendition bell br
