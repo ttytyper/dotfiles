@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if ! command -v iwevent >/dev/null; then
+	logger -s "iwevent was not found. Quitting wifi i3block" >&2
+fi
+
 interval=15
 good_quality=50
 bad_quality=20

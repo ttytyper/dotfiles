@@ -1,6 +1,10 @@
 #!/bin/bash
 set -eEu
 
+if ! command -v mpc >/dev/null; then
+	logger -s "mpc not found. Qutting mpc i3block" >&2
+fi
+
 . "$(dirname "$0")/common_functions"
 
 format='[%artist%: ]%title%'
