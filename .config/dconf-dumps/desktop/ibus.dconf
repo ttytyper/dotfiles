@@ -1,9 +1,9 @@
 [general]
-engines-order=['xkb:no::nor', 'mozc-jp', 'xkb:de:deadacute:deu', 'xkb:us::eng']
+engines-order=['xkb:no::nor', 'mozc-jp', 'xkb:us::eng', 'xkb:de:deadacute:deu']
 preload-engines=['xkb:no::nor', 'mozc-jp', 'xkb:us::eng', 'xkb:de:deadacute:deu']
 use-global-engine=false
 use-system-keyboard-layout=false
-version='1.5.27'
+version='1.5.32'
 
 [general/hotkey]
 triggers=['<Control><Alt>space']
