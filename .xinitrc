@@ -78,7 +78,13 @@ if cmdexists nm-tray; then
 fi
 
 # Pulseaudio tray
-cmdexists pasystray && pasystray --notify=all --symbolic-icons &
+if cmdexists pasystray; then
+	pasystray --notify=all --symbolic-icons &
+fi
+
+if cmdexists lxpolkit; then
+	lxpolkit &
+fi
 
 xsetroot -cursor_name top_left_arrow
 
