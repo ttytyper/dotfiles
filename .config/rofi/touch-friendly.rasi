@@ -2,7 +2,7 @@
  * User: qball, ttytyper
  * Copyright: Dave Davenport, Jesper Henriksen
  *
- * Adapted from the sidebar theme by qball. Made it fullscreen with a large scrollbar, suitable for touchscreens
+ * Adapted from the sidebar theme by qball, made more suitable for touchscreens.
  */
 
 configuration {
@@ -58,7 +58,9 @@ configuration {
     highlight:     bold #ffffff;
 }
 #window {
-    fullscreen: true;
+    height: calc(100% - 1.5em);
+    width: 100%;
+    location: north;
     border:  0px 2px 0px 0px;
     text-color: @lightwhite;
 
