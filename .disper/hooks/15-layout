@@ -3,7 +3,14 @@
 set -eu
 
 set_primary() {
-	xrandr --output "$1" --primary
+	displays=( "${@}" )
+	for display in "${displays[@]}"; do
+		if is_connected "$display"; then
+			echo "Primary: $1"
+			xrandr --output "$display" --primary
+			break;
+		fi
+	done
 }
 
 get_geometry() {
@@ -60,17 +67,20 @@ ordered() {
 			prev_display="$display"
 		done
 	fi
-	xrandr "${xrandr_opts[@]}"
+
+	if [ ${#xrandr_opts[@]} -gt 0 ]; then
+		xrandr "${xrandr_opts[@]}"
+	fi
 }
 
 if [ -r /sys/devices/virtual/dmi/id/product_name ] && grep -q '^MS-7C80$' /sys/devices/virtual/dmi/id/product_name; then
 	echo "Running on desktop"
 	ordered 'HDMI-1' 'DP-1'
-	set_primary 'DP-1'
+	set_primary 'DP-1' 'HDMI-1'
 elif [ -r /sys/devices/virtual/dmi/id/product_name ] && grep -q '^21B5005YMX$' /sys/devices/virtual/dmi/id/product_name; then
 	echo "Running on laptop"
-	ordered 'DP-2' 'eDP-1' 'DP-3'
-	set_primary 'DP-3'
+	ordered 'HDMI-1' 'eDP-1' 'DP-2'
+	set_primary 'DP-2' 'eDP-1'
 elif is_connected "DP-0.1" && is_connected "DP-0.8" && is_connected "DP-4"; then
 	echo "Recognized as $(hostname) in three-screen configuration with DP-0"
 	xrandr_opts=(
@@ -91,5 +101,6 @@ else
 	echo "Unrecognized setup. Falling back to default layout"
 	mapfile -t alldisplays < <(xrandr|awk '$2=="disconnected" || $2=="connected" {print $1}')
 	ordered "${alldisplays[@]}"
+	set_primary "${alldisplays[@]}"
 fi
 
