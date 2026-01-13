@@ -22,10 +22,10 @@ xset r rate 200 35
 pkill -U "$UID" xkbevd
 xkbevd -bg
 
-# xbindkeys is configure to launch rofi on Windows + d. With xcape, it's possible to assign the Windows key by itself to a key combo, such as Windows + d. This is useful for launching rofi on e.g. a ThinkPad Yoga S1 in tablet mode, where the only available button is the Windows button at the bottom of the monitor
 if type xcape >/dev/null; then
 	pkill -U "$UID" xcape
-	xcape -e 'Super_L=Super_L|d'
+	# See ~/.xbindkeysrc
+	xcape -e 'Super_L=Menu'
 fi
 
 if type xbindkeys >/dev/null 2>&1 && [ -f ~/.xbindkeysrc ]; then

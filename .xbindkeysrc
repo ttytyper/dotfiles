@@ -1,18 +1,18 @@
 ### Rofi as application launcher
-# The setup is a bit complicated, but here goes:
+# This binding is used along with xcape to launch rofi with a tap
+# on the Windows key (Mod4/Super_L):
 #
-# 1. The Windows key by itself is intercepted by xcape (launched by mydisper),
-#    which translates it to Windows + d.
-# 2. xbindkeys is configured to launch rofi on Windows + d.
-# 3. rofi is configured (~/.config/rofi/config.rasi) to cancel out on Windows + d.
+# xcape -e 'Super_L=Menu'
 #
-# All this effectively makes the Windows key by itself act as a rofi toggle. As a fallback,
-# in case xcape is not installed, manually pressing Windows + d works as well.
+# (In my setup, xcape is launched by a disper hook, since it apparently
+# needs to be restarted whenever hotplugging a keyboard)
 #
-# Why involve xcape, can't we just bind to the Windows key itself? Maybe, somehow, but I've
-# never gotten it to work, at least not without interfering with other key bindings.
-"rofi -show drun"
-	Mod4 + d
+# If I had bound Mod4 by itself directly in xbindkeys, the binding would
+# interfere with all the other Mod4/Super_L bindings. xcape apparently only
+# triggers when tapping the key, not holding it, making the Windows key
+# a convenient choice for toggling rofi.
+"rofi -kb-cancel Escape,Menu -show drun"
+	Menu
 
 ### Terminal launcher
 # Windows + Return for i3 familiarity
