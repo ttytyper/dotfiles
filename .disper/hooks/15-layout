@@ -73,10 +73,12 @@ ordered() {
 	fi
 }
 
+mapfile -t alldisplays < <(xrandr|awk '$2=="disconnected" || $2=="connected" {print $1}')
+
 if [ -r /sys/devices/virtual/dmi/id/product_name ] && grep -q '^MS-7C80$' /sys/devices/virtual/dmi/id/product_name; then
 	echo "Running on desktop"
-	ordered 'HDMI-1' 'DP-1'
-	set_primary 'DP-1' 'HDMI-1'
+	ordered "${alldisplays[@]}"
+	set_primary 'DisplayPort-1'
 elif [ -r /sys/devices/virtual/dmi/id/product_name ] && grep -q '^21B5005YMX$' /sys/devices/virtual/dmi/id/product_name; then
 	echo "Running on laptop"
 	ordered 'HDMI-1' 'eDP-1' 'DP-2'
@@ -99,7 +101,6 @@ elif is_connected "DP-2.1" && is_connected "DP-2.8" && is_connected "DP-4"; then
 	xrandr "${xrandr_opts[@]}"
 else
 	echo "Unrecognized setup. Falling back to default layout"
-	mapfile -t alldisplays < <(xrandr|awk '$2=="disconnected" || $2=="connected" {print $1}')
 	ordered "${alldisplays[@]}"
 	set_primary "${alldisplays[@]}"
 fi
