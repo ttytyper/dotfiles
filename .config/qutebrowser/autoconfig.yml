@@ -33,6 +33,7 @@ settings:
         ',jk': yank --quiet selection;; open -r -t https://www.kakimashou.com/dictionary/search/{clipboard}
         ',mph': mpv-hint {hint-url}
         ',mpu': mpv {url}
+        <Ctrl+a>: null
   colors.statusbar.command.bg:
     global: black
   colors.statusbar.command.fg:
