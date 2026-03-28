@@ -27,11 +27,11 @@ text/plain=code.desktop;org.gnome.gedit.desktop;vim.desktop;
 application/x-sh=code.desktop;
 
 [Default Applications]
-x-scheme-handler/http=firefox-esr.desktop
-x-scheme-handler/https=firefox-esr.desktop
+x-scheme-handler/http=org.qutebrowser.qutebrowser.desktop
+x-scheme-handler/https=org.qutebrowser.qutebrowser.desktop
 x-scheme-handler/ftp=firefox-esr.desktop
 x-scheme-handler/chrome=firefox-esr.desktop
-text/html=firefox-esr.desktop
+text/html=org.qutebrowser.qutebrowser.desktop
 application/x-extension-htm=firefox-esr.desktop
 application/x-extension-html=firefox-esr.desktop
 application/x-extension-shtml=firefox-esr.desktop
@@ -45,3 +45,5 @@ image/jpeg=feh.desktop
 image/png=feh.desktop
 application/x-blender=blender.desktop
 application/gpx+xml=viking.desktop
+x-scheme-handler/about=org.qutebrowser.qutebrowser.desktop
+x-scheme-handler/unknown=org.qutebrowser.qutebrowser.desktop
