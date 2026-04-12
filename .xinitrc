@@ -70,7 +70,9 @@ if cmdexists worksession-timer; then
 fi
 
 # NetworkManager tray
-if cmdexists nm-tray; then
+if cmdexists nm-applet; then
+	nm-applet --indicator &
+elif cmdexists nm-tray; then
 	nm-tray &
 fi
 
