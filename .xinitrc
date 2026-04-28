@@ -25,6 +25,12 @@ else
 	xsetroot -solid black
 fi
 
+# spice-vdagent allows dynamic monitor resolution and copy/paste
+# when running as a virtual machine with spice.
+if cmdexists systemd-detect-virt && cmdexists spice-vdagent && systemd-detect-virt; then
+	spice-vdagent &
+fi
+
 # Touchpad configuration
 if cmdexists synclient; then
 	synclient \
