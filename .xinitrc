@@ -18,7 +18,12 @@ cmdexists()
 [ -f "${HOME}/.Xresources.local" ] && xrdb -merge "${HOME}/.Xresources.local"
 
 # A simple black background, unless anything overrides it
-xsetroot -solid black
+if cmdexists hsetroot; then
+	hsetroot -solid black
+else
+	echo "hsetroot not available. Falling back to xsetroot which might not work with xcompmgr" >&2
+	xsetroot -solid black
+fi
 
 # Touchpad configuration
 if cmdexists synclient; then
@@ -38,8 +43,8 @@ fi
 # This seems necessary to make scrolling by touch screen work in Firefox
 export MOZ_USE_XINPUT2=1
 
-if cmdexists picom; then
-	picom --vsync --backend glx --daemon
+if cmdexists xcompmgr; then
+	xcompmgr &
 fi
 
 # For easy switching between different keyboard input methods such as Japanese
