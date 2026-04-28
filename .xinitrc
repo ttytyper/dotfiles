@@ -89,6 +89,11 @@ if cmdexists lxpolkit; then
 	lxpolkit &
 fi
 
+if cmdexists corectrl && [ -d "${XDG_CONFIG_HOME:-$HOME/.config}/corectrl" ]; then
+	# CoreCtrl needs lxpolkit to be ready for priviledge escalation
+	(sleep 5; corectrl) &
+fi
+
 xsetroot -cursor_name top_left_arrow
 
 # Finally, the window manager
