@@ -38,6 +38,10 @@ fi
 # This seems necessary to make scrolling by touch screen work in Firefox
 export MOZ_USE_XINPUT2=1
 
+if cmdexists picom; then
+	picom --vsync --backend glx --daemon
+fi
+
 # For easy switching between different keyboard input methods such as Japanese
 if cmdexists ibus-daemon; then
 	export GTK_IM_MODULE='ibus'
