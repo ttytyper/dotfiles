@@ -13,6 +13,8 @@ cmdexists()
 	type "$1" 1>/dev/null 2>&1
 }
 
+[ -f "${HOME}/.xprofile" ] && . "${HOME}/.xprofile"
+
 # Xresources
 [ -f "${HOME}/.Xresources" ] && xrdb -merge "${HOME}/.Xresources"
 [ -f "${HOME}/.Xresources.local" ] && xrdb -merge "${HOME}/.Xresources.local"
