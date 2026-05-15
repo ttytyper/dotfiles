@@ -49,7 +49,9 @@ fi
 # This seems necessary to make scrolling by touch screen work in Firefox
 export MOZ_USE_XINPUT2=1
 
-if cmdexists xcompmgr; then
+if cmdexists picom; then
+	picom --daemon
+elif cmdexists xcompmgr; then
 	xcompmgr &
 fi
 
