@@ -89,7 +89,7 @@ export LESSHISTSIZE=0
 #fi
 
 # gpg-agent, for managing my gpg key
-if [ -d "${HOME}/.gnupg" ] && cmdexists gpg-agent; then
+if [ -z "${SSH_AUTH_SOCK:-}" ] && [ -d "${HOME}/.gnupg" ] && cmdexists gpg-agent; then
 	# New way to start gpg-agent, implied by calling gpgconf.
 	# If you get errors such as "inappropriate ioctl for device", try:
 	# gpg-connect-agent /bye
