@@ -1,0 +1,160 @@
+# WIP branch workflow
+#
+# These aliases support a workflow where work is performed on temporary
+# branches named:
+#
+#     wip/<parent-branch>
+#
+# Examples:
+#
+#     main                   -> wip/main
+#     feature/123-cool-thing -> wip/feature/123-cool-thing
+#
+# The intent is to make frequent small commits on the WIP branch and push
+# them to a remote repository, making it easy to sync in-progress work
+# between multiple computers without cluttering the parent branch's history.
+#
+# When the work is complete, the WIP branch is squash-merged back into its
+# parent branch, producing a single clean commit (or a small number of
+# intentional commits) on the parent branch.
+#
+# Typical workflow:
+#
+#     git switch feature/my-feature
+#     git wip-start
+#
+#     ...work, commit, push...
+#
+#     git wip-merge-from-parent   # optional, keep WIP branch up to date
+#
+#     git wip-finish
+#     git commit
+#     git wip-delete
+#
+# Most aliases derive branch names automatically from the current branch,
+# using the convention that adding or removing the "wip/" prefix converts
+# between a parent branch and its corresponding WIP branch.
+[alias]
+	# Show the currently checked-out branch. Intended to be used by
+	# the other aliases, not by the user directly.
+	#
+	# Fails if HEAD is detached.
+	wip-show-current-branch = "!f() { \
+		set -e; \
+		branch=$(git branch --show-current); \
+		test -n \"$branch\" || { \
+			echo 'Not currently on a branch. HEAD detached?' >&2; \
+			exit 1; \
+		}; \
+		echo \"$branch\"; \
+	}; f"
+
+	# Show the WIP branch corresponding to the current branch.
+	#
+	# Examples:
+	#   main                       -> wip/main
+	#   feature/123-cool-thing     -> wip/feature/123-cool-thing
+	#   wip/main                   -> wip/main
+	wip-show-wip-branch = "!f() { \
+		set -e; \
+		branch=$(git wip-show-current-branch); \
+		echo \"wip/${branch#wip/}\"; \
+	}; f"
+
+	# Show the parent branch corresponding to the current branch.
+	#
+	# Examples:
+	#   wip/main                   -> main
+	#   wip/feature/123-cool-thing -> feature/123-cool-thing
+	#   main                       -> main
+	wip-show-parent-branch = "!f() { \
+		set -e; \
+		branch=$(git wip-show-current-branch); \
+		echo \"${branch#wip/}\"; \
+	}; f"
+
+	# Create and switch to the WIP branch corresponding to the
+	# current branch.
+	#
+	# Example:
+	#   feature/foo -> creates and switches to wip/feature/foo
+	wip-start = "!f() { \
+		set -e; \
+		git switch --create \"$(git wip-show-wip-branch)\"; \
+	}; f"
+
+	# Switch to the WIP branch corresponding to the current branch.
+	#
+	# Example:
+	#   feature/foo -> switches to wip/feature/foo
+	wip-continue = "!f() { \
+		set -e; \
+		git switch \"$(git wip-show-wip-branch)\"; \
+	}; f"
+
+	# Switch to the parent branch corresponding to the current branch.
+	#
+	# Examples:
+	#   wip/feature/foo -> feature/foo
+	#   feature/foo     -> feature/foo
+	wip-switch-parent = "!f() { \
+		set -e; \
+		git switch \"$(git wip-show-parent-branch)\"; \
+	}; f"
+
+	# Squash the current WIP branch into its parent branch.
+	#
+	# The resulting changes are staged but not committed.
+	# Review and edit the generated commit message before committing.
+	#
+	# Finishing a WIP branch and deleting it are intentionally separate
+	# operations. This provides an opportunity to inspect, test, and commit
+	# the squashed result before removing the WIP branch.
+	wip-finish = "!f() { \
+		set -e; \
+		parent=$(git wip-show-parent-branch); \
+		wip=$(git wip-show-wip-branch); \
+		git switch --quiet \"$parent\"; \
+		git merge --squash --no-commit \"$wip\"; \
+		echo; \
+		echo 'Note: Your WIP changes are now in their parent branch, but not yet committed.'; \
+		echo 'Note: The default commit message includes all your WIP comments. Review the generated message before committing.'; \
+	}; f"
+
+	# Delete the current WIP branch after switching to its parent.
+	#
+	# Additional arguments are passed to 'git branch --delete'.
+	#
+	# Examples:
+	#   git wip-delete
+	#   git wip-delete --force
+	wip-delete = "!f() { \
+		set -e; \
+		parent=$(git wip-show-parent-branch); \
+		wip=$(git wip-show-wip-branch); \
+		git switch --quiet \"$parent\"; \
+		git branch --delete \"$@\" \"$wip\"; \
+	}; f"
+
+	# Merge the parent branch into the corresponding WIP branch.
+	#
+	# Useful for bringing a long-lived WIP branch up to date.
+	wip-merge-from-parent = "!f() { \
+		set -e; \
+		parent=$(git wip-show-parent-branch); \
+		wip=$(git wip-show-wip-branch); \
+		git switch --quiet \"$wip\"; \
+		git merge \"$parent\"; \
+	}; f"
+
+	# Create a quick checkpoint commit on the corresponding WIP branch.
+	#
+	# Stages all changes and commits them with the message 'wip'.
+	wip-quick-commit = "!f() { \
+		set -e; \
+		wip=$(git wip-show-wip-branch); \
+		git switch --quiet \"$wip\"; \
+		git add -A; \
+		git commit -m 'wip'; \
+	}; f"
+

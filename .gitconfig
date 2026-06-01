@@ -32,3 +32,6 @@
 	defaultBranch = main
 [includeIf "gitdir:*"]
 	path = ~/.gitconfig.local
+[include]
+	path = ~/.gitconfig-wip-workflow
+
