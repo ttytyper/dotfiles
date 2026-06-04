@@ -81,7 +81,7 @@ settings:
   content.pdfjs:
     global: true
   content.private_browsing:
-    global: true
+    global: false
   content.register_protocol_handler:
     global: false
   fileselect.folder.command:
