@@ -21,15 +21,15 @@
 # Typical workflow:
 #
 #     git switch feature/my-feature
-#     git wip-start
+#     git wip-create-wip-branch
 #
 #     ...work, commit, push...
 #
 #     git wip-merge-from-parent   # optional, keep WIP branch up to date
 #
-#     git wip-finish
+#     git wip-squash-to-parent
 #     git commit
-#     git wip-delete
+#     git wip-delete-wip-branch
 #
 # Most aliases derive branch names automatically from the current branch,
 # using the convention that adding or removing the "wip/" prefix converts
@@ -77,17 +77,18 @@
 	# current branch.
 	#
 	# Example:
-	#   feature/foo -> creates and switches to wip/feature/foo
-	wip-start = "!f() { \
+	#   feature/123-cool-thing -> creates and switches to wip/feature/123-cool-thing
+	wip-create-wip-branch = "!f() { \
 		set -e; \
 		git switch --create \"$(git wip-show-wip-branch)\"; \
 	}; f"
 
 	# Switch to the WIP branch corresponding to the current branch.
 	#
-	# Example:
-	#   feature/foo -> switches to wip/feature/foo
-	wip-continue = "!f() { \
+	# Examples:
+	#   wip/feature/123-cool-thing -> wip/feature/123-cool-thing
+	#   feature/123-cool-thing     -> wip/feature/123-cool-thing
+	wip-switch-to-wip = "!f() { \
 		set -e; \
 		git switch \"$(git wip-show-wip-branch)\"; \
 	}; f"
@@ -95,9 +96,9 @@
 	# Switch to the parent branch corresponding to the current branch.
 	#
 	# Examples:
-	#   wip/feature/foo -> feature/foo
-	#   feature/foo     -> feature/foo
-	wip-switch-parent = "!f() { \
+	#   wip/feature/123-cool-thing -> feature/123-cool-thing
+	#   feature/123-cool-thing     -> feature/123-cool-thing
+	wip-switch-to-parent = "!f() { \
 		set -e; \
 		git switch \"$(git wip-show-parent-branch)\"; \
 	}; f"
@@ -110,7 +111,7 @@
 	# Finishing a WIP branch and deleting it are intentionally separate
 	# operations. This provides an opportunity to inspect, test, and commit
 	# the squashed result before removing the WIP branch.
-	wip-finish = "!f() { \
+	wip-squash-to-parent = "!f() { \
 		set -e; \
 		parent=$(git wip-show-parent-branch); \
 		wip=$(git wip-show-wip-branch); \
@@ -126,9 +127,9 @@
 	# Additional arguments are passed to 'git branch --delete'.
 	#
 	# Examples:
-	#   git wip-delete
-	#   git wip-delete --force
-	wip-delete = "!f() { \
+	#   git wip-delete-wip-branch
+	#   git wip-delete-wip-branch --force
+	wip-delete-wip-branch = "!f() { \
 		set -e; \
 		parent=$(git wip-show-parent-branch); \
 		wip=$(git wip-show-wip-branch); \

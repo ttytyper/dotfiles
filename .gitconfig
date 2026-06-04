@@ -33,5 +33,5 @@
 [includeIf "gitdir:*"]
 	path = ~/.gitconfig.local
 [include]
-	path = ~/.gitconfig-wip-workflow
+	path = ~/.gitconfig.d/wip-workflow
 
