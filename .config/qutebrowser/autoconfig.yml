@@ -35,31 +35,31 @@ settings:
         ',mpu': mpv {url}
         <Ctrl+a>: null
   colors.statusbar.command.bg:
-    global: black
+    global: '#0f0820'
   colors.statusbar.command.fg:
-    global: white
+    global: '#f5f3ff'
   colors.statusbar.command.private.bg:
-    global: black
+    global: '#0f0820'
   colors.statusbar.normal.bg:
-    global: black
+    global: '#0f0820'
   colors.statusbar.normal.fg:
-    global: yellow
+    global: '#ffd60a'
   colors.statusbar.private.bg:
-    global: black
+    global: '#0f0820'
   colors.statusbar.private.fg:
     global: lime
   colors.tabs.even.bg:
-    global: '#1b1c22'
+    global: '#1a0f2e'
   colors.tabs.even.fg:
-    global: '#888888'
+    global: '#9d9db0'
   colors.tabs.odd.bg:
-    global: '#1b1c22'
+    global: '#1a0f2e'
   colors.tabs.odd.fg:
-    global: '#888888'
+    global: '#9d9db0'
   colors.tabs.selected.even.bg:
-    global: '#42414d'
+    global: '#4a1a6f'
   colors.tabs.selected.odd.bg:
-    global: '#42414d'
+    global: '#4a1a6f'
   colors.webpage.darkmode.enabled:
     '*://qutebrowser.org/*': true
     global: false

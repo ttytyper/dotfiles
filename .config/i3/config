@@ -1,11 +1,11 @@
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
 # class                 border  backgr. text    indicator child_border
-client.focused          #333333 #42414d #ffffff #2e9ef4   #42414d
-client.focused_inactive #333333 #1b1c22 #888888 #2e9ef4   #333333
-client.unfocused        #333333 #1b1c22 #888888 #2e9ef4   #333333
-client.urgent           #2f343a #900000 #ffffff #900000   #900000
-client.placeholder      #000000 #0c0c0c #ffffff #000000   #0c0c0c
+client.focused          #7209b7 #4a1a6f #f5f3ff #d947ef   #7209b7
+client.focused_inactive #2d1b4e #1a0f2e #9d9db0 #d947ef   #2d1b4e
+client.unfocused        #2d1b4e #1a0f2e #9d9db0 #d947ef   #2d1b4e
+client.urgent           #2d1b4e #ff6b9d #f5f3ff #ff6b9d   #ff6b9d
+client.placeholder      #1a0f2e #0f0820 #f5f3ff #1a0f2e   #0f0820
 
 client.background       #ffffff
 
@@ -158,8 +158,8 @@ bar {
 	status_command i3blocks
 	colors {
 		#                  Border  Backgr. Text
-		focused_workspace  #333333 #42414d #ffffff
-		inactive_workspace #333333 #1b1c22 #888888
+		focused_workspace  #7209b7 #4a1a6f #f5f3ff
+		inactive_workspace #2d1b4e #1a0f2e #9d9db0
 	}
 }
 
