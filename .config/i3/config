@@ -159,6 +159,7 @@ bar {
 	colors {
 		#                  Border  Backgr. Text
 		focused_workspace  #7209b7 #4a1a6f #f5f3ff
+		active_workspace   #2d1b4e #1a0f2e #9d9db0
 		inactive_workspace #2d1b4e #1a0f2e #9d9db0
 	}
 }
