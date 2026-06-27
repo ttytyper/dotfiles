@@ -140,7 +140,7 @@ settings:
   tabs.close_mouse_button:
     global: none
   tabs.last_close:
-    global: close
+    global: startpage
   tabs.padding:
     global:
       bottom: 5
