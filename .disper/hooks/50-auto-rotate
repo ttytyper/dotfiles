@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+#
+# Uses the accelerometer built into some convertible laptops to determine the
+# orientation of the monitor and configure rotation accordingly.
+#
+# Consider the script experimental.
+# Only tested on a Lenovo ThinkPad L13 Yoga Gen 3.
+#
+
+# Regex matching built in monitors. Only the first match will be used.
+display_search_regex="eDP-"
+
+x_threshold=5
+y_threshold=5
+
+main() {
+	set -euo pipefail
+
+	for dependency in awk bc xrandr; do
+		if ! command -v "$dependency" >/dev/null; then
+			echo "Missing dependency $dependency. Unable to continue" >&2
+			exit 1
+		fi
+	done
+
+	if ! IFS= read -r monitor < <(xrandr | awk '/^'"$display_search_regex"'/ && $2 == "connected" { print $1; exit }'); then
+		: "No eDP-* monitor connected. This script is not applicable to this hardware setup"
+		exit 0
+	fi
+
+	mapfile -t accel_3d_paths < <(
+		shopt -s nullglob
+		iio_device_paths=( /sys/bus/iio/devices/iio:device*/name )
+		if [ "${#iio_device_paths[@]}" -eq 0 ]; then
+			: "No applicate IIO devices available"
+			exit
+		fi
+		grep -l '^accel_3d$' "${iio_device_paths[@]}" \
+		| xargs -r dirname \
+		| while IFS= read -r accel_3d_path; do
+			if [ -f "$accel_3d_path/in_accel_scale" ] && [ -f "$accel_3d_path/in_accel_x_raw" ] && [ -f "$accel_3d_path/in_accel_y_raw" ]; then
+				echo "$accel_3d_path"
+			fi
+		done
+	)
+	#declare -p accel_3d_paths
+
+	if [ "${#accel_3d_paths[@]}" -eq 0 ]; then
+		: "No compatible 3D accelerometers available. This script is not applicable to this hardware setup"
+		exit 0
+	fi
+
+	if [ "${#accel_3d_paths[@]}" -gt 1 ]; then
+		echo "There are multiple IIO accelerometers available. Picking the first one"
+	fi
+	accel_3d_path="${accel_3d_paths[0]}"
+
+	IFS= read -r in_accel_scale < "$accel_3d_path/in_accel_scale"
+	IFS= read -r in_accel_x_raw < "$accel_3d_path/in_accel_x_raw"
+	IFS= read -r in_accel_y_raw < "$accel_3d_path/in_accel_y_raw"
+	#declare -p in_accel_scale in_accel_y_raw in_accel_x_raw
+
+	IFS= read -r x < <(echo "($in_accel_scale * $in_accel_x_raw)/1" | bc)
+	IFS= read -r y < <(echo "($in_accel_scale * $in_accel_y_raw)/1" | bc)
+	#declare -p x y
+
+	rotate=normal
+	if (( "$x" > "$x_threshold" )); then
+		rotate=left
+	elif (( "$x" < -"$x_threshold" )); then
+		rotate=right
+	elif (( "$y" > "$y_threshold" )) then
+		rotate=inverted
+	fi
+	#declare -p rotate
+
+	xrandr --output "$monitor" --rotate "$rotate"
+}
+
+main
