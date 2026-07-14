@@ -72,10 +72,7 @@ bindsym $mod+Ctrl+h move workspace to output left
 bindsym $mod+Ctrl+l move workspace to output right
 
 # Prompt to rename current workspace
-# Credit for idea: https://gist.github.com/ha7ilm/4712e38bdfdb81d53264c011a7f867e5
-# Modified to work with spaces
-#bindsym $mod+u exec i3-input -F "rename workspace to \\\"$(i3-msg -t get_workspaces|jq -r 'map(select(.focused))[0].num'): %s\\\"" -P 'New name for this workspace: '
-bindsym $mod+Ctrl+u exec i3-input -F 'rename workspace to "%s"' -P 'New name for this workspace: '
+bindsym $mod+Ctrl+u exec --no-startup-id ~/.config/i3/scripts/rename-workspace-dialog
 
 # change container layout (stacked, tabbed, toggle split)
 #bindsym $mod+s layout stacking
