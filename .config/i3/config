@@ -178,6 +178,13 @@ for_window [class="Pinentry"] floating enable, move position center
 # SpeedCrunch is better floating
 for_window [title="SpeedCrunch"] floating enable, sticky enable, move position mouse
 
+# VR applicates rarely need to be seen on the monitor.
+# Moving them aside and hopefully reducing render overhead
+for_window [title="^VRChat$"] floating enable, resize set 640 480
+assign [title="^VRChat$"] number "9: VR"
+for_window [title="^QuiVr$"] floating enable, resize set 640 480
+assign [title="^QuiVr$"] number "9: VR"
+
 # No borders
 hide_edge_borders both
 
