@@ -41,6 +41,8 @@ bindsym $altgr+BackSpace scratchpad show
 
 # kill focused window
 bindsym $mod+q kill
+# Kill with middle click on titlebar
+bindsym button2 kill
 
 # Move focus across windows
 bindsym $alt+Tab focus right
