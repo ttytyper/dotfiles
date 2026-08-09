@@ -59,14 +59,14 @@ ordered() {
 		xrandr_opts+=( --output "$display" --auto )
 	done
 
-	if [ ${#connected_displays[@]} -gt 0 ]; then
-		prev_display="${connected_displays[0]}"	
-
-		for display in "${connected_displays[@]:1}"; do
-			xrandr_opts+=( --output "$display" --rotate normal --auto --right-of "${prev_display}" )
-			prev_display="$display"
-		done
-	fi
+	prev_display=""
+	for display in "${connected_displays[@]}"; do
+		xrandr_opts+=( --output "$display" --rotate normal --auto )
+		if [ "$prev_display" != "" ]; then
+			xrandr_opts+=( --right-of "${prev_display}" )
+		fi
+		prev_display="$display"
+	done
 
 	if [ ${#xrandr_opts[@]} -gt 0 ]; then
 		xrandr "${xrandr_opts[@]}"
@@ -78,7 +78,7 @@ mapfile -t alldisplays < <(xrandr|awk '$2=="disconnected" || $2=="connected" {pr
 if [ -r /sys/devices/virtual/dmi/id/product_name ] && grep -q '^MS-7C80$' /sys/devices/virtual/dmi/id/product_name; then
 	echo "Running on desktop"
 	ordered "${alldisplays[@]}"
-	set_primary 'DisplayPort-1'
+	set_primary DisplayPort-{1,2,3}
 elif [ -r /sys/devices/virtual/dmi/id/product_name ] && grep -q '^21B5005YMX$' /sys/devices/virtual/dmi/id/product_name; then
 	echo "Running on laptop"
 	ordered 'HDMI-1' 'eDP-1' 'DP-2'
