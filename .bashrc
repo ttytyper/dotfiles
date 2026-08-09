@@ -28,6 +28,8 @@ alias netstat='netstat --wide'
 
 alias bc='bc -l -q'
 
+alias mpa='mpv --no-video'
+
 if cmdexists lynx; then
 	alias lynx="lynx -nopause"
 fi
