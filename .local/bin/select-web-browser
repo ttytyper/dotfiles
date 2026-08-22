@@ -1,0 +1,90 @@
+#!/usr/bin/env bash
+# Launches Rofi to select which web browser to open the given URL in.
+# Presents both normal and incognito/private modes.
+# For YouTube, mpv is also presented, in both video and audio-only modes.
+
+set -euo pipefail
+
+url="${1:?No URL given}"
+
+is_video_site() {
+	[[ $1 == http://youtube.com/* ||
+	   $1 == https://youtube.com/* ||
+	   $1 == http://www.youtube.com/* ||
+	   $1 == https://www.youtube.com/* ||
+	   $1 == http://youtu.be/* ||
+	   $1 == https://youtu.be/* ]]
+}
+
+# Opens Qutebrowser as a temporary individual session,
+# but retaining your configuration directory.
+qutebrowser_private() (
+	tmpbase=$(mktemp -d)
+	trap 'rm -rf "$tmpbase"' EXIT
+	ln -s "$HOME/.config/qutebrowser" "$tmpbase/config"
+	exec qutebrowser --basedir "$tmpbase" "$@"
+)
+
+list_browsers() {
+	if command -v qutebrowser &>/dev/null; then
+		printf '%s\n' \
+			"qutebrowser" \
+			"private qutebrowser"
+	fi
+
+	if command -v firefox &>/dev/null; then
+		printf '%s\n' \
+			"firefox" \
+			"private firefox"
+	fi
+
+	if command -v chromium &>/dev/null; then
+		printf '%s\n' \
+			"chromium" \
+			"private chromium"
+	fi
+
+	if command -v mpv &>/dev/null && is_video_site "$url"; then
+		printf '%s\n' \
+			"mpv" \
+			"mpv (no video)"
+	fi
+}
+
+selected=$(
+	list_browsers |
+		sort |
+		rofi -normal-window -no-sort -no-custom -dmenu \
+		-p "Select browser for $url"
+)
+
+if [[ -z $selected ]]; then
+	exit 0
+fi
+
+case $selected in
+	"qutebrowser")
+		exec qutebrowser -- "$url"
+		;;
+	"private qutebrowser")
+		qutebrowser_private -- "$url"
+		;;
+	"firefox")
+		exec firefox -- "$url"
+		;;
+	"private firefox")
+		exec firefox -private -url "$url"
+		;;
+	"chromium")
+		exec chromium -- "$url"
+		;;
+	"private chromium")
+		exec chromium --incognito -- "$url"
+		;;
+	"mpv")
+		exec mpv --terminal=no -- "$url"
+		;;
+	"mpv (no video)")
+		exec mpv --terminal=no -no-video -force-window=immediate -- "$url"
+		;;
+esac

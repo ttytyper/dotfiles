@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Select web browser
+# ~/.local/bin/select-web-browser
+Exec=select-web-browser %u
+Type=Application
+Terminal=false
+MimeType=x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/ftp;x-scheme-handler/chrome;x-scheme-handler/about;x-scheme-handler/unknown;text/html;application/xhtml+xml;application/x-extension-htm;application/x-extension-html;application/x-extension-shtml;application/x-extension-xhtml;application/x-extension-xht;application/atom+xml;
