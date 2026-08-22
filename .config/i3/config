@@ -103,6 +103,10 @@ assign [class="urxvt"] $workspace3
 # Background music
 set $workspace10 "10: Music ♫"
 
+# Unity doesn't redraw properly when switching workspaces. Here's a dirty workaround.
+# Credit: https://discussions.unity.com/t/editor-panels-only-redraw-on-update-mouse-over/755222/22
+#set $unity-refresh exec i3-msg --quiet [class="Unity"] fullscreen toggle; exec i3-msg --quiet [class="Unity"] fullscreen toggle
+
 # switch to workspace
 bindsym $mod+bar workspace number 0
 bindsym $mod+1 workspace number $workspace1
