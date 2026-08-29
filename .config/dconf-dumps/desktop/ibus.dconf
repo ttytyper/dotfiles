@@ -1,12 +1,15 @@
 [general]
-engines-order=['xkb:no::nor', 'mozc-jp', 'xkb:us::eng', 'xkb:de:deadacute:deu']
-preload-engines=['xkb:no::nor', 'mozc-jp', 'xkb:us::eng', 'xkb:de:deadacute:deu']
-use-global-engine=false
+engines-order=['xkb:no:nodeadkeys:nob', 'mozc-jp', 'xkb:us::eng']
+preload-engines=['mozc-jp', 'xkb:us::eng', 'xkb:no:nodeadkeys:nob']
+use-global-engine=true
 use-system-keyboard-layout=false
 version='1.5.32'
 
 [general/hotkey]
 triggers=['<Control><Alt>space']
+
+[panel]
+show=0
 
 [panel/emoji]
 hotkey=@as []
