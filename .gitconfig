@@ -9,9 +9,8 @@
 	# Funky layout, modified from this:
 	# https://stackoverflow.com/a/9074343
 	graph = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
-	pushall = !git remote | xargs -L1 git push --all
+	push-to-all-remotes = !git remote | xargs -L1 git push --all
 	sync = "!f() { git fetch --tags && git pull && git push; };f"
-	checkpoint = "!git stash store -m \"$1\" $(git stash create \"$1\") #"
 	# Searches through the file contents of stashes.
 	# Credit: https://stackoverflow.com/a/57601163
 	stashgrep = "!f() { for i in `git stash list --format=\"%gd\"` ; \
@@ -34,4 +33,8 @@
 	path = ~/.gitconfig.local
 [include]
 	path = ~/.gitconfig.d/wip-workflow
+[user]
+	# Prevents git from trying to guess `user.name` and `user.email`,
+	# instead prompting the user to take action if they're missing.
+	useConfigOnly = true
 
