@@ -10,11 +10,12 @@
 	# https://stackoverflow.com/a/9074343
 	graph = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
 	push-to-all-remotes = !git remote | xargs -L1 git push --all
-	sync = "!f() { git fetch --tags && git pull && git push; };f"
+	sync = "!f() { git fetch --all --tags && git pull && git push; };f"
 	# Searches through the file contents of stashes.
 	# Credit: https://stackoverflow.com/a/57601163
 	stashgrep = "!f() { for i in `git stash list --format=\"%gd\"` ; \
 		do git stash show -p $i | grep -H --label=\"$i\" \"$@\" ; done ; }; f"
+	whatsnew = "!f() { git for-each-ref --format='%(if)%(upstream:short)%(then)%(refname:short)..%(upstream:short)%(end)' refs/heads/ | grep . | xargs -r -L1 git log --oneline --left-right; }; f"
 [push]
 	default = simple
 [commit]
