@@ -59,7 +59,7 @@ list_browsers() {
 }
 
 selected=$(
-	list_browsers |
+	list_browsers "$@" |
 		sort |
 		rofi -normal-window -no-sort -no-custom -dmenu \
 		-p "Select browser"
