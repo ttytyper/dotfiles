@@ -21,6 +21,7 @@ find . \( -name .git -or \( -type f -name HEAD -execdir test -e refs -a -e objec
 		-or \
 		-execdir sh -c 'git rev-parse --is-bare-repository 2>/dev/null | grep -qF true' \; \
 	\) \
+	-execdir sh -c 'git remote | grep -q .' \; \
 	-printf "$(tput bold)Repo: %h$(tput sgr0)\n" \
 	\( -execdir git fetch --all --tags \; -or -true \) \
 	\( -execdir git -c "$git_alias_whatsnew" whatsnew \; -or -true \)
