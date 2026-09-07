@@ -1,0 +1,26 @@
+#!/bin/sh
+# Searches for git repositories under the current directory. For each of them:
+# Runs `git fetch --all -tags`
+# Lists the commits that are pending for a pull or push.
+#
+# It is up to the user to do the pull.
+
+# If there are many pending commits, it might be a bit overwhelming. You can
+# choose here to limit the number of commits shown. Comment out if you really
+# want to see everything
+export max_log_count=5
+
+set -eu
+
+# Shows commits that are ahead/behind the remote(s)
+git_alias_whatsnew="alias.whatsnew"="!f() { git for-each-ref --format='%(if)%(upstream:short)%(then)%(refname:short)..%(upstream:short)%(end)' refs/heads/ | grep . | xargs -r -L1 git log --oneline ${max_log_count:+--max-count=$max_log_count} --left-right; }; f"
+
+find . \( -name .git -or \( -type f -name HEAD -execdir test -e refs -a -e objects \; \) \) \
+	\( \
+		-execdir sh -c 'git rev-parse --is-inside-work-tree 2>/dev/null | grep -qF true' \; \
+		-or \
+		-execdir sh -c 'git rev-parse --is-bare-repository 2>/dev/null | grep -qF true' \; \
+	\) \
+	-printf "$(tput bold)Repo: %h$(tput sgr0)\n" \
+	\( -execdir git fetch --all --tags \; -or -true \) \
+	\( -execdir git -c "$git_alias_whatsnew" whatsnew \; -or -true \)
