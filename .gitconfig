@@ -15,7 +15,12 @@
 	# Credit: https://stackoverflow.com/a/57601163
 	stashgrep = "!f() { for i in `git stash list --format=\"%gd\"` ; \
 		do git stash show -p $i | grep -H --label=\"$i\" \"$@\" ; done ; }; f"
-	whatsnew = "!f() { git for-each-ref --format='%(if)%(upstream:short)%(then)%(refname:short)..%(upstream:short)%(end)' refs/heads/ | grep . | xargs -r -L1 git log --oneline --left-right; }; f"
+	# Shows commits that have been fetched but not pulled yet
+	incoming = "!f() { git for-each-ref --format='%(if)%(upstream:short)%(then)%(refname:short)..%(upstream:short)%(end)' refs/heads/ | grep . | xargs -r -L1 git log --oneline --left-right; }; f"
+	# Shows commits that have not been pushed yet
+	outgoing = "!f() { git for-each-ref --format='%(if)%(upstream:short)%(then)%(upstream:short)..%(refname:short)%(end)' refs/heads/ | grep . | xargs -r -L1 git log --oneline --right-only; }; f"
+	# Shows all pending commits
+	whatsnew = "!f() { git incoming; git outgoing; }; f"
 [push]
 	default = simple
 [commit]
