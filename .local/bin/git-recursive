@@ -1,0 +1,12 @@
+#!/bin/sh
+# Runs git with the given arguments on all repos under the current directory, recursively
+
+find . \( -name .git -or \( -type f -name HEAD -execdir test -e refs -a -e objects \; \) \) \
+	\( \
+		-execdir sh -c 'git rev-parse --is-inside-work-tree 2>/dev/null | grep -qF true' \; \
+		-or \
+		-execdir sh -c 'git rev-parse --is-bare-repository 2>/dev/null | grep -qF true' \; \
+	\) \
+	-execdir sh -c 'git remote | grep -q .' \; \
+	-printf "$(tput bold)Repo: %h$(tput sgr0)\n" \
+	-execdir git "$@" \;

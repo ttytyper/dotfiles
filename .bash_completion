@@ -4,9 +4,14 @@ if [ -e "/usr/share/bash-completion/completions/pass" ]; then
 	complete -o filenames -F _pass mypass
 fi
 
-# Use git for dotfiles etc. See .bashrc for details
+# Completion for custom git wrappers
 if [ -e "/usr/share/bash-completion/completions/git" ]; then
 	. "/usr/share/bash-completion/completions/git"
-	__git_complete dotfiles __git_main
+	if command -v dotfiles >/dev/null; then
+		__git_complete dotfiles __git_main
+	fi
 
+	if command -v git-recursive >/dev/null; then
+		__git_complete git-recursive __git_main
+	fi
 fi
