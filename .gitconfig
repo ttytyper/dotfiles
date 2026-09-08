@@ -21,6 +21,20 @@
 	outgoing = "!f() { git for-each-ref --format='%(if)%(upstream:short)%(then)%(upstream:short)..%(refname:short)%(end)' refs/heads/ | grep . | xargs -r -L1 git log --oneline --right-only; }; f"
 	# Shows all pending commits
 	whatsnew = "!f() { git incoming; git outgoing; }; f"
+	# Show tags that exist locally but not on any remotes. Rather untested.
+	# Requires doing a network request (git ls-remote) once for each remote.
+	dirtytags = "!f() { \
+		local=$(mktemp) || exit 1; \
+		remote=$(mktemp) || { rm -f \"$local\"; exit 1; }; \
+		trap 'rm -f \"$local\" \"$remote\"' EXIT; \
+		git for-each-ref --format='%(refname:strip=2)' refs/tags | sort -u >\"$local\"; \
+		for r in $(git remote); do \
+			git ls-remote --tags \"$r\" || exit 1; \
+		done | awk '$2 !~ /\\^\\{\\}$/ {sub(\"refs/tags/\", \"\", $2); print $2}' | sort -u >\"$remote\"; \
+		comm -23 \"$local\" \"$remote\"; \
+	}; f"
+	# Show local commits that are not on any remotes. Also shows stashes, as those changes can't be expected to be on a remote.
+	whatsdirty = "!f() { git log --branches --not --remotes --simplify-by-decoration --decorate --oneline; if git rev-parse --is-inside-work-tree 2>/dev/null | grep -qF true; then git stash list; fi; }; f"
 [push]
 	default = simple
 [commit]
