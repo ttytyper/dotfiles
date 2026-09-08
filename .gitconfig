@@ -9,12 +9,14 @@
 	# Funky layout, modified from this:
 	# https://stackoverflow.com/a/9074343
 	graph = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
-	push-to-all-remotes = !git remote | xargs -L1 git push --all
-	sync = "!f() { git fetch --all --tags && git pull && git push; };f"
-	# Searches through the file contents of stashes.
-	# Credit: https://stackoverflow.com/a/57601163
-	stashgrep = "!f() { for i in `git stash list --format=\"%gd\"` ; \
-		do git stash show -p $i | grep -H --label=\"$i\" \"$@\" ; done ; }; f"
+	# Shows a list of change files in every stash
+	stashstatus = "!f() { \
+		git stash list --format='%gd: %gs' \
+		| while IFS=: read -r reflogsel name; do \
+			echo \"$reflogsel $name\"; \
+			git stash show --name-status \"$reflogsel\"; \
+		done; \
+	}; f"
 	# Shows commits that have been fetched but not pulled yet
 	incoming = "!f() { git for-each-ref --format='%(if)%(upstream:short)%(then)%(refname:short)..%(upstream:short)%(end)' refs/heads/ | grep . | xargs -r -L1 git log --oneline --left-right; }; f"
 	# Shows commits that have not been pushed yet
@@ -33,8 +35,14 @@
 		done | awk '$2 !~ /\\^\\{\\}$/ {sub(\"refs/tags/\", \"\", $2); print $2}' | sort -u >\"$remote\"; \
 		comm -23 \"$local\" \"$remote\"; \
 	}; f"
-	# Show local commits that are not on any remotes. Also shows stashes, as those changes can't be expected to be on a remote.
-	whatsdirty = "!f() { git log --branches --not --remotes --simplify-by-decoration --decorate --oneline; if git rev-parse --is-inside-work-tree 2>/dev/null | grep -qF true; then git stash list; fi; }; f"
+	# Show local commits that are not on any remotes, as well as uncommitted changes. Also shows stashes, as those changes can't be expected to be on a remote.
+	whatsdirty = "!f() { \
+		git log --branches --not --remotes --simplify-by-decoration --decorate --oneline; \
+		if git rev-parse --is-inside-work-tree 2>/dev/null | grep -qF true; then \
+			git -c color.status=always status --short; \
+			git stashstatus; \
+		fi; \
+	}; f"
 [push]
 	default = simple
 [commit]
