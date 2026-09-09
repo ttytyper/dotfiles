@@ -1,4 +1,0 @@
-[submodule "alacritty-themes"]
-	shallow = true
-	path = .config/alacritty/themes
-	url = https://github.com/alacritty/alacritty-theme.git
