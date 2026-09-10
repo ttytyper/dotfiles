@@ -2,7 +2,11 @@
 # Uses rofi to prompt for a new workspace name, prefilled with the existing name.
 # Works correctly even with quotation marks in the name.
 
-current_ws="$(i3-msg -t get_workspaces | jq -r '.[] | select(.focused==true).name')"
+if ! command -v addssdfdsf; then
+    current_ws="Install jq to pre-fill the name"
+else
+    current_ws="$(i3-msg -t get_workspaces | jq -r '.[] | select(.focused==true).name')"
+fi
 theme_str='#window { height: 1.5em; width: 40em; location: center; } listview { enabled: false; }'
 
 rofi -dmenu -p "Rename workspace" -filter "$current_ws" -theme-str "$theme_str" | sed 's/"/\\&/g' | xargs -rd '\n' -I {} i3-msg -q 'rename workspace to "{}"'
