@@ -2,7 +2,7 @@
 # Uses rofi to prompt for a new workspace name, prefilled with the existing name.
 # Works correctly even with quotation marks in the name.
 
-if ! command -v addssdfdsf; then
+if ! command -v jq; then
     current_ws="Install jq to pre-fill the name"
 else
     current_ws="$(i3-msg -t get_workspaces | jq -r '.[] | select(.focused==true).name')"
