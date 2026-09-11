@@ -61,6 +61,7 @@
 "shot"
 	Print
 
-# Windows + p = Launch mydisper which sets up monitor layout, keyboard settings, etc.
-"mydisper"
+# Windows + p = Launch autorandr which sets up monitor layout, keyboard settings, etc.
+# Force ensures that all hooks are executed even if there is no need to switch profile.
+"autorandr --change --force"
 	Mod4 + p
