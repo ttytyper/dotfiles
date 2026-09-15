@@ -109,6 +109,10 @@ if cmdexists corectrl && [ -d "${XDG_CONFIG_HOME:-$HOME/.config}/corectrl" ]; th
 	(sleep 5; corectrl) &
 fi
 
+if cmdexists yubikey-touch-detector; then
+	yubikey-touch-detector -libnotify &
+fi
+
 xsetroot -cursor_name top_left_arrow
 
 # Finally, the window manager
