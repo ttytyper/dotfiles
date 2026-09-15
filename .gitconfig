@@ -13,15 +13,15 @@
 	# Shows a list of change files in every stash
 	stashstatus = "!f() { \
 		git stash list --format='%gd: %gs' \
-		| while IFS=: read -r reflogsel name; do \
-			echo \"$reflogsel $name\"; \
-			git stash show --name-status \"$reflogsel\"; \
+		| while IFS= read -r line; do \
+			echo \"$line\"; \
+			git stash show --name-status \"${line%%:*}\"; \
 		done; \
 	}; f"
 	# Shows commits that have been fetched but not pulled yet
-	incoming = "!f() { git for-each-ref --format='%(if)%(upstream:short)%(then)%(refname:short)..%(upstream:short)%(end)' refs/heads/ | grep . | xargs -r -L1 git log --oneline --left-right; }; f"
+	incoming = "!f() { git for-each-ref --format='%(if)%(upstream:short)%(then)^%(refname:short) %(upstream:short)%(end)' refs/heads/ | grep . | xargs -r -L1 git log --oneline --left-right; }; f"
 	# Shows commits that have not been pushed yet
-	outgoing = "!f() { git for-each-ref --format='%(if)%(upstream:short)%(then)%(upstream:short)..%(refname:short)%(end)' refs/heads/ | grep . | xargs -r -L1 git log --oneline --right-only; }; f"
+	outgoing = "!f() { git for-each-ref --format='%(if)%(upstream:short)%(then)%(upstream:short)...%(refname:short)%(end)' refs/heads/ | grep . | xargs -r -L1 git log --oneline --cherry; }; f"
 	# Shows all pending commits
 	whatsnew = "!f() { git incoming; git outgoing; }; f"
 	# Show tags that exist locally but not on any remotes. Rather untested.
