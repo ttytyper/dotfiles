@@ -1,6 +1,7 @@
 [core]
 	excludesfile = ~/.gitignore
 	commentChar = auto
+	hooksPath = ~/.gitconfig.d/hooks
 [color]
 	diff = true
 [merge]

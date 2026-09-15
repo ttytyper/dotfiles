@@ -1,0 +1,56 @@
+#!/bin/sh
+#
+# Global pre-push hook (see core.hooksPath in ~/.gitconfig).
+#
+# Blocks pushing wip/* branches (see ~/.gitconfig.d/wip-workflow) anywhere
+# except a per-repo allowlisted remote, so a WIP branch synced between your
+# own machines can't accidentally reach a shared/upstream remote.
+#
+# Configure per repo with one or more values:
+#   git config --add wip.allowed-remote <remote-name>
+#   git config --add wip.allowed-remote <another-remote-name>
+#
+# If unset, all wip/* pushes from that repo are blocked.
+
+set -e
+
+remote_name="$1"
+allowed_remotes=$(git config --get-all wip.allowed-remote || true)
+blocked=0
+
+is_allowed_remote() {
+	candidate=$1
+	for allowed in $allowed_remotes; do
+		if [ "$candidate" = "$allowed" ]; then
+			return 0
+		fi
+	done
+	return 1
+}
+
+while read -r local_ref _local_sha remote_ref _remote_sha; do
+	case "$local_ref" in
+	refs/heads/wip/*) ;;
+	*) continue ;;
+	esac
+
+	branch=${local_ref#refs/heads/}
+
+	if [ -z "$allowed_remotes" ]; then
+		echo "pre-push: refusing to push '$branch' ($remote_ref) to '$remote_name': wip.allowed-remote is not set for this repo." >&2
+		echo "pre-push: run 'git config --add wip.allowed-remote <remote-name>' if you intend to sync wip branches from here." >&2
+		blocked=1
+		continue
+	fi
+
+	if ! is_allowed_remote "$remote_name"; then
+		echo "pre-push: refusing to push '$branch' to remote '$remote_name': allowed remotes for wip/* branches in this repo are: $allowed_remotes" >&2
+		blocked=1
+	fi
+done
+
+if [ "$blocked" -ne 0 ]; then
+	exit 1
+fi
+
+exit 0
