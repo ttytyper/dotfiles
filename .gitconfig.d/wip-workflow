@@ -159,3 +159,32 @@
 		git commit -m 'wip'; \
 	}; f"
 
+	# Undo the most recent commit on the current WIP branch, restoring its
+	# changes as uncommitted edits (like popping a stash).
+	#
+	# Refuses to run unless all of the following hold, to avoid unwinding
+	# a commit that didn't originate on this WIP branch:
+	#   - the current branch is a WIP branch (wip/...)
+	#   - HEAD is strictly ahead of the corresponding parent branch (i.e. the
+	#     commit was actually made on the WIP branch, not inherited from the
+	#     parent)
+	#   - HEAD is not a merge commit (e.g. from wip-merge-from-parent)
+	wip-pop = "!f() { \
+		set -e; \
+		branch=$(git wip-show-current-branch); \
+		case \"$branch\" in \
+			wip/*) ;; \
+			*) echo 'Not on a WIP branch.' >&2; exit 1;; \
+		esac; \
+		parent=$(git wip-show-parent-branch); \
+		test \"$(git rev-parse HEAD)\" != \"$(git rev-parse \"$parent\")\" || { \
+			echo 'HEAD has no commits beyond the parent branch.' >&2; \
+			exit 1; \
+		}; \
+		test -z \"$(git rev-parse --verify -q HEAD^2 2>/dev/null)\" || { \
+			echo 'HEAD is a merge commit, refusing to pop.' >&2; \
+			exit 1; \
+		}; \
+		git reset --mixed HEAD~1; \
+	}; f"
+
