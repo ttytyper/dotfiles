@@ -70,6 +70,21 @@ if cmdexists mydisper; then
 	mydisper || echo "mydisper failed" >&2
 fi
 
+# Audible bell on xkb events
+# http://www.gentoo-wiki.info/HOWTO_Virtual_PC_Speaker
+if cmdexists xkbevd; then
+	xkbevd -bg
+fi
+
+# Super_L alone acts as Menu key; see ~/.xbindkeysrc
+if cmdexists xcape; then
+	xcape -e 'Super_L=Menu'
+fi
+
+if cmdexists xbindkeys && [ -f ~/.xbindkeysrc ]; then
+	xbindkeys
+fi
+
 # Do not blank/turn off the monitor automatically. I want manual control
 xset s off dpms 0 0 0
 # screenlocker
