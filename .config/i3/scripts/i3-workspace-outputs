@@ -1,0 +1,60 @@
+#!/bin/sh
+# Save or restore the mapping of i3 workspace -> output, keyed by
+# autorandr profile.
+#
+# Intended to be run via autorandr hooks:
+#   - "save" from preswitch.d, to record the layout of the profile
+#     that's about to be replaced.
+#   - "restore" from postswitch.d, to move workspaces back to their
+#     saved outputs once autorandr has switched to a profile we have
+#     a save for.
+#
+# Neither preswitch nor postswitch reliably expose "the profile we're
+# leaving" ($AUTORANDR_CURRENT_PROFILE is the *upcoming* profile in
+# preswitch, and unset entirely in predetect on some autorandr
+# versions), so the profile name must be passed explicitly as a second
+# argument. The preswitch/postswitch hooks get it from a small state
+# file they maintain between themselves -- see those scripts.
+set -eu
+
+command -v i3-msg >/dev/null 2>&1 || exit 0
+
+profile="${2:-${AUTORANDR_CURRENT_PROFILE:-}}"
+[ -n "$profile" ] || exit 0
+
+cache_file="${XDG_CACHE_HOME:-$HOME/.cache}/i3/workspace-outputs-${profile}"
+
+save() {
+	mkdir -p "$(dirname "$cache_file")"
+	i3-msg -t get_workspaces | jq -r '.[] | "\(.name)\t\(.output)"' > "$cache_file"
+}
+
+restore() {
+	[ -f "$cache_file" ] || exit 0
+
+	active_outputs="$(i3-msg -t get_outputs | jq -r '.[] | select(.active) | .name')"
+	original_ws="$(i3-msg -t get_workspaces | jq -r '.[] | select(.focused).name')"
+
+	while IFS="$(printf '\t')" read -r name output; do
+		[ -n "$name" ] || continue
+		printf '%s\n' "$active_outputs" | grep -qxF "$output" || continue
+
+		esc_name="$(printf '%s' "$name" | sed 's/[\\"]/\\&/g')"
+		esc_output="$(printf '%s' "$output" | sed 's/[\\"]/\\&/g')"
+		i3-msg -q "workspace --no-auto-back-and-forth \"$esc_name\"; move workspace to output \"$esc_output\""
+	done < "$cache_file"
+
+	if [ -n "$original_ws" ]; then
+		esc_orig="$(printf '%s' "$original_ws" | sed 's/[\\"]/\\&/g')"
+		i3-msg -q "workspace --no-auto-back-and-forth \"$esc_orig\""
+	fi
+}
+
+case "${1:-}" in
+	save) save ;;
+	restore) restore ;;
+	*)
+		echo "usage: $(basename "$0") {save|restore} [profile]" >&2
+		exit 1
+		;;
+esac

@@ -1,0 +1,11 @@
+#!/bin/sh
+# $AUTORANDR_CURRENT_PROFILE is correctly the new/current profile here.
+# Restore workspaces for it, then remember it in a state file so the
+# next preswitch knows which profile it's leaving.
+set -eu
+
+"$HOME/.config/i3/scripts/i3-workspace-outputs" restore "${AUTORANDR_CURRENT_PROFILE:-}"
+
+state_file="${XDG_CACHE_HOME:-$HOME/.cache}/i3/current-profile"
+mkdir -p "$(dirname "$state_file")"
+printf '%s' "${AUTORANDR_CURRENT_PROFILE:-}" > "$state_file"
