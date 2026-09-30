@@ -3,7 +3,7 @@
 
 set -uo pipefail
 
-find . \( -name .git -or \( -type f -name HEAD -execdir test -e refs -a -e objects \; \) \) \
+find . \( \( -name .git -type d \) -or \( -type f -name HEAD -execdir test -e refs -a -e objects \; \) \) \
 	\( \
 		-execdir sh -c 'git rev-parse --is-inside-work-tree 2>/dev/null | grep -qF true' \; \
 		-or \
@@ -12,7 +12,7 @@ find . \( -name .git -or \( -type f -name HEAD -execdir test -e refs -a -e objec
 	-execdir sh -c 'git remote | grep -q .' \; \
 	-print0 |
 	sort -z |
-	while IFS= read -d '' path; do
+	while IFS= read -r -d '' path; do
 		repo=$(dirname "$path")
 		printf "$(tput bold)Repo: %s$(tput sgr0)\n" "$repo"
 		( cd "$repo" && git "$@" )
