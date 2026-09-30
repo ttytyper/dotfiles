@@ -36,16 +36,11 @@ while read -r local_ref _local_sha remote_ref _remote_sha; do
 
 	branch=${local_ref#refs/heads/}
 
-	if [ -z "$allowed_remotes" ]; then
-		echo "pre-push: refusing to push '$branch' ($remote_ref) to '$remote_name': wip.allowed-remote is not set for this repo." >&2
-		echo "pre-push: run 'git config --add wip.allowed-remote <remote-name>' if you intend to sync wip branches from here." >&2
+	if [ -z "$allowed_remotes" ] || ! is_allowed_remote "$remote_name"; then
+		echo "pre-push: refusing to push '$branch' ($remote_ref) to '$remote_name': wip.allowed-remote is not set for this remote." >&2
+		echo "pre-push: run 'git config --add wip.allowed-remote $remote_name' if you intend to sync wip branches from here." >&2
 		blocked=1
 		continue
-	fi
-
-	if ! is_allowed_remote "$remote_name"; then
-		echo "pre-push: refusing to push '$branch' to remote '$remote_name': allowed remotes for wip/* branches in this repo are: $allowed_remotes" >&2
-		blocked=1
 	fi
 done
 

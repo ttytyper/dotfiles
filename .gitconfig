@@ -66,4 +66,5 @@
 	# Prevents git from trying to guess `user.name` and `user.email`,
 	# instead prompting the user to take action if they're missing.
 	useConfigOnly = true
-
+[log]
+	showSignature = true
