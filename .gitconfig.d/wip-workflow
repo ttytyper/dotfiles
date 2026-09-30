@@ -177,6 +177,11 @@
 			*) echo 'Not on a WIP branch.' >&2; exit 1;; \
 		esac; \
 		parent=$(git wip-show-parent-branch); \
+		git rev-parse --verify --quiet \"$parent\" >/dev/null || { \
+			echo \"Parent branch '$parent' does not exist locally. Cannot verify HEAD is ahead of parent, refusing to pop.\" >&2; \
+			echo 'To pop anyway, run: git reset --mixed HEAD~1' >&2; \
+			exit 1; \
+		}; \
 		test \"$(git rev-parse HEAD)\" != \"$(git rev-parse \"$parent\")\" || { \
 			echo 'HEAD has no commits beyond the parent branch.' >&2; \
 			exit 1; \
